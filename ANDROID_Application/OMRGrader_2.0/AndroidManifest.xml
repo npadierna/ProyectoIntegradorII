@@ -1,0 +1,71 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="co.edu.udea.android.omrgrader2_0"
+    android:versionCode="1"
+    android:versionName="1.0" >
+
+    <uses-sdk
+        android:minSdkVersion="14"
+        android:targetSdkVersion="16" >
+    </uses-sdk>
+
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" >
+    </uses-permission>
+    <uses-permission android:name="android.permission.CAMERA" >
+    </uses-permission>
+    <uses-permission android:name="android.permission.INTERNET" >
+    </uses-permission>
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" >
+    </uses-permission>
+    <uses-permission android:name="android.permission.WAKE_LOCK" >
+    </uses-permission>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" >
+    </uses-permission>
+
+    <uses-feature android:name="android.hardware.camera" >
+    </uses-feature>
+    <uses-feature android:name="android.hardware.camera.autofocus" >
+    </uses-feature>
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/application_name"
+        android:theme="@style/AppTheme" >
+        <activity
+            android:name=".activity.about.AboutUsActivity"
+            android:label="@string/about_us_activity_name"
+            android:noHistory="true"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Dialog" >
+        </activity>
+        <activity
+            android:name=".activity.configuration.ConfigurationStarterActivity"
+            android:noHistory="true"
+            android:screenOrientation="portrait" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" >
+                </action>
+
+                <category android:name="android.intent.category.LAUNCHER" >
+                </category>
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".activity.configuration.InitialActivity"
+            android:label="@string/initial_activity_name"
+            android:noHistory="true"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".activity.session.MainSessionActivity"
+            android:label="@string/application_name"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".activity.session.preference.MainSessionPreferenceActivity"
+            android:label="@string/application_name"
+            android:screenOrientation="portrait" >
+        </activity>
+    </application>
+
+</manifest>

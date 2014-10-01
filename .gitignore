@@ -1,0 +1,8 @@
+*.class
+
+# Package Files #
+*.ear
+*.dex
+*.cache
+*.apk
+ANDROID_Application/OMRGrader_2.0/bin/

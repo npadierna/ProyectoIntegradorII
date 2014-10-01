@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <PreferenceCategory
+        android:order="1"
+        android:title="@string/user_data_shared_preference_category" >
+        <EditTextPreference
+            android:dialogMessage="@string/email_shared_preference_dialog_message"
+            android:dialogTitle="@string/email_shared_preference_dialog_title"
+            android:inputType="textEmailAddress"
+            android:key="@string/email_shared_preference_key"
+            android:order="1"
+            android:persistent="true"
+            android:summary="@string/email_shared_preference_summary"
+            android:title="@string/email_shared_preference_title" >
+        </EditTextPreference>
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:order="2"
+        android:title="@string/session_data_shared_preference_category" >
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="@string/delete_images_shared_preference_key"
+            android:order="1"
+            android:persistent="true"
+            android:summary="@string/delete_images_shared_preference_summary"
+            android:title="@string/delete_images_shared_preference_title" >
+        </CheckBoxPreference>
+    </PreferenceCategory>
+
+</PreferenceScreen>

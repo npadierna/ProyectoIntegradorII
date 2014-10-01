@@ -1,0 +1,64 @@
+<resources>
+
+    <!-- About Us Activity -->
+    <string name="about_us_activity_name">Acerca de Nosotros</string>
+    <string name="development_semester_text_view">2014/2</string>
+    <string name="project_name_text_view">Proyecto Integrador II</string>
+    <string name="professor_full_names_text_view">Juan Fernando Franco Higuita</string>
+    <string name="professor_title_text_view">Tutor:</string>
+    <string name="students_full_names_text_view">Andersson García Sotelo\nMiguel Ángel Ossa Ruiz\nNeiber de Jesús Padierna Pérez</string>
+    <string name="students_title_text_view">Desarrolladores:</string>
+    <string name="university_name_text_view">Universidad de Antioquia</string>
+
+    <!-- Base Album Directory -->
+    <string name="base_album_root">OMRGrader2</string>
+    <string name="base_album_students">students</string>
+
+    <!-- Configuration Starter Activity -->
+    <string name="no_backcamera_alert_dialog_message">Su dispositivo móvil no cuenta con una Cámara trasera.</string>
+    <string name="no_backcamera_alert_dialog_title">Sin Cámara Trasera</string>
+    <string name="no_internet_connection_alert_dialog_message">Su dispositivo móvil no está actualmente conectado a una red de Internet.</string>
+    <string name="no_internet_connection_alert_dialog_title">Sin Conexión</string>
+
+    <!-- General Strings for the Application -->
+    <string name="application_name">OMRGrader 2.0</string>
+    <string name="accept_button_label">Aceptar</string>
+    <string name="cancel_button_label">Cancelar</string>
+
+    <!-- Initial Activity -->
+    <string name="delete_images_check_box_message">¿Borrar las imágenes capturadas al finalizar la sesión de calificación?</string>
+    <string name="email_selector_text_view_message">Por favor, seleccione un Correo Electrónico al cual desea enviar los resultados de las sesiones de calificación:</string>
+    <string name="initial_activity_name">Configuración Inicial</string>
+    <string name="session_data_configuration_text_view_title">DATOS DE SESIÓN DE CALIFICACIÓN</string>
+    <string name="set_initial_configuration_button_label">Listo y continuar</string>
+    <string name="user_data_configuration_text_view_title">DATOS DE USUARIO</string>
+
+    <!-- Internet Connection Validator -->
+    <string name="internet_connection_url_server">https://www.google.com/</string>
+    <string name="internet_connection_validator_user_agent">OMRGrader 2.0 for Android</string>
+
+    <!-- Main Session Activity -->
+    <string name="do_ping_to_server_button_label">Hacer Ping!</string>
+    <string name="new_grader_session_button_label">Nueva Sesión</string>
+
+    <!-- Main Session Preference Fragment -->
+    <string name="invalid_email_alert_dialog_message">El Correo Electrónico que ha sido ingresado no es válido. Se establecerá el correo por defecto del dispositivo.</string>
+    <string name="invalid_email_alert_dialog_title">E-Mail Inválido</string>
+
+    <!-- Main Settings Menu -->
+    <string name="menu_main_about_us_item">Acerca de</string>
+    <string name="menu_main_settings_item">Configuraciones</string>
+
+    <!-- Shared Preferences Grader Settings -->
+    <string name="user_data_shared_preference_category">Datos de Usuario</string>
+    <string name="email_shared_preference_dialog_message">Ingrese el Correo Electrónico (E-Mail) al cual desea recibir los resultados:</string>
+    <string name="email_shared_preference_dialog_title">Correo Electrónico</string>
+    <string name="email_shared_preference_key">E-Mail</string>
+    <string name="email_shared_preference_summary">Correo Electrónico al cual enviar los resultados de las calificaciones.</string>
+    <string name="email_shared_preference_title">Correo Electrónico</string>
+    <string name="session_data_shared_preference_category">Datos de Sesión de Calificación</string>
+    <string name="delete_images_shared_preference_key">DeleteImages</string>
+    <string name="delete_images_shared_preference_summary">Borrar siempre las imágenes tomadas de los exámenes al finalizar la sesión.</string>
+    <string name="delete_images_shared_preference_title">Borrar Imágenes</string>
+
+</resources>
