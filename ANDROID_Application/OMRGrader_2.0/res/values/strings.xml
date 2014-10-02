@@ -27,8 +27,9 @@
 
     <!-- Initial Activity -->
     <string name="delete_images_check_box_message">¿Borrar las imágenes capturadas al finalizar la sesión de calificación?</string>
-    <string name="email_selector_text_view_message">Por favor, seleccione un Correo Electrónico al cual desea enviar los resultados de las sesiones de calificación:</string>
+    <string name="email_selector_text_view_message">Seleccione un Correo Electrónico al cual desea enviar los resultados de las sesiones de calificación:</string>
     <string name="initial_activity_name">Configuración Inicial</string>
+    <string name="maximum_grade_selector_text_view_message">Seleccione la máxima nota a ser asignada durante las Sesiones de Calificación:</string>
     <string name="session_data_configuration_text_view_title">DATOS DE SESIÓN DE CALIFICACIÓN</string>
     <string name="set_initial_configuration_button_label">Listo y continuar</string>
     <string name="user_data_configuration_text_view_title">DATOS DE USUARIO</string>
@@ -50,15 +51,26 @@
     <string name="menu_main_settings_item">Configuraciones</string>
 
     <!-- Shared Preferences Grader Settings -->
-    <string name="user_data_shared_preference_category">Datos de Usuario</string>
+    <string name="delete_images_shared_preference_key">DeleteImages</string>
+    <string name="delete_images_shared_preference_summary">Borrar siempre las imágenes tomadas de los exámenes al finalizar la sesión.</string>
+    <string name="delete_images_shared_preference_title">Borrar Imágenes</string>
     <string name="email_shared_preference_dialog_message">Ingrese el Correo Electrónico (E-Mail) al cual desea recibir los resultados:</string>
     <string name="email_shared_preference_dialog_title">Correo Electrónico</string>
     <string name="email_shared_preference_key">E-Mail</string>
     <string name="email_shared_preference_summary">Correo Electrónico al cual enviar los resultados de las calificaciones.</string>
     <string name="email_shared_preference_title">Correo Electrónico</string>
+    <string name="grader_values_shared_preference_dialog_title">Máxima Nota</string>
+    <string name="grader_values_shared_preference_summary">Máxima nota a ser obtenida durante una Sesión de Calificación.</string>
+    <string name="grader_values_shared_preference_title">Máxima Nota</string>
+    <string name="grader_values_shared_preference_key">MaximumGrader</string>
     <string name="session_data_shared_preference_category">Datos de Sesión de Calificación</string>
-    <string name="delete_images_shared_preference_key">DeleteImages</string>
-    <string name="delete_images_shared_preference_summary">Borrar siempre las imágenes tomadas de los exámenes al finalizar la sesión.</string>
-    <string name="delete_images_shared_preference_title">Borrar Imágenes</string>
+    <string name="user_data_shared_preference_category">Datos de Usuario</string>
+
+    <string-array name="grader_values_shared_preference_array">
+        <item>5.0</item>
+        <item>10.0</item>
+        <item>50.0</item>
+        <item>100.0</item>
+    </string-array>
 
 </resources>

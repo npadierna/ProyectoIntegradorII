@@ -18,10 +18,21 @@
     <PreferenceCategory
         android:order="2"
         android:title="@string/session_data_shared_preference_category" >
+        <ListPreference
+            android:dialogTitle="@string/grader_values_shared_preference_dialog_title"
+            android:entries="@array/grader_values_shared_preference_array"
+            android:entryValues="@array/grader_values_shared_preference_array"
+            android:key="@string/grader_values_shared_preference_key"
+            android:order="1"
+            android:persistent="true"
+            android:summary="@string/grader_values_shared_preference_summary"
+            android:title="@string/grader_values_shared_preference_title" >
+        </ListPreference>
+
         <CheckBoxPreference
             android:defaultValue="true"
             android:key="@string/delete_images_shared_preference_key"
-            android:order="1"
+            android:order="2"
             android:persistent="true"
             android:summary="@string/delete_images_shared_preference_summary"
             android:title="@string/delete_images_shared_preference_title" >

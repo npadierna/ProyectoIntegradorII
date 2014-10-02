@@ -30,9 +30,11 @@ public class InitialActivity extends Activity {
 
 	private List<CharSequence> eMailAccountsList;
 	private String eMailAccountSelected;
+	private String maximumGradeSelected;
 
 	private CheckBox deleteImagesCheckBox;
 	private Spinner eMailListSpinner;
+	private Spinner maximumGradeSpinner;
 
 	@Override()
 	protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +61,11 @@ public class InitialActivity extends Activity {
 				super.getApplicationContext(),
 				android.R.layout.simple_spinner_dropdown_item,
 				this.eMailAccountsList);
+		SpinnerAdapter maximumGradeSpinnerAdapter = new ArrayAdapter<CharSequence>(
+				super.getApplicationContext(),
+				android.R.layout.simple_spinner_dropdown_item, super
+						.getResources().getStringArray(
+								R.array.grader_values_shared_preference_array));
 
 		this.deleteImagesCheckBox = (CheckBox) super
 				.findViewById(R.id.delete_images_checkBox);
@@ -80,6 +87,24 @@ public class InitialActivity extends Activity {
 					public void onNothingSelected(AdapterView<?> parent) {
 					}
 				});
+
+		this.maximumGradeSpinner = (Spinner) super
+				.findViewById(R.id.maximum_grade_spinner);
+		this.maximumGradeSpinner.setAdapter(maximumGradeSpinnerAdapter);
+		this.maximumGradeSpinner
+				.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+					@Override()
+					public void onItemSelected(AdapterView<?> parente,
+							View view, int position, long id) {
+						maximumGradeSelected = getResources().getStringArray(
+								R.array.grader_values_shared_preference_array)[position];
+					}
+
+					@Override()
+					public void onNothingSelected(AdapterView<?> parent) {
+					}
+				});
 	}
 
 	private void onPersistInitialConfiguration() {
@@ -92,6 +117,9 @@ public class InitialActivity extends Activity {
 		sharedPreferencesEditor.putBoolean(
 				super.getString(R.string.delete_images_shared_preference_key),
 				this.deleteImagesCheckBox.isChecked());
+		sharedPreferencesEditor.putString(
+				super.getString(R.string.grader_values_shared_preference_key),
+				this.maximumGradeSelected);
 		sharedPreferencesEditor.putString(
 				super.getString(R.string.email_shared_preference_key),
 				this.eMailAccountSelected);

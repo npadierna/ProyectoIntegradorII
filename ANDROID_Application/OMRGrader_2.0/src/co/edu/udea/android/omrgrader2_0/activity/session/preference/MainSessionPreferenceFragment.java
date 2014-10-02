@@ -35,14 +35,16 @@ public class MainSessionPreferenceFragment extends PreferenceFragment implements
 	@Override()
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
 			String key) {
-		if (key.equals(super.getActivity().getString(
-				R.string.email_shared_preference_key))) {
-			String newEMailValue = sharedPreferences.getString(key, null);
+		if (super.getActivity() != null) {
+			if (key.equals(super.getActivity().getString(
+					R.string.email_shared_preference_key))) {
+				String newEMailValue = sharedPreferences.getString(key, null);
 
-			if (!RegexValidator.isValidEMail(newEMailValue)) {
-				this.errorAlertDialogBuilder.create().show();
+				if (!RegexValidator.isValidEMail(newEMailValue)) {
+					this.errorAlertDialogBuilder.create().show();
 
-				this.onSetDefaultEMail();
+					this.onSetDefaultEMail();
+				}
 			}
 		}
 	}
