@@ -28,7 +28,7 @@ public final class EMailAccountManager {
 		for (Account account : accounts) {
 			if ((RegexValidator.isValidEMail(account.name))
 					&& (!eMailAccoutsList.contains(account.name))) {
-				eMailAccoutsList.add(account.name);
+				//eMailAccoutsList.add(account.name);
 			}
 		}
 

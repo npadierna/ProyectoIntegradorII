@@ -63,55 +63,57 @@ public final class R {
         public static final int delete_images_check_box_message=0x7f070011;
         /**  Shared Preferences Grader Settings 
          */
-        public static final int delete_images_shared_preference_key=0x7f070020;
-        public static final int delete_images_shared_preference_summary=0x7f070021;
-        public static final int delete_images_shared_preference_title=0x7f070022;
+        public static final int delete_images_shared_preference_key=0x7f070022;
+        public static final int delete_images_shared_preference_summary=0x7f070023;
+        public static final int delete_images_shared_preference_title=0x7f070024;
         public static final int development_semester_text_view=0x7f070001;
         /**  Main Session Activity 
          */
-        public static final int do_ping_to_server_button_label=0x7f07001a;
+        public static final int do_ping_to_server_button_label=0x7f07001c;
         public static final int email_selector_text_view_message=0x7f070012;
-        public static final int email_shared_preference_dialog_message=0x7f070023;
-        public static final int email_shared_preference_dialog_title=0x7f070024;
-        public static final int email_shared_preference_key=0x7f070025;
-        public static final int email_shared_preference_summary=0x7f070026;
-        public static final int email_shared_preference_title=0x7f070027;
-        public static final int grader_values_shared_preference_dialog_title=0x7f070028;
-        public static final int grader_values_shared_preference_key=0x7f07002b;
-        public static final int grader_values_shared_preference_summary=0x7f070029;
-        public static final int grader_values_shared_preference_title=0x7f07002a;
+        public static final int email_shared_preference_dialog_message=0x7f070025;
+        public static final int email_shared_preference_dialog_title=0x7f070026;
+        public static final int email_shared_preference_key=0x7f070027;
+        public static final int email_shared_preference_summary=0x7f070028;
+        public static final int email_shared_preference_title=0x7f070029;
+        public static final int grader_values_shared_preference_dialog_title=0x7f07002a;
+        public static final int grader_values_shared_preference_key=0x7f07002d;
+        public static final int grader_values_shared_preference_summary=0x7f07002b;
+        public static final int grader_values_shared_preference_title=0x7f07002c;
         public static final int initial_activity_name=0x7f070013;
         /**  Internet Connection Validator 
          */
-        public static final int internet_connection_url_server=0x7f070018;
-        public static final int internet_connection_validator_user_agent=0x7f070019;
+        public static final int internet_connection_url_server=0x7f07001a;
+        public static final int internet_connection_validator_user_agent=0x7f07001b;
         /**  Main Session Preference Fragment 
          */
-        public static final int invalid_email_alert_dialog_message=0x7f07001c;
-        public static final int invalid_email_alert_dialog_title=0x7f07001d;
+        public static final int invalid_email_alert_dialog_message=0x7f07001e;
+        public static final int invalid_email_alert_dialog_title=0x7f07001f;
         public static final int maximum_grade_selector_text_view_message=0x7f070014;
         /**  Main Settings Menu 
          */
-        public static final int menu_main_about_us_item=0x7f07001e;
-        public static final int menu_main_settings_item=0x7f07001f;
-        public static final int new_grader_session_button_label=0x7f07001b;
+        public static final int menu_main_about_us_item=0x7f070020;
+        public static final int menu_main_settings_item=0x7f070021;
+        public static final int new_grader_session_button_label=0x7f07001d;
         /**  Configuration Starter Activity 
          */
         public static final int no_backcamera_alert_dialog_message=0x7f07000a;
         public static final int no_backcamera_alert_dialog_title=0x7f07000b;
+        public static final int no_emails_accounts_alert_dialog_message=0x7f070015;
+        public static final int no_emails_accounts_alert_dialog_title=0x7f070016;
         public static final int no_internet_connection_alert_dialog_message=0x7f07000c;
         public static final int no_internet_connection_alert_dialog_title=0x7f07000d;
         public static final int professor_full_names_text_view=0x7f070003;
         public static final int professor_title_text_view=0x7f070004;
         public static final int project_name_text_view=0x7f070002;
-        public static final int session_data_configuration_text_view_title=0x7f070015;
-        public static final int session_data_shared_preference_category=0x7f07002c;
-        public static final int set_initial_configuration_button_label=0x7f070016;
+        public static final int session_data_configuration_text_view_title=0x7f070017;
+        public static final int session_data_shared_preference_category=0x7f07002e;
+        public static final int set_initial_configuration_button_label=0x7f070018;
         public static final int students_full_names_text_view=0x7f070005;
         public static final int students_title_text_view=0x7f070006;
         public static final int university_name_text_view=0x7f070007;
-        public static final int user_data_configuration_text_view_title=0x7f070017;
-        public static final int user_data_shared_preference_category=0x7f07002d;
+        public static final int user_data_configuration_text_view_title=0x7f070019;
+        public static final int user_data_shared_preference_category=0x7f07002f;
     }
     public static final class style {
         /** 

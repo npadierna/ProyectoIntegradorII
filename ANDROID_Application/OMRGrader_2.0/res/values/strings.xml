@@ -30,6 +30,8 @@
     <string name="email_selector_text_view_message">Seleccione un Correo Electrónico al cual desea enviar los resultados de las sesiones de calificación:</string>
     <string name="initial_activity_name">Configuración Inicial</string>
     <string name="maximum_grade_selector_text_view_message">Seleccione la máxima nota a ser asignada durante las Sesiones de Calificación:</string>
+    <string name="no_emails_accounts_alert_dialog_message">En su dispositivo móvil no se han encontrado cuentas asociadas a Correos Electrónicos.</string>
+    <string name="no_emails_accounts_alert_dialog_title">Sin Cuentas de Correo Electrónico</string>
     <string name="session_data_configuration_text_view_title">DATOS DE SESIÓN DE CALIFICACIÓN</string>
     <string name="set_initial_configuration_button_label">Listo y continuar</string>
     <string name="user_data_configuration_text_view_title">DATOS DE USUARIO</string>

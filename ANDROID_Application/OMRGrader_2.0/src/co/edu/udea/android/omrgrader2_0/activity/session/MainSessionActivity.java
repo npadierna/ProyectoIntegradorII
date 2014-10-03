@@ -72,4 +72,11 @@ public class MainSessionActivity extends Activity {
 			e.printStackTrace();
 		}
 	}
+
+	public void onStartGradeSession(View view) {
+		Log.v(TAG, "Starting new Grade Session.");
+
+		super.startActivity(new Intent(super.getApplicationContext(),
+				ImageTakerActivity.class));
+	}
 }

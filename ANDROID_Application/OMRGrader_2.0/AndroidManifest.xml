@@ -51,6 +51,11 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".activity.session.ImageTakerActivity"
+            android:label="@string/initial_activity_name"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
             android:name=".activity.configuration.InitialActivity"
             android:label="@string/initial_activity_name"
             android:noHistory="true"

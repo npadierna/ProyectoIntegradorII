@@ -3,6 +3,7 @@ package co.edu.udea.android.omrgrader2_0.activity.configuration;
 import java.util.List;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -32,6 +33,7 @@ public class InitialActivity extends Activity {
 	private String eMailAccountSelected;
 	private String maximumGradeSelected;
 
+	private AlertDialog.Builder errorAlertDialogBuilder;
 	private CheckBox deleteImagesCheckBox;
 	private Spinner eMailListSpinner;
 	private Spinner maximumGradeSpinner;
@@ -54,39 +56,55 @@ public class InitialActivity extends Activity {
 	private void createViewComponents() {
 		Log.v(TAG, "Creating the View Components for the Activity.");
 
+		this.errorAlertDialogBuilder = new AlertDialog.Builder(this);
+		this.errorAlertDialogBuilder
+				.setMessage(R.string.no_emails_accounts_alert_dialog_message);
+		this.errorAlertDialogBuilder
+				.setTitle(R.string.no_emails_accounts_alert_dialog_title);
+		this.errorAlertDialogBuilder.setPositiveButton(
+				R.string.accept_button_label, null);
+
+		this.deleteImagesCheckBox = (CheckBox) super
+				.findViewById(R.id.delete_images_checkBox);
+
 		this.eMailAccountsList = EMailAccountManager.findAllEMailsAccount(super
 				.getApplicationContext());
 
-		SpinnerAdapter eMailSpinnerAdapter = new ArrayAdapter<CharSequence>(
-				super.getApplicationContext(),
-				android.R.layout.simple_spinner_dropdown_item,
-				this.eMailAccountsList);
+		this.eMailListSpinner = (Spinner) super
+				.findViewById(R.id.email_list_spinner);
+
+		if (!this.eMailAccountsList.isEmpty()) {
+			SpinnerAdapter eMailSpinnerAdapter = new ArrayAdapter<CharSequence>(
+					super.getApplicationContext(),
+					android.R.layout.simple_spinner_dropdown_item,
+					this.eMailAccountsList);
+
+			this.eMailListSpinner.setAdapter(eMailSpinnerAdapter);
+			this.eMailListSpinner
+					.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+						@Override()
+						public void onItemSelected(AdapterView<?> parente,
+								View view, int position, long id) {
+							eMailAccountSelected = eMailAccountsList.get(
+									position).toString();
+						}
+
+						@Override()
+						public void onNothingSelected(AdapterView<?> parent) {
+						}
+					});
+		} else {
+			this.eMailListSpinner.setEnabled(false);
+
+			this.errorAlertDialogBuilder.create().show();
+		}
+
 		SpinnerAdapter maximumGradeSpinnerAdapter = new ArrayAdapter<CharSequence>(
 				super.getApplicationContext(),
 				android.R.layout.simple_spinner_dropdown_item, super
 						.getResources().getStringArray(
 								R.array.grader_values_shared_preference_array));
-
-		this.deleteImagesCheckBox = (CheckBox) super
-				.findViewById(R.id.delete_images_checkBox);
-
-		this.eMailListSpinner = (Spinner) super
-				.findViewById(R.id.email_list_spinner);
-		this.eMailListSpinner.setAdapter(eMailSpinnerAdapter);
-		this.eMailListSpinner
-				.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-
-					@Override()
-					public void onItemSelected(AdapterView<?> parente,
-							View view, int position, long id) {
-						eMailAccountSelected = eMailAccountsList.get(position)
-								.toString();
-					}
-
-					@Override()
-					public void onNothingSelected(AdapterView<?> parent) {
-					}
-				});
 
 		this.maximumGradeSpinner = (Spinner) super
 				.findViewById(R.id.maximum_grade_spinner);
