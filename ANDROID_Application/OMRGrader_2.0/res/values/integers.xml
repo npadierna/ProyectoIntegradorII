@@ -4,4 +4,9 @@
     <!-- Internet Connection Validator -->
     <integer name="maximum_timeout">5000</integer>
 
+    <!-- Shared Preferences Grader Settings -->
+    <integer name="grade_precision_default_shared_preference">3</integer>
+    <integer name="grade_precision_maximum_shared_preference">5</integer>
+    <integer name="grade_precision_minimum_shared_preference">1</integer>
+
 </resources>

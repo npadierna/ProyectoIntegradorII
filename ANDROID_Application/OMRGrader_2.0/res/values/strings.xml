@@ -45,8 +45,12 @@
     <string name="new_grader_session_button_label">Nueva Sesión</string>
 
     <!-- Main Session Preference Fragment -->
-    <string name="invalid_email_alert_dialog_message">El Correo Electrónico que ha sido ingresado no es válido. Se establecerá el correo por defecto del dispositivo.</string>
+    <string name="invalid_email_alert_dialog_message">El Correo Electrónico que ha sido ingresado no es válido. No se establecerá ningún valor para el Correo Electrónico.</string>
     <string name="invalid_email_alert_dialog_title">E-Mail Inválido</string>
+    <string name="invalid_grade_precision_dialog_message">El nivel de la Precisión establecida para los decimales de las notas no cumple con los criterios, se establecerá un valor por defecto.</string>
+    <string name="invalid_grade_precision_dialog_title">Precisión Inválida</string>
+    <string name="invalid_percentage_alert_dialog_message">El valor del Porcentaje aprobatorio establecido no cumple con los criterios, se establecerá un valor por defecto.</string>
+    <string name="invalid_percentage_alert_dialog_title">Porcentaje Inválido</string>
 
     <!-- Main Settings Menu -->
     <string name="menu_main_about_us_item">Acerca de</string>
@@ -61,10 +65,23 @@
     <string name="email_shared_preference_key">E-Mail</string>
     <string name="email_shared_preference_summary">Correo Electrónico al cual enviar los resultados de las calificaciones.</string>
     <string name="email_shared_preference_title">Correo Electrónico</string>
+    <string name="grade_precision_shared_preference_dialog_message">Ingrese la cantidad de números después del punto decimal a ser considerados:</string>
+    <string name="grade_precision_shared_preference_dialog_title">Precisión Decimal</string>
+    <string name="grade_precision_shared_preference_key">DecimalPrecision</string>
+    <string name="grade_precision_shared_preference_summary">Cantidad de números decimales a considerar en las notas de la sesión.</string>
+    <string name="grade_precision_shared_preference_title">Precisión Decimal De Notas</string>
     <string name="grader_values_shared_preference_dialog_title">Máxima Nota</string>
     <string name="grader_values_shared_preference_summary">Máxima nota a ser obtenida durante una Sesión de Calificación.</string>
     <string name="grader_values_shared_preference_title">Máxima Nota</string>
     <string name="grader_values_shared_preference_key">MaximumGrader</string>
+    <string name="percentage_default_shared_preference">60.0</string>
+    <string name="percentage_maximum_shared_preference">100.0</string>
+    <string name="percentage_minimum_shared_preference">25.0</string>
+    <string name="percentage_shared_preference_dialog_message">Ingrese el mínimo porcentaje aceptable para aprobar los exámenes:</string>
+    <string name="percentage_shared_preference_dialog_title">Mínimo Porcentaje Aprobatorio</string>
+    <string name="percentage_shared_preference_key">GradePercentage</string>
+    <string name="percentage_shared_preference_summary">Mínimo valor en Porcentaje para aprobar los exámenes.</string>
+    <string name="percentage_shared_preference_title">Mínimo Porcentaje Aprobatorio</string>
     <string name="session_data_shared_preference_category">Datos de Sesión de Calificación</string>
     <string name="user_data_shared_preference_category">Datos de Usuario</string>
 
