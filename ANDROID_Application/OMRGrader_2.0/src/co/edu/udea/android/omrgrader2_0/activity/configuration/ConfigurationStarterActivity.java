@@ -50,16 +50,16 @@ public class ConfigurationStarterActivity extends Activity {
 			return;
 		}
 
-//		if (!InternetConnectionValidator.isNetworkConnecting(super
-//				.getApplicationContext())) {
-//			this.errorAlertDialogBuilder
-//					.setMessage(R.string.no_internet_connection_alert_dialog_message);
-//			this.errorAlertDialogBuilder
-//					.setTitle(R.string.no_internet_connection_alert_dialog_title);
-//			this.errorAlertDialogBuilder.create().show();
-//
-//			return;
-//		}
+		if (!InternetConnectionValidator.isNetworkConnecting(super
+				.getApplicationContext())) {
+			this.errorAlertDialogBuilder
+					.setMessage(R.string.no_internet_connection_alert_dialog_message);
+			this.errorAlertDialogBuilder
+					.setTitle(R.string.no_internet_connection_alert_dialog_title);
+			this.errorAlertDialogBuilder.create().show();
+
+			return;
+		}
 
 		this.onStartNextActivity();
 	}

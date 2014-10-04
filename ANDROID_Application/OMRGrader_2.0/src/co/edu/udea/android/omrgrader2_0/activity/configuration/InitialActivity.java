@@ -13,11 +13,13 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 import co.edu.udea.android.omrgrader2_0.R;
 import co.edu.udea.android.omrgrader2_0.activity.session.MainSessionActivity;
 import co.edu.udea.android.omrgrader2_0.util.EMailAccountManager;
+import co.edu.udea.android.omrgrader2_0.util.validator.RegexValidator;
 
 /**
  * 
@@ -35,6 +37,7 @@ public class InitialActivity extends Activity {
 
 	private AlertDialog.Builder errorAlertDialogBuilder;
 	private CheckBox deleteImagesCheckBox;
+	private EditText eMailEditText;
 	private Spinner eMailListSpinner;
 	private Spinner maximumGradeSpinner;
 
@@ -47,6 +50,16 @@ public class InitialActivity extends Activity {
 	}
 
 	public void onSetInitialConfiguration(View view) {
+		if (this.eMailAccountsList.isEmpty()) {
+			this.eMailAccountSelected = this.eMailEditText.getText().toString();
+
+			if (!RegexValidator.isValidEMail(this.eMailAccountSelected)) {
+				this.errorAlertDialogBuilder.create().show();
+
+				return;
+			}
+		}
+
 		this.onPersistInitialConfiguration();
 
 		super.startActivity(new Intent(super.getApplicationContext(),
@@ -58,14 +71,17 @@ public class InitialActivity extends Activity {
 
 		this.errorAlertDialogBuilder = new AlertDialog.Builder(this);
 		this.errorAlertDialogBuilder
-				.setMessage(R.string.no_emails_accounts_alert_dialog_message);
+				.setMessage(R.string.invalid_email_account_alert_dialog_message);
 		this.errorAlertDialogBuilder
-				.setTitle(R.string.no_emails_accounts_alert_dialog_title);
+				.setTitle(R.string.invalid_email_account_alert_dialog_title);
 		this.errorAlertDialogBuilder.setPositiveButton(
 				R.string.accept_button_label, null);
 
+		this.eMailEditText = (EditText) super
+				.findViewById(R.id.email_edit_text);
+
 		this.deleteImagesCheckBox = (CheckBox) super
-				.findViewById(R.id.delete_images_checkBox);
+				.findViewById(R.id.delete_images_check_box);
 
 		this.eMailAccountsList = EMailAccountManager.findAllEMailsAccount(super
 				.getApplicationContext());
@@ -94,10 +110,9 @@ public class InitialActivity extends Activity {
 						public void onNothingSelected(AdapterView<?> parent) {
 						}
 					});
+			this.eMailListSpinner.setVisibility(View.VISIBLE);
 		} else {
-			this.eMailListSpinner.setEnabled(false);
-
-			this.errorAlertDialogBuilder.create().show();
+			this.eMailEditText.setVisibility(View.VISIBLE);
 		}
 
 		SpinnerAdapter maximumGradeSpinnerAdapter = new ArrayAdapter<CharSequence>(

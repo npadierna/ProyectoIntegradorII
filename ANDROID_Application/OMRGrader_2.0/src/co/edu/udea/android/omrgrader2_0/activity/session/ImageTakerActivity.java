@@ -34,10 +34,19 @@ public class ImageTakerActivity extends Activity {
 		super.setContentView(R.layout.activity_image_taker);
 	}
 
+	public void onGradeExams(View view) {
+		Log.v(TAG, "Starting The Grade for Exams.");
+	}
+
+	public void onStartTakingStudentsExamsImages(View view) {
+		Log.v(TAG, "Start Taking Students Exams Images.");
+	}
+
 	public void onTakeReferenceExamImage(View view) {
 		Log.v(TAG, "Taking the Reference Exam Image.");
 
-		Bitmap imageBitmap = BitmapFactory.decodeFile("/storage/sdcard0/DCIM/Camera/1398827742194.jpg");
+		Bitmap imageBitmap = BitmapFactory
+				.decodeFile("/storage/sdcard0/DCIM/Camera/1398827742194.jpg");
 		AsyncTask<Object, Void, Integer> webServiceAsyncTask = new ExamImageSenderAsyncTask();
 
 		webServiceAsyncTask.execute(new Object[] { imageBitmap });

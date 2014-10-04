@@ -23,9 +23,9 @@ public final class R {
         public static final int ic_launcher=0x7f020000;
     }
     public static final class id {
-        public static final int button=0x7f0b0000;
-        public static final int delete_images_checkBox=0x7f0b0003;
-        public static final int email_list_spinner=0x7f0b0001;
+        public static final int delete_images_check_box=0x7f0b0003;
+        public static final int email_edit_text=0x7f0b0001;
+        public static final int email_list_spinner=0x7f0b0000;
         public static final int main_about_us_menu_item=0x7f0b0005;
         public static final int main_settings_menu_item=0x7f0b0004;
         public static final int maximum_grade_spinner=0x7f0b0002;
@@ -65,77 +65,86 @@ public final class R {
         public static final int cancel_button_label=0x7f070010;
         /**  Initial Activity 
          */
-        public static final int delete_images_check_box_message=0x7f070011;
+        public static final int delete_images_check_box_message=0x7f070015;
         /**  Shared Preferences Grader Settings 
          */
-        public static final int delete_images_shared_preference_key=0x7f070026;
-        public static final int delete_images_shared_preference_summary=0x7f070027;
-        public static final int delete_images_shared_preference_title=0x7f070028;
+        public static final int delete_images_shared_preference_key=0x7f07002b;
+        public static final int delete_images_shared_preference_summary=0x7f07002c;
+        public static final int delete_images_shared_preference_title=0x7f07002d;
         public static final int development_semester_text_view=0x7f070001;
         /**  Main Session Activity 
          */
-        public static final int do_ping_to_server_button_label=0x7f07001c;
-        public static final int email_selector_text_view_message=0x7f070012;
-        public static final int email_shared_preference_dialog_message=0x7f070029;
-        public static final int email_shared_preference_dialog_title=0x7f07002a;
-        public static final int email_shared_preference_key=0x7f07002b;
-        public static final int email_shared_preference_summary=0x7f07002c;
-        public static final int email_shared_preference_title=0x7f07002d;
-        public static final int grade_precision_shared_preference_dialog_message=0x7f07002e;
-        public static final int grade_precision_shared_preference_dialog_title=0x7f07002f;
-        public static final int grade_precision_shared_preference_key=0x7f070030;
-        public static final int grade_precision_shared_preference_summary=0x7f070031;
-        public static final int grade_precision_shared_preference_title=0x7f070032;
-        public static final int grader_values_shared_preference_dialog_title=0x7f070033;
-        public static final int grader_values_shared_preference_key=0x7f070036;
-        public static final int grader_values_shared_preference_summary=0x7f070034;
-        public static final int grader_values_shared_preference_title=0x7f070035;
-        public static final int initial_activity_name=0x7f070013;
+        public static final int do_ping_to_server_button_label=0x7f070020;
+        public static final int email_selector_text_view_message=0x7f070016;
+        public static final int email_shared_preference_dialog_message=0x7f07002e;
+        public static final int email_shared_preference_dialog_title=0x7f07002f;
+        public static final int email_shared_preference_key=0x7f070030;
+        public static final int email_shared_preference_summary=0x7f070031;
+        public static final int email_shared_preference_title=0x7f070032;
+        public static final int grade_exams_button_label=0x7f070014;
+        public static final int grade_precision_shared_preference_dialog_message=0x7f070033;
+        public static final int grade_precision_shared_preference_dialog_title=0x7f070034;
+        public static final int grade_precision_shared_preference_key=0x7f070035;
+        public static final int grade_precision_shared_preference_summary=0x7f070036;
+        public static final int grade_precision_shared_preference_title=0x7f070037;
+        public static final int grader_values_shared_preference_dialog_title=0x7f070038;
+        public static final int grader_values_shared_preference_key=0x7f07003b;
+        public static final int grader_values_shared_preference_summary=0x7f070039;
+        public static final int grader_values_shared_preference_title=0x7f07003a;
+        /**  Image Taker Activity 
+         */
+        public static final int image_taker_activity_name=0x7f070011;
+        public static final int initial_activity_name=0x7f070017;
         /**  Internet Connection Validator 
          */
-        public static final int internet_connection_url_server=0x7f07001a;
-        public static final int internet_connection_validator_user_agent=0x7f07001b;
+        public static final int internet_connection_url_server=0x7f07001e;
+        public static final int internet_connection_validator_user_agent=0x7f07001f;
+        public static final int invalid_email_account_alert_dialog_message=0x7f070019;
+        public static final int invalid_email_account_alert_dialog_title=0x7f07001a;
         /**  Main Session Preference Fragment 
          */
-        public static final int invalid_email_alert_dialog_message=0x7f07001e;
-        public static final int invalid_email_alert_dialog_title=0x7f07001f;
-        public static final int invalid_grade_precision_dialog_message=0x7f070020;
-        public static final int invalid_grade_precision_dialog_title=0x7f070021;
-        public static final int invalid_percentage_alert_dialog_message=0x7f070022;
-        public static final int invalid_percentage_alert_dialog_title=0x7f070023;
-        public static final int maximum_grade_selector_text_view_message=0x7f070014;
+        public static final int invalid_email_alert_dialog_message=0x7f070023;
+        public static final int invalid_email_alert_dialog_title=0x7f070024;
+        public static final int invalid_grade_precision_dialog_message=0x7f070025;
+        public static final int invalid_grade_precision_dialog_title=0x7f070026;
+        public static final int invalid_percentage_alert_dialog_message=0x7f070027;
+        public static final int invalid_percentage_alert_dialog_title=0x7f070028;
+        /**  Main Session Preference Activity 
+         */
+        public static final int main_session_preference_activity_name=0x7f070022;
+        public static final int maximum_grade_selector_text_view_message=0x7f070018;
         /**  Main Settings Menu 
          */
-        public static final int menu_main_about_us_item=0x7f070024;
-        public static final int menu_main_settings_item=0x7f070025;
-        public static final int new_grader_session_button_label=0x7f07001d;
+        public static final int menu_main_about_us_item=0x7f070029;
+        public static final int menu_main_settings_item=0x7f07002a;
+        public static final int new_grader_session_button_label=0x7f070021;
         /**  Configuration Starter Activity 
          */
         public static final int no_backcamera_alert_dialog_message=0x7f07000a;
         public static final int no_backcamera_alert_dialog_title=0x7f07000b;
-        public static final int no_emails_accounts_alert_dialog_message=0x7f070015;
-        public static final int no_emails_accounts_alert_dialog_title=0x7f070016;
         public static final int no_internet_connection_alert_dialog_message=0x7f07000c;
         public static final int no_internet_connection_alert_dialog_title=0x7f07000d;
-        public static final int percentage_default_shared_preference=0x7f070037;
-        public static final int percentage_maximum_shared_preference=0x7f070038;
-        public static final int percentage_minimum_shared_preference=0x7f070039;
-        public static final int percentage_shared_preference_dialog_message=0x7f07003a;
-        public static final int percentage_shared_preference_dialog_title=0x7f07003b;
-        public static final int percentage_shared_preference_key=0x7f07003c;
-        public static final int percentage_shared_preference_summary=0x7f07003d;
-        public static final int percentage_shared_preference_title=0x7f07003e;
+        public static final int percentage_default_shared_preference=0x7f07003c;
+        public static final int percentage_maximum_shared_preference=0x7f07003d;
+        public static final int percentage_minimum_shared_preference=0x7f07003e;
+        public static final int percentage_shared_preference_dialog_message=0x7f07003f;
+        public static final int percentage_shared_preference_dialog_title=0x7f070040;
+        public static final int percentage_shared_preference_key=0x7f070041;
+        public static final int percentage_shared_preference_summary=0x7f070042;
+        public static final int percentage_shared_preference_title=0x7f070043;
         public static final int professor_full_names_text_view=0x7f070003;
         public static final int professor_title_text_view=0x7f070004;
         public static final int project_name_text_view=0x7f070002;
-        public static final int session_data_configuration_text_view_title=0x7f070017;
-        public static final int session_data_shared_preference_category=0x7f07003f;
-        public static final int set_initial_configuration_button_label=0x7f070018;
+        public static final int session_data_configuration_text_view_title=0x7f07001b;
+        public static final int session_data_shared_preference_category=0x7f070044;
+        public static final int set_initial_configuration_button_label=0x7f07001c;
+        public static final int start_taking_students_exams_images_button_label=0x7f070012;
         public static final int students_full_names_text_view=0x7f070005;
         public static final int students_title_text_view=0x7f070006;
+        public static final int take_reference_exam_image_button_label=0x7f070013;
         public static final int university_name_text_view=0x7f070007;
-        public static final int user_data_configuration_text_view_title=0x7f070019;
-        public static final int user_data_shared_preference_category=0x7f070040;
+        public static final int user_data_configuration_text_view_title=0x7f07001d;
+        public static final int user_data_shared_preference_category=0x7f070045;
     }
     public static final class style {
         /** 
