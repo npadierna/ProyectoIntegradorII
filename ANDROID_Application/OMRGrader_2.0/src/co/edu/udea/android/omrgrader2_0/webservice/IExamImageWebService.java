@@ -14,6 +14,6 @@ public interface IExamImageWebService {
 	public boolean uploadReferenceExamImageFile(Bitmap referenceExamImageBitmap)
 			throws OMRGraderWebServiceException;
 
-	public boolean uploadStudentExamImageFile(Bitmap studentExamImageBitmap)
-			throws OMRGraderWebServiceException;
+	public boolean uploadStudentExamImageFile(Bitmap studentExamImageBitmap,
+			int imageFieldId) throws OMRGraderWebServiceException;
 }

@@ -21,6 +21,7 @@
     <Button
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:enabled="false"
         android:onClick="onStartTakingStudentsExamsImages"
         android:text="@string/start_taking_students_exams_images_button_label"
         android:textStyle="bold" >
@@ -29,6 +30,7 @@
     <Button
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:enabled="false"
         android:onClick="onGradeExams"
         android:text="@string/grade_exams_button_label"
         android:textStyle="bold" >
