@@ -11,8 +11,7 @@ import org.json.JSONObject;
  */
 public interface IJSONContext {
 
-	public JSONObject packEntityToJsonObject(IJSONContext jsonContext)
-			throws JSONException;
+	public JSONObject packEntityToJsonObject() throws JSONException;
 
 	public IJSONContext unpackJsonOjectToEntity(JSONObject jsonObject)
 			throws JSONException;

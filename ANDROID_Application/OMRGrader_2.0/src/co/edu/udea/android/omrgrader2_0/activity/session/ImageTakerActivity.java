@@ -11,7 +11,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import co.edu.udea.android.omrgrader2_0.R;
-import co.edu.udea.android.omrgrader2_0.business.grade.ExamImageSenderAsyncTask;
+import co.edu.udea.android.omrgrader2_0.business.grade.ExamImageUploaderAsyncTask;
+import co.edu.udea.android.omrgrader2_0.business.grade.GraderSessionAsyncTask;
+import co.edu.udea.android.omrgrader2_0.webservice.model.GraderSession;
 
 /**
  * 
@@ -45,13 +47,23 @@ public class ImageTakerActivity extends Activity {
 	public void onTakeReferenceExamImage(View view) {
 		Log.v(TAG, "Taking the Reference Exam Image.");
 
+		GraderSession graderSession = new GraderSession(60.0F, 100.0F, 3, null,
+				"npadierna@gmail.com", "Session");
 		Bitmap imageBitmap = BitmapFactory
 				.decodeFile("/storage/sdcard0/DCIM/Camera/1398827742194.jpg");
-		AsyncTask<Object, Void, Integer> webServiceAsyncTask = new ExamImageSenderAsyncTask();
 
-		webServiceAsyncTask.execute(new Object[] { imageBitmap });
+		AsyncTask<Object, Void, Integer> examImageUploaderAsyncTask = new ExamImageUploaderAsyncTask();
+		// examImageUploaderAsyncTask.execute(new Object[] { imageBitmap });
+
+		AsyncTask<Object, Void, Object[]> graderSessionAsyncTask = new GraderSessionAsyncTask();
+		graderSessionAsyncTask.execute(new Object[] {
+				GraderSessionAsyncTask.CREATE_GRADER_SESSION, graderSession });
+
 		try {
-			webServiceAsyncTask.get();
+			// examImageUploaderAsyncTask.get();
+			Object[] returns = graderSessionAsyncTask.get();
+
+			Log.v(TAG, String.valueOf(returns.length));
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		} catch (ExecutionException e) {

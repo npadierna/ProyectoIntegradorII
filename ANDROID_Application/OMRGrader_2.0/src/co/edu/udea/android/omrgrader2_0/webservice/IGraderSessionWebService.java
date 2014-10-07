@@ -11,11 +11,9 @@ import co.edu.udea.android.omrgrader2_0.webservice.model.GraderSession;
  */
 public interface IGraderSessionWebService {
 
-	public boolean createGraderSession(GraderSession graderSession)
+	public GraderSession createGraderSession(GraderSession graderSession)
 			throws OMRGraderWebServiceException;
 
-	public boolean finishGraderSession(GraderSession graderSession)
+	public GraderSession finishGraderSession(GraderSession graderSession)
 			throws OMRGraderWebServiceException;
-
-	public int buildStorageDirectoryPathName(GraderSession graderSession);
 }

@@ -103,8 +103,7 @@ public class GraderSession implements IJSONContext, Serializable {
 	}
 
 	@Override()
-	public JSONObject packEntityToJsonObject(IJSONContext jsonContext)
-			throws JSONException {
+	public JSONObject packEntityToJsonObject() throws JSONException {
 		JSONObject jsonObject = new JSONObject();
 
 		jsonObject.put(APPROVAL_PERCENTAGE, this.getApprovalPercentage());
@@ -120,6 +119,23 @@ public class GraderSession implements IJSONContext, Serializable {
 	@Override()
 	public IJSONContext unpackJsonOjectToEntity(JSONObject jsonObject)
 			throws JSONException {
+		if (jsonObject.has(APPROVAL_PERCENTAGE)) {
+			this.setApprovalPercentage((float) jsonObject
+					.getDouble(APPROVAL_PERCENTAGE));
+		}
+
+		if (jsonObject.has(MAXIMUM_GRADE)) {
+			this.setMaximumGrade((float) jsonObject.getDouble(MAXIMUM_GRADE));
+		}
+
+		if (jsonObject.has(DECIMAL_PRECISION)) {
+			this.setDecimalPrecision(jsonObject.getInt(DECIMAL_PRECISION));
+		}
+
+		if (jsonObject.has(REQUEST_TIME_STAMP)) {
+			this.setRequestTimeStamp(jsonObject.getLong(REQUEST_TIME_STAMP));
+		}
+
 		this.seteMailAccount(jsonObject.getString(E_MAIL_ACCOUNT));
 		this.setGraderSessionName(jsonObject.getString(GRADER_SESSION_NAME));
 

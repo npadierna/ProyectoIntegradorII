@@ -2,6 +2,7 @@ package co.edu.udea.android.omrgrader2_0.webservice;
 
 import android.graphics.Bitmap;
 import co.edu.udea.android.omrgrader2_0.webservice.exception.OMRGraderWebServiceException;
+import co.edu.udea.android.omrgrader2_0.webservice.model.GraderSession;
 
 /**
  * 
@@ -11,9 +12,13 @@ import co.edu.udea.android.omrgrader2_0.webservice.exception.OMRGraderWebService
  */
 public interface IExamImageWebService {
 
-	public boolean uploadReferenceExamImageFile(Bitmap referenceExamImageBitmap)
+	public int buildStorageDirectoryPathName(GraderSession graderSession);
+
+	public boolean uploadReferenceExamImageFile(
+			Bitmap referenceExamImageBitmap, GraderSession graderSession)
 			throws OMRGraderWebServiceException;
 
 	public boolean uploadStudentExamImageFile(Bitmap studentExamImageBitmap,
-			int imageFieldId) throws OMRGraderWebServiceException;
+			Integer imageFileId, GraderSession graderSession)
+			throws OMRGraderWebServiceException;
 }
