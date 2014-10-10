@@ -30,6 +30,7 @@
     <string name="start_taking_students_exams_images_button_label">Capturar Exámenes de Estudiantes</string>
     <string name="take_reference_exam_image_button_label">Capturar Exámen de Referencia</string>
     <string name="grade_exams_button_label">Calificar Exámenes</string>
+
     <!-- Initial Activity -->
     <string name="delete_images_check_box_message">¿Borrar las imágenes capturadas al finalizar la sesión de calificación?</string>
     <string name="email_selector_text_view_message">Proporcione un Correo Electrónico al cual desea enviar los resultados de las sesiones de calificación:</string>
@@ -78,6 +79,7 @@
     <string name="grade_precision_shared_preference_key">DecimalPrecision</string>
     <string name="grade_precision_shared_preference_summary">Cantidad de números decimales a considerar en las notas de la sesión.</string>
     <string name="grade_precision_shared_preference_title">Precisión Decimal De Notas</string>
+    <string name="grader_values_default_shared_preference">5.0</string>
     <string name="grader_values_shared_preference_dialog_title">Máxima Nota</string>
     <string name="grader_values_shared_preference_summary">Máxima nota a ser obtenida durante una Sesión de Calificación.</string>
     <string name="grader_values_shared_preference_title">Máxima Nota</string>

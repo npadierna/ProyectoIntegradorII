@@ -11,8 +11,10 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import co.edu.udea.android.omrgrader2_0.R;
-import co.edu.udea.android.omrgrader2_0.business.grade.ExamImageUploaderAsyncTask;
-import co.edu.udea.android.omrgrader2_0.business.grade.GraderSessionAsyncTask;
+import co.edu.udea.android.omrgrader2_0.business.exception.OMRGraderBusinessException;
+import co.edu.udea.android.omrgrader2_0.business.grade.OMRGraderProcess;
+import co.edu.udea.android.omrgrader2_0.business.grade.asynctask.ExamImageUploaderAsyncTask;
+import co.edu.udea.android.omrgrader2_0.business.grade.asynctask.GraderSessionAsyncTask;
 import co.edu.udea.android.omrgrader2_0.webservice.model.GraderSession;
 
 /**
@@ -25,6 +27,8 @@ public class ImageTakerActivity extends Activity {
 
 	private static final String TAG = ImageTakerActivity.class.getSimpleName();
 
+	private OMRGraderProcess omrGraderProcess;
+
 	@Override()
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
@@ -34,6 +38,8 @@ public class ImageTakerActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		super.setContentView(R.layout.activity_image_taker);
+
+		this.createComponents();
 	}
 
 	public void onGradeExams(View view) {
@@ -67,6 +73,17 @@ public class ImageTakerActivity extends Activity {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		} catch (ExecutionException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void createComponents() {
+		// FIXME: Think more about how to handle this exception.
+
+		try {
+			this.omrGraderProcess = new OMRGraderProcess(
+					super.getApplicationContext(), "");
+		} catch (OMRGraderBusinessException e) {
 			e.printStackTrace();
 		}
 	}

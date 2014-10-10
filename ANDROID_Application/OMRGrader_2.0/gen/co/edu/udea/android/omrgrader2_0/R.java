@@ -87,10 +87,11 @@ public final class R {
         public static final int grade_precision_shared_preference_key=0x7f070035;
         public static final int grade_precision_shared_preference_summary=0x7f070036;
         public static final int grade_precision_shared_preference_title=0x7f070037;
-        public static final int grader_values_shared_preference_dialog_title=0x7f070038;
-        public static final int grader_values_shared_preference_key=0x7f07003b;
-        public static final int grader_values_shared_preference_summary=0x7f070039;
-        public static final int grader_values_shared_preference_title=0x7f07003a;
+        public static final int grader_values_default_shared_preference=0x7f070038;
+        public static final int grader_values_shared_preference_dialog_title=0x7f070039;
+        public static final int grader_values_shared_preference_key=0x7f07003c;
+        public static final int grader_values_shared_preference_summary=0x7f07003a;
+        public static final int grader_values_shared_preference_title=0x7f07003b;
         /**  Image Taker Activity 
          */
         public static final int image_taker_activity_name=0x7f070011;
@@ -124,19 +125,19 @@ public final class R {
         public static final int no_backcamera_alert_dialog_title=0x7f07000b;
         public static final int no_internet_connection_alert_dialog_message=0x7f07000c;
         public static final int no_internet_connection_alert_dialog_title=0x7f07000d;
-        public static final int percentage_default_shared_preference=0x7f07003c;
-        public static final int percentage_maximum_shared_preference=0x7f07003d;
-        public static final int percentage_minimum_shared_preference=0x7f07003e;
-        public static final int percentage_shared_preference_dialog_message=0x7f07003f;
-        public static final int percentage_shared_preference_dialog_title=0x7f070040;
-        public static final int percentage_shared_preference_key=0x7f070041;
-        public static final int percentage_shared_preference_summary=0x7f070042;
-        public static final int percentage_shared_preference_title=0x7f070043;
+        public static final int percentage_default_shared_preference=0x7f07003d;
+        public static final int percentage_maximum_shared_preference=0x7f07003e;
+        public static final int percentage_minimum_shared_preference=0x7f07003f;
+        public static final int percentage_shared_preference_dialog_message=0x7f070040;
+        public static final int percentage_shared_preference_dialog_title=0x7f070041;
+        public static final int percentage_shared_preference_key=0x7f070042;
+        public static final int percentage_shared_preference_summary=0x7f070043;
+        public static final int percentage_shared_preference_title=0x7f070044;
         public static final int professor_full_names_text_view=0x7f070003;
         public static final int professor_title_text_view=0x7f070004;
         public static final int project_name_text_view=0x7f070002;
         public static final int session_data_configuration_text_view_title=0x7f07001b;
-        public static final int session_data_shared_preference_category=0x7f070044;
+        public static final int session_data_shared_preference_category=0x7f070045;
         public static final int set_initial_configuration_button_label=0x7f07001c;
         public static final int start_taking_students_exams_images_button_label=0x7f070012;
         public static final int students_full_names_text_view=0x7f070005;
@@ -144,7 +145,7 @@ public final class R {
         public static final int take_reference_exam_image_button_label=0x7f070013;
         public static final int university_name_text_view=0x7f070007;
         public static final int user_data_configuration_text_view_title=0x7f07001d;
-        public static final int user_data_shared_preference_category=0x7f070045;
+        public static final int user_data_shared_preference_category=0x7f070046;
     }
     public static final class style {
         /** 

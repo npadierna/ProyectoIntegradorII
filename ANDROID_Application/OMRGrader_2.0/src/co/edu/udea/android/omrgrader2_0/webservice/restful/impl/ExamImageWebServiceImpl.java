@@ -15,6 +15,7 @@ import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
 import android.text.TextUtils;
 import android.util.Log;
+import co.edu.udea.android.omrgrader2_0.util.validator.RegexValidator;
 import co.edu.udea.android.omrgrader2_0.webservice.IExamImageWebService;
 import co.edu.udea.android.omrgrader2_0.webservice.exception.OMRGraderWebServiceException;
 import co.edu.udea.android.omrgrader2_0.webservice.model.GraderSession;
@@ -155,11 +156,21 @@ public class ExamImageWebServiceImpl extends AbstractContextWebService
 					|| (TextUtils.isEmpty(graderSession.geteMailAccount()
 							.trim()))
 					|| (TextUtils.isEmpty(graderSession.getGraderSessionName()
-							.trim()))) {
+							.trim()))
+					|| (!RegexValidator.isValidEMail(graderSession
+							.geteMailAccount()))) {
 
 				return (false);
 			}
 		} catch (Exception e) {
+
+			return (false);
+		}
+
+		if ((graderSession.getRequestTimeStamp() == null)
+				|| (graderSession.getApprovalPercentage() <= 0.0F)
+				|| (graderSession.getDecimalPrecision() <= 0)
+				|| (graderSession.getMaximumGrade() <= 0.0F)) {
 
 			return (false);
 		}

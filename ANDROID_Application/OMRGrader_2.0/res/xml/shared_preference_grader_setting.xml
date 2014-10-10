@@ -19,6 +19,7 @@
         android:order="2"
         android:title="@string/session_data_shared_preference_category" >
         <ListPreference
+            android:defaultValue="@string/grader_values_default_shared_preference"
             android:dialogTitle="@string/grader_values_shared_preference_dialog_title"
             android:entries="@array/grader_values_shared_preference_array"
             android:entryValues="@array/grader_values_shared_preference_array"
