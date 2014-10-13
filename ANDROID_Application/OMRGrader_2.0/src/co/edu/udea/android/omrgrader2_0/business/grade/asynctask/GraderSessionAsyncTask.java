@@ -42,11 +42,11 @@ public class GraderSessionAsyncTask extends AsyncTask<Object, Void, Object[]> {
 				}
 			} catch (OMRGraderWebServiceException e) {
 
-				return (new Object[] { GRADER_SESSION_FAIL, resultGraderSession });
+				return (new Object[] { GRADER_SESSION_FAIL, null });
 			}
 
 			return (new Object[] {
-					((resultGraderSession == null) ? GRADER_SESSION_OK
+					((resultGraderSession != null) ? GRADER_SESSION_OK
 							: GRADER_SESSION_FAIL), resultGraderSession });
 		}
 
