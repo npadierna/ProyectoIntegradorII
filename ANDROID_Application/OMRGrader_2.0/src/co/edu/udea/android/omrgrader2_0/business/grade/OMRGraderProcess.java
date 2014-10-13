@@ -29,6 +29,7 @@ public final class OMRGraderProcess {
 	private BaseStorageDirectory baseStorageDirectory;
 	private GraderSession graderSession;
 
+	private File sessionDirectoryFile;
 	private File referenceExamImageFile;
 	private List<File> studentsExamsImagesFilesList;
 

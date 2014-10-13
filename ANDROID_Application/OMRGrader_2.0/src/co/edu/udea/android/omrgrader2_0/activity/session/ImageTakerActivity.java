@@ -27,11 +27,28 @@ public class ImageTakerActivity extends Activity {
 
 	private static final String TAG = ImageTakerActivity.class.getSimpleName();
 
+	private static final int REQUEST_FOR_TAKING_REFERENCE_EXAM = 1;
+	private static final int REQUEST_FOR_TAKING_STUDENT_EXAM = 2;
+
+	public static final String SESSION_NAME_KEY = "Key for the Session Name";
+
 	private OMRGraderProcess omrGraderProcess;
 
 	@Override()
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		super.onActivityResult(requestCode, resultCode, data);
+		switch (requestCode) {
+		case REQUEST_FOR_TAKING_REFERENCE_EXAM:
+			if (resultCode == Activity.RESULT_OK) {
+
+			}
+			break;
+
+		case REQUEST_FOR_TAKING_STUDENT_EXAM:
+			if (resultCode == Activity.RESULT_OK) {
+
+			}
+			break;
+		}
 	}
 
 	@Override()
@@ -39,7 +56,7 @@ public class ImageTakerActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		super.setContentView(R.layout.activity_image_taker);
 
-		this.createComponents();
+		this.createComponents(super.getIntent().getExtras());
 	}
 
 	public void onGradeExams(View view) {
@@ -77,12 +94,13 @@ public class ImageTakerActivity extends Activity {
 		}
 	}
 
-	private void createComponents() {
+	private void createComponents(Bundle bundle) {
 		// FIXME: Think more about how to handle this exception.
 
 		try {
 			this.omrGraderProcess = new OMRGraderProcess(
-					super.getApplicationContext(), "");
+					super.getApplicationContext(),
+					bundle.getString(SESSION_NAME_KEY));
 		} catch (OMRGraderBusinessException e) {
 			e.printStackTrace();
 		}

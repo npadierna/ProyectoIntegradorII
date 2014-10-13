@@ -20,6 +20,10 @@
     <string name="no_internet_connection_alert_dialog_message">Su dispositivo móvil no está actualmente conectado a una red de Internet.</string>
     <string name="no_internet_connection_alert_dialog_title">Sin Conexión</string>
 
+    <!-- Dialog Session Name -->
+    <string name="session_name_text_view_title">Por favor, introduzca un nombre para la nueva Sesión de Calificación a ser creada:</string>
+    <string name="session_name_title">Nombre de Sesión de Calificación</string>
+
     <!-- General Strings for the Application -->
     <string name="application_name">OMRGrader 2.0</string>
     <string name="accept_button_label">Aceptar</string>
@@ -55,6 +59,8 @@
     <string name="do_ping_to_server_button_label">Hacer Ping!</string>
     <string name="instructions_text_view_title">INSTRUCCIONES</string>
     <string name="do_ping_instructions_text_view_message"> - El botón "Hacer Ping!" sirve para realizar una petición al Servidor Web y enterarse sí la aplicación está activa y accesible, y de ese modo, poderse llevar a cabo los procesos de Calificación automática de Exámenes.</string>
+    <string name="invalid_session_name_alert_dialog_message">El nombre ingresado para la nueva Sesión de Calificación es inválido. Por favor, trate con un nombre diferente.</string>
+    <string name="invalid_session_name_alert_dialog_title">Nombre de Sesión Inválido</string>
     <string name="new_grader_session_instructions_text_view_message"> - El botón "Nueva Sesión" sirve para crear una nueva Sesión de Calificación automática de Exámenes de Selección Múltiple, los cuales serán capturados por medio de la cámara trasera del dispositivo móvil.</string>
     <string name="shared_preferences_menu_instructions_text_view_message"> - No olvide que con el botón "Menú" del Dispositivo Móvil o el menú superior de configuración, usted podrá personalizar varios parámetros para llevar a cabo la Califación automática de Exámenes y el envío de los resultados de calificación.</string>
     <string name="new_grader_session_button_label">Nueva Sesión</string>
