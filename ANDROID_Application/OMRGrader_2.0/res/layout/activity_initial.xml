@@ -29,8 +29,20 @@
     <Spinner
         android:id="@+id/email_list_spinner"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:visibility="gone" >
     </Spinner>
+
+    <EditText
+        android:id="@+id/email_edit_text"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textEmailAddress"
+        android:visibility="gone" >
+
+        <requestFocus />
+    </EditText>
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -48,8 +60,21 @@
             android:textStyle="bold" >
         </TextView>
 
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/maximum_grade_selector_text_view_message"
+            android:textAppearance="?android:attr/textAppearanceMedium" >
+        </TextView>
+
+        <Spinner
+            android:id="@+id/maximum_grade_spinner"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" >
+        </Spinner>
+
         <CheckBox
-            android:id="@+id/delete_images_checkBox"
+            android:id="@+id/delete_images_check_box"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:checked="true"
@@ -60,8 +85,8 @@
     <Button
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:onClick="onSetInitialConfiguration"
         android:layout_gravity="bottom"
+        android:onClick="onSetInitialConfiguration"
         android:text="@string/set_initial_configuration_button_label" >
     </Button>
 

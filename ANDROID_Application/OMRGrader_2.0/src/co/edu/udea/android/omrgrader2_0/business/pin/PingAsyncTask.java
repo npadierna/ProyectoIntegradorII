@@ -33,7 +33,7 @@ public class PingAsyncTask extends AsyncTask<Object, Void, Integer> {
 	}
 
 	@Override()
-	protected Integer doInBackground(Object... args) {
+	protected Integer doInBackground(Object... parameters) {
 		boolean isResponse = false;
 
 		try {

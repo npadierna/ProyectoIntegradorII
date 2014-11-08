@@ -13,7 +13,7 @@ import co.edu.udea.android.omrgrader2_0.business.exception.OMRGraderBusinessExce
  * @author Miguel &Aacute;ngel Ossa Ruiz
  * @author Neiber Padierna P&eacute;rez
  */
-public class BaseStorageDirectory {
+public final class BaseStorageDirectory {
 
 	private File baseStorageDirectoryFile;
 

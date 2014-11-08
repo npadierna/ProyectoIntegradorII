@@ -20,15 +20,33 @@
     <string name="no_internet_connection_alert_dialog_message">Su dispositivo móvil no está actualmente conectado a una red de Internet.</string>
     <string name="no_internet_connection_alert_dialog_title">Sin Conexión</string>
 
+    <!-- Dialog Session Name -->
+    <string name="session_name_text_view_title">Por favor, introduzca un nombre para la nueva Sesión de Calificación a ser creada:</string>
+    <string name="session_name_title">Nombre de Sesión de Calificación</string>
+
     <!-- General Strings for the Application -->
     <string name="application_name">OMRGrader 2.0</string>
     <string name="accept_button_label">Aceptar</string>
     <string name="cancel_button_label">Cancelar</string>
 
+    <!-- Image Taker Activity -->
+    <string name="image_taker_activity_name">Sesión De Calificación</string>
+    <string name="procedure_first_step_text_view_message">1. Tomar la imagen o foto correspondiente al Examen de Referencia con las respuestas verdaderas efectuando "tap" en el botón: Capturar Examen de Referencia.</string>
+    <string name="procedure_second_step_text_view_message">2. Tomar o capturar las imágenes o fotos correspondientes a los Exámenes de los Estudiantes efectuando "tap" en el botón: Capturar Exámenes de Estudiantes.</string>
+    <string name="procedure_third_step_text_view_message">3. Empezar la calificación automática de los Exámenes de los Estudiantes efectuando "tap" en el botón: Califcar Exámenes.</string>
+    <string name="procedure_fourth_step_text_view_message">4. Esperar que la califacación sea efectuada en Servidor Web y los resultados sean recibidos exitosamente en el Correo Electrónico proporcionado.</string>
+    <string name="procedure_text_view_title">PROCEDIMIENTO</string>
+    <string name="start_taking_students_exams_images_button_label">Capturar Exámenes de Estudiantes</string>
+    <string name="take_reference_exam_image_button_label">Capturar Examen de Referencia</string>
+    <string name="grade_exams_button_label">Calificar Exámenes</string>
+
     <!-- Initial Activity -->
     <string name="delete_images_check_box_message">¿Borrar las imágenes capturadas al finalizar la sesión de calificación?</string>
-    <string name="email_selector_text_view_message">Por favor, seleccione un Correo Electrónico al cual desea enviar los resultados de las sesiones de calificación:</string>
+    <string name="email_selector_text_view_message">Proporcione un Correo Electrónico al cual desea enviar los resultados de las sesiones de calificación:</string>
     <string name="initial_activity_name">Configuración Inicial</string>
+    <string name="maximum_grade_selector_text_view_message">Seleccione la máxima nota a ser asignada durante las Sesiones de Calificación:</string>
+    <string name="invalid_email_account_alert_dialog_message">La cuenta de Correo Eletrónica ingresada no es válida, por favor verifique e intente de nuevo.</string>
+    <string name="invalid_email_account_alert_dialog_title">Correo Electrónico Inválido</string>
     <string name="session_data_configuration_text_view_title">DATOS DE SESIÓN DE CALIFICACIÓN</string>
     <string name="set_initial_configuration_button_label">Listo y continuar</string>
     <string name="user_data_configuration_text_view_title">DATOS DE USUARIO</string>
@@ -39,26 +57,64 @@
 
     <!-- Main Session Activity -->
     <string name="do_ping_to_server_button_label">Hacer Ping!</string>
+    <string name="instructions_text_view_title">INSTRUCCIONES</string>
+    <string name="do_ping_instructions_text_view_message"> - El botón "Hacer Ping!" sirve para realizar una petición al Servidor Web y enterarse sí la aplicación está activa y accesible, y de ese modo, poderse llevar a cabo los procesos de Calificación automática de Exámenes.</string>
+    <string name="invalid_session_name_alert_dialog_message">El nombre ingresado para la nueva Sesión de Calificación es inválido. Por favor, trate con un nombre diferente.</string>
+    <string name="invalid_session_name_alert_dialog_title">Nombre de Sesión Inválido</string>
+    <string name="new_grader_session_instructions_text_view_message"> - El botón "Nueva Sesión" sirve para crear una nueva Sesión de Calificación automática de Exámenes de Selección Múltiple, los cuales serán capturados por medio de la cámara trasera del dispositivo móvil.</string>
+    <string name="shared_preferences_menu_instructions_text_view_message"> - No olvide que con el botón "Menú" del Dispositivo Móvil o el menú superior de configuración, usted podrá personalizar varios parámetros para llevar a cabo la Califación automática de Exámenes y el envío de los resultados de calificación.</string>
     <string name="new_grader_session_button_label">Nueva Sesión</string>
 
+    <!-- Main Session Preference Activity -->
+    <string name="main_session_preference_activity_name">Configuraciones</string>
+
     <!-- Main Session Preference Fragment -->
-    <string name="invalid_email_alert_dialog_message">El Correo Electrónico que ha sido ingresado no es válido. Se establecerá el correo por defecto del dispositivo.</string>
+    <string name="invalid_email_alert_dialog_message">El Correo Electrónico que ha sido ingresado no es válido. No se establecerá ningún valor para el Correo Electrónico.</string>
     <string name="invalid_email_alert_dialog_title">E-Mail Inválido</string>
+    <string name="invalid_grade_precision_dialog_message">El nivel de la Precisión establecida para los decimales de las notas no cumple con los criterios, se establecerá un valor por defecto.</string>
+    <string name="invalid_grade_precision_dialog_title">Precisión Inválida</string>
+    <string name="invalid_percentage_alert_dialog_message">El valor del Porcentaje aprobatorio establecido no cumple con los criterios, se establecerá un valor por defecto.</string>
+    <string name="invalid_percentage_alert_dialog_title">Porcentaje Inválido</string>
 
     <!-- Main Settings Menu -->
     <string name="menu_main_about_us_item">Acerca de</string>
     <string name="menu_main_settings_item">Configuraciones</string>
 
     <!-- Shared Preferences Grader Settings -->
-    <string name="user_data_shared_preference_category">Datos de Usuario</string>
+    <string name="delete_images_shared_preference_key">DeleteImages</string>
+    <string name="delete_images_shared_preference_summary">Borrar siempre las imágenes tomadas de los exámenes al finalizar la sesión.</string>
+    <string name="delete_images_shared_preference_title">Borrar Imágenes</string>
     <string name="email_shared_preference_dialog_message">Ingrese el Correo Electrónico (E-Mail) al cual desea recibir los resultados:</string>
     <string name="email_shared_preference_dialog_title">Correo Electrónico</string>
     <string name="email_shared_preference_key">E-Mail</string>
     <string name="email_shared_preference_summary">Correo Electrónico al cual enviar los resultados de las calificaciones.</string>
     <string name="email_shared_preference_title">Correo Electrónico</string>
+    <string name="grade_precision_shared_preference_dialog_message">Ingrese la cantidad de números después del punto decimal a ser considerados:</string>
+    <string name="grade_precision_shared_preference_dialog_title">Precisión Decimal</string>
+    <string name="grade_precision_shared_preference_key">DecimalPrecision</string>
+    <string name="grade_precision_shared_preference_summary">Cantidad de números decimales a considerar en las notas de la sesión.</string>
+    <string name="grade_precision_shared_preference_title">Precisión Decimal De Notas</string>
+    <string name="grader_values_default_shared_preference">5.0</string>
+    <string name="grader_values_shared_preference_dialog_title">Máxima Nota</string>
+    <string name="grader_values_shared_preference_summary">Máxima nota a ser obtenida durante una Sesión de Calificación.</string>
+    <string name="grader_values_shared_preference_title">Máxima Nota</string>
+    <string name="grader_values_shared_preference_key">MaximumGrader</string>
+    <string name="percentage_default_shared_preference">60.0</string>
+    <string name="percentage_maximum_shared_preference">100.0</string>
+    <string name="percentage_minimum_shared_preference">25.0</string>
+    <string name="percentage_shared_preference_dialog_message">Ingrese el mínimo porcentaje aceptable para aprobar los exámenes:</string>
+    <string name="percentage_shared_preference_dialog_title">Mínimo Porcentaje Aprobatorio</string>
+    <string name="percentage_shared_preference_key">GradePercentage</string>
+    <string name="percentage_shared_preference_summary">Mínimo valor en Porcentaje para aprobar los exámenes.</string>
+    <string name="percentage_shared_preference_title">Mínimo Porcentaje Aprobatorio</string>
     <string name="session_data_shared_preference_category">Datos de Sesión de Calificación</string>
-    <string name="delete_images_shared_preference_key">DeleteImages</string>
-    <string name="delete_images_shared_preference_summary">Borrar siempre las imágenes tomadas de los exámenes al finalizar la sesión.</string>
-    <string name="delete_images_shared_preference_title">Borrar Imágenes</string>
+    <string name="user_data_shared_preference_category">Datos de Usuario</string>
+
+    <string-array name="grader_values_shared_preference_array">
+        <item>5.0</item>
+        <item>10.0</item>
+        <item>50.0</item>
+        <item>100.0</item>
+    </string-array>
 
 </resources>

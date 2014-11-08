@@ -18,10 +18,45 @@
     <PreferenceCategory
         android:order="2"
         android:title="@string/session_data_shared_preference_category" >
+        <ListPreference
+            android:defaultValue="@string/grader_values_default_shared_preference"
+            android:dialogTitle="@string/grader_values_shared_preference_dialog_title"
+            android:entries="@array/grader_values_shared_preference_array"
+            android:entryValues="@array/grader_values_shared_preference_array"
+            android:key="@string/grader_values_shared_preference_key"
+            android:order="1"
+            android:persistent="true"
+            android:summary="@string/grader_values_shared_preference_summary"
+            android:title="@string/grader_values_shared_preference_title" >
+        </ListPreference>
+
+        <EditTextPreference
+            android:defaultValue="@string/percentage_default_shared_preference"
+            android:dialogMessage="@string/percentage_shared_preference_dialog_message"
+            android:dialogTitle="@string/percentage_shared_preference_dialog_title"
+            android:inputType="numberDecimal"
+            android:key="@string/percentage_shared_preference_key"
+            android:order="2"
+            android:persistent="true"
+            android:summary="@string/percentage_shared_preference_summary"
+            android:title="@string/percentage_shared_preference_title" >
+        </EditTextPreference>
+        <EditTextPreference
+            android:defaultValue="@integer/grade_precision_default_shared_preference"
+            android:dialogMessage="@string/grade_precision_shared_preference_dialog_message"
+            android:dialogTitle="@string/grade_precision_shared_preference_dialog_title"
+            android:inputType="number"
+            android:key="@string/grade_precision_shared_preference_key"
+            android:order="3"
+            android:persistent="true"
+            android:summary="@string/grade_precision_shared_preference_summary"
+            android:title="@string/grade_precision_shared_preference_title" >
+        </EditTextPreference>
+
         <CheckBoxPreference
             android:defaultValue="true"
             android:key="@string/delete_images_shared_preference_key"
-            android:order="1"
+            android:order="4"
             android:persistent="true"
             android:summary="@string/delete_images_shared_preference_summary"
             android:title="@string/delete_images_shared_preference_title" >

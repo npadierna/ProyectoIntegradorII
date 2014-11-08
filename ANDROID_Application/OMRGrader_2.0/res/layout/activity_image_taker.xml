@@ -10,12 +10,84 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".activity.session.ImageTakerActivity" >
 
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="0dip"
+        android:layout_weight="9" >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dip"
+                android:gravity="center"
+                android:text="@string/procedure_text_view_title"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textStyle="bold" >
+            </TextView>
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="7dip"
+                android:text="@string/procedure_first_step_text_view_message"
+                android:textAppearance="?android:attr/textAppearanceMedium" >
+            </TextView>
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="7dip"
+                android:text="@string/procedure_second_step_text_view_message"
+                android:textAppearance="?android:attr/textAppearanceMedium" >
+            </TextView>
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="7dip"
+                android:text="@string/procedure_third_step_text_view_message"
+                android:textAppearance="?android:attr/textAppearanceMedium" >
+            </TextView>
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="7dip"
+                android:text="@string/procedure_fourth_step_text_view_message"
+                android:textAppearance="?android:attr/textAppearanceMedium" >
+            </TextView>
+        </LinearLayout>
+    </ScrollView>
+
     <Button
-        android:id="@+id/button"
-        android:onClick="onTakeReferenceExamImage"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Button" >
+        android:onClick="onTakeReferenceExamImage"
+        android:text="@string/take_reference_exam_image_button_label"
+        android:textStyle="bold" >
+    </Button>
+
+    <Button
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:enabled="false"
+        android:onClick="onStartTakingStudentsExamsImages"
+        android:text="@string/start_taking_students_exams_images_button_label"
+        android:textStyle="bold" >
+    </Button>
+
+    <Button
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:enabled="false"
+        android:onClick="onGradeExams"
+        android:text="@string/grade_exams_button_label"
+        android:textStyle="bold" >
     </Button>
 
 </LinearLayout>
