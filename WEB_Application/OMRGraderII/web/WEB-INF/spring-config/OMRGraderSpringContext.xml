@@ -28,6 +28,8 @@
     <context:component-scan
         base-package="co.edu.udea.web.omrgrader2_0.process.directory" />
     <context:component-scan
+        base-package="co.edu.udea.web.omrgrader2_0.process.dispatcher" />
+    <context:component-scan
         base-package="co.edu.udea.web.omrgrader2_0.webservice.rest.impl" />
 
     <tx:annotation-driven />
