@@ -10,6 +10,8 @@ import com.sun.jersey.core.header.FormDataContentDisposition;
 import com.sun.jersey.multipart.FormDataParam;
 import java.io.File;
 import java.io.InputStream;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.jws.WebService;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
@@ -61,7 +63,10 @@ public class ExamImageWebServiceImpl implements IExamImageWebService {
 
                 return (Response.status(Response.Status.BAD_REQUEST).build());
             }
-        } catch (OMRGraderWebServiceException | OMRGraderProcessException ex) {
+        } catch (OMRGraderWebServiceException | OMRGraderProcessException e) {
+            Logger.getLogger(TAG).log(Level.SEVERE,
+                    "Error while the Web Service was trying to upload a new Reference Exam Image File.",
+                    e);
 
             return (Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                     .build());
@@ -89,7 +94,10 @@ public class ExamImageWebServiceImpl implements IExamImageWebService {
 
                 return (Response.status(Response.Status.BAD_REQUEST).build());
             }
-        } catch (OMRGraderWebServiceException | OMRGraderProcessException ex) {
+        } catch (OMRGraderWebServiceException | OMRGraderProcessException e) {
+            Logger.getLogger(TAG).log(Level.SEVERE,
+                    "Error while the Web Service was trying to upload a new Student Exam Image File.",
+                    e);
 
             return (Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                     .build());

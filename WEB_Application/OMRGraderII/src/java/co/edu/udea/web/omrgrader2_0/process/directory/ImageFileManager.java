@@ -1,11 +1,13 @@
 package co.edu.udea.web.omrgrader2_0.process.directory;
 
+import co.edu.udea.web.omrgrader2_0.persistence.entities.GraderSession;
 import co.edu.udea.web.omrgrader2_0.process.exception.OMRGraderProcessException;
 import co.edu.udea.web.omrgrader2_0.util.text.TextUtil;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Date;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.context.WebApplicationContext;
@@ -24,7 +26,7 @@ public class ImageFileManager {
     public static final String REFERENCE_EXAM_IMAGE_FILE_DEFAULT_NAME = "referenceExamImageFile";
     public static final String STUDENT_EXAM_IMAGE_FILE_DEFAULT_NAME = "studentExamImageFile_";
     public static final String STUDENT_EXAM_IMAGE_FILE_DIRECTORY_PATH = "Students_Exams_Images";
-    public static final String UPLOADED_FILE_DIRECTORY_PATH = "/home/rebien/Descargas/";
+    public static final String UPLOADED_FILE_DIRECTORY_PATH = "/tmp/OMRGrader/";
 
     public ImageFileManager() {
         super();
@@ -187,5 +189,16 @@ public class ImageFileManager {
         }
 
         return (rawExamImageFileName.concat(IMAGE_FILE_SUFFIX));
+    }
+
+    public long buildStorageDirectoryPathName(GraderSession graderSession,
+            boolean isCreation) {
+        if (isCreation) {
+            graderSession.setRequest(new Date());
+        }
+
+        return (Math.abs(graderSession.getGraderSessionPK().getElectronicMail().hashCode()
+                + graderSession.getGraderSessionPK().getSessionName().hashCode()
+                + graderSession.getRequest().hashCode()));
     }
 }

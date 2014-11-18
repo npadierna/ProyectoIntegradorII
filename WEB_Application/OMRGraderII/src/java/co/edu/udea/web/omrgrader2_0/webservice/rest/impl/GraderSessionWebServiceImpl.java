@@ -8,7 +8,8 @@ import co.edu.udea.web.omrgrader2_0.process.exception.OMRGraderProcessException;
 import co.edu.udea.web.omrgrader2_0.util.text.TextUtil;
 import co.edu.udea.web.omrgrader2_0.webservice.IGraderSessionWebService;
 import co.edu.udea.web.omrgrader2_0.webservice.rest.contract.WebServicePathContract;
-import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.jws.WebService;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
@@ -54,14 +55,16 @@ public class GraderSessionWebServiceImpl implements IGraderSessionWebService {
             return (Response.status(Response.Status.BAD_REQUEST).build());
         }
 
-        long storageDirectoryPathName = this.buildStorageDirectoryPathName(
-                graderSession, true);
+        long storageDirectoryPathName = this.imageFileManagement.
+                buildStorageDirectoryPathName(graderSession, true);
 
         try {
             this.imageFileManagement.createStorageDirectory(
                     String.valueOf(storageDirectoryPathName));
-            this.graderSessionDAO.save(graderSession);
-        } catch (OMRGraderProcessException | OMRGraderPersistenceException e) {
+        } catch (OMRGraderProcessException e) {
+            Logger.getLogger(TAG).log(Level.SEVERE,
+                    "Error while the Web Service was trying to create a new Grader Session.",
+                    e);
 
             return (Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                     .build());
@@ -81,14 +84,20 @@ public class GraderSessionWebServiceImpl implements IGraderSessionWebService {
             return (Response.status(Response.Status.BAD_REQUEST).build());
         }
 
-        long storageDirectoryPathName = this.buildStorageDirectoryPathName(
-                graderSession, false);
+        long storageDirectoryPathName = this.imageFileManagement.
+                buildStorageDirectoryPathName(graderSession, false);
 
         try {
+            // TODO: Esta eliminación no se puede hacer aquí.
             boolean eliminationResult = this.imageFileManagement
                     .deleteStorageDirectory(String.valueOf(
                     storageDirectoryPathName));
-        } catch (OMRGraderProcessException ex) {
+
+            this.graderSessionDAO.save(graderSession);
+        } catch (OMRGraderProcessException | OMRGraderPersistenceException e) {
+            Logger.getLogger(TAG).log(Level.SEVERE,
+                    "Error while the Web Service was trying to finish a Grader Session.",
+                    e);
 
             return (Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                     .build());
@@ -118,16 +127,5 @@ public class GraderSessionWebServiceImpl implements IGraderSessionWebService {
                 graderSession.getGraderSessionPK().getSessionName().trim());
 
         return (true);
-    }
-
-    private long buildStorageDirectoryPathName(GraderSession graderSession,
-            boolean isCreation) {
-        if (isCreation) {
-            graderSession.setRequest(new Date());
-        }
-
-        return (Math.abs(graderSession.getGraderSessionPK().getElectronicMail().hashCode()
-                + graderSession.getGraderSessionPK().getSessionName().hashCode()
-                + graderSession.getRequest().hashCode()));
     }
 }
