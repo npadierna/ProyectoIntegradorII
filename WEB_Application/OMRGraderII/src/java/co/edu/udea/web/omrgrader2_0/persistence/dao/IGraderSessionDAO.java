@@ -25,6 +25,9 @@ public interface IGraderSessionDAO {
             String attribute, Object value)
             throws OMRGraderPersistenceException;
 
+    public GraderSession findFirstByRequest()
+            throws OMRGraderPersistenceException;
+
     public GraderSessionPK save(GraderSession graderSession)
             throws OMRGraderPersistenceException;
 }

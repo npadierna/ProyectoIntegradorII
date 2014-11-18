@@ -7,6 +7,10 @@ import co.edu.udea.web.omrgrader2_0.persistence.entities.IEntity;
 import co.edu.udea.web.omrgrader2_0.persistence.exception.OMRGraderPersistenceException;
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.Query;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.context.WebApplicationContext;
@@ -60,6 +64,34 @@ public class GraderSessionDAOImpl extends AbstractEntityDAO
         }
 
         return (graderSessionList);
+    }
+
+    /*
+     * SELECT * FROM GRADER_SESSION AS gs ORDER BY gs.request ASC LIMIT 1
+     */
+    @Override()
+    public GraderSession findFirstByRequest()
+            throws OMRGraderPersistenceException {
+        try {
+            CriteriaBuilder criteriaBuilder = super.getEntityManager().
+                    getCriteriaBuilder();
+            CriteriaQuery<GraderSession> criteriaQuery = criteriaBuilder.
+                    createQuery(GraderSession.class);
+            Root<GraderSession> root = criteriaQuery.from(GraderSession.class);
+
+            criteriaQuery.orderBy(criteriaBuilder.asc(root.get("request")));
+
+            Query query = super.getEntityManager().createQuery(criteriaQuery).
+                    setMaxResults(1);
+            List resultsList = query.getResultList();
+
+            return (((resultsList != null) && (!resultsList.isEmpty()))
+                    ? (GraderSession) resultsList.get(0) : null);
+        } catch (Exception e) {
+            throw new OMRGraderPersistenceException(
+                    "Fatal error while the DAO was trying to execute the Query for finding by Request.",
+                    e.getCause());
+        }
     }
 
     @Override()
