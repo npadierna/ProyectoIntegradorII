@@ -1,5 +1,7 @@
 package co.edu.udea.web.omrgrader2_0.process.dispatcher;
 
+import co.edu.udea.web.omrgrader2_0.process.dispatcher.thread.GraderSessionThread;
+import co.edu.udea.web.omrgrader2_0.process.dispatcher.thread.GraderSessionThreadPool;
 import co.edu.udea.web.omrgrader2_0.persistence.dao.IGraderSessionDAO;
 import co.edu.udea.web.omrgrader2_0.persistence.entities.GraderSession;
 import co.edu.udea.web.omrgrader2_0.persistence.exception.OMRGraderPersistenceException;
@@ -24,13 +26,13 @@ public final class GraderSessionDispatcherThread extends Thread {
     private static final long TIME_FOR_SLEEPING = 60000L;
     @Autowired()
     private IGraderSessionDAO graderSessionDAO;
+    @Autowired()
     private GraderSessionThreadPool graderSessionThreadPool;
     private boolean isRunning;
 
     public GraderSessionDispatcherThread() {
         super(TAG);
 
-        this.graderSessionThreadPool = new GraderSessionThreadPool();
         this.isRunning = true;
     }
 
@@ -42,17 +44,27 @@ public final class GraderSessionDispatcherThread extends Thread {
         while (this.isRunning) {
             try {
                 graderSession = this.graderSessionDAO.findFirstByRequest();
-                graderSessionThread = this.graderSessionThreadPool.
-                        findFreeGraderSessionThread(graderSession);
 
-                if ((graderSession != null) && (graderSessionThread != null)) {
-                    this.execute(graderSessionThread);
-                } else {
-                    Thread.sleep(TIME_FOR_SLEEPING);
+                if (graderSession != null) {
+                    graderSessionThread = this.graderSessionThreadPool.
+                            findFreeGraderSessionThread(graderSession);
+
+                    if (graderSessionThread != null) {
+                        graderSession.setAvailable(false);
+                        graderSession = this.graderSessionDAO.update(graderSession);
+
+                        graderSessionThread.setGraderSession(graderSession);
+
+                        this.execute(graderSessionThread);
+
+                        continue;
+                    }
                 }
+
+                Thread.sleep(TIME_FOR_SLEEPING);
             } catch (OMRGraderPersistenceException | InterruptedException e) {
                 Logger.getLogger(TAG).log(Level.SEVERE,
-                        "Error while the OMRGrader Dispatcher was trying to retrieve a Grader Session.",
+                        "Error while the OMRGrader Dispatcher was trying to manage a Grader Session.",
                         e);
             }
         }
