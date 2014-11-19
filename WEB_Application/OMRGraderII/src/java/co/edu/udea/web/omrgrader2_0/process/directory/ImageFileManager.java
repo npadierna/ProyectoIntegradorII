@@ -194,10 +194,11 @@ public class ImageFileManager {
     public long buildStorageDirectoryPathName(GraderSession graderSession,
             boolean isCreation) {
         if (isCreation) {
-            graderSession.setRequest(new Date());
+            graderSession.setRequest(Long.valueOf(new Date().getTime()));
         }
 
-        return (Math.abs(graderSession.getGraderSessionPK().getElectronicMail().hashCode()
+        return (Math.abs(graderSession.getGraderSessionPK().getElectronicMail()
+                .hashCode()
                 + graderSession.getGraderSessionPK().getSessionName().hashCode()
                 + graderSession.getRequest().hashCode()));
     }

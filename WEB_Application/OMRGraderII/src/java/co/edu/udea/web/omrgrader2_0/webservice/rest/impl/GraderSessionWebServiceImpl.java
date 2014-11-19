@@ -59,9 +59,12 @@ public class GraderSessionWebServiceImpl implements IGraderSessionWebService {
                 buildStorageDirectoryPathName(graderSession, true);
 
         try {
+            graderSession.setAvailable(false);
+            this.graderSessionDAO.save(graderSession);
+
             this.imageFileManagement.createStorageDirectory(
                     String.valueOf(storageDirectoryPathName));
-        } catch (OMRGraderProcessException e) {
+        } catch (OMRGraderProcessException | OMRGraderPersistenceException e) {
             Logger.getLogger(TAG).log(Level.SEVERE,
                     "Error while the Web Service was trying to create a new Grader Session.",
                     e);
@@ -84,17 +87,10 @@ public class GraderSessionWebServiceImpl implements IGraderSessionWebService {
             return (Response.status(Response.Status.BAD_REQUEST).build());
         }
 
-        long storageDirectoryPathName = this.imageFileManagement.
-                buildStorageDirectoryPathName(graderSession, false);
-
         try {
-            // TODO: Esta eliminación no se puede hacer aquí.
-            boolean eliminationResult = this.imageFileManagement
-                    .deleteStorageDirectory(String.valueOf(
-                    storageDirectoryPathName));
-
-            this.graderSessionDAO.save(graderSession);
-        } catch (OMRGraderProcessException | OMRGraderPersistenceException e) {
+            graderSession.setAvailable(true);
+            graderSession = this.graderSessionDAO.update(graderSession);
+        } catch (OMRGraderPersistenceException e) {
             Logger.getLogger(TAG).log(Level.SEVERE,
                     "Error while the Web Service was trying to finish a Grader Session.",
                     e);
