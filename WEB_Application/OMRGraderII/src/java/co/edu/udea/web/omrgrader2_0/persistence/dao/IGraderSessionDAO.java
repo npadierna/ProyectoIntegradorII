@@ -30,4 +30,7 @@ public interface IGraderSessionDAO {
 
     public GraderSessionPK save(GraderSession graderSession)
             throws OMRGraderPersistenceException;
+
+    public GraderSession update(GraderSession graderSession)
+            throws OMRGraderPersistenceException;
 }

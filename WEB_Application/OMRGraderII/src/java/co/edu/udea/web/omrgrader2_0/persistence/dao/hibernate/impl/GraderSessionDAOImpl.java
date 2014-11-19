@@ -67,9 +67,10 @@ public class GraderSessionDAOImpl extends AbstractEntityDAO
     }
 
     /*
-     * SELECT * FROM GRADER_SESSION AS gs ORDER BY gs.request ASC LIMIT 1
+     * SELECT * FROM GRADER_SESSION AS gs WHERE gs.is_available = true ORDER BY gs.request ASC LIMIT 1
      */
     @Override()
+    @SuppressWarnings(value = {"rawtypes"})
     public GraderSession findFirstByRequest()
             throws OMRGraderPersistenceException {
         try {
@@ -79,6 +80,8 @@ public class GraderSessionDAOImpl extends AbstractEntityDAO
                     createQuery(GraderSession.class);
             Root<GraderSession> root = criteriaQuery.from(GraderSession.class);
 
+            criteriaQuery.where(criteriaBuilder.equal(root.get("available"),
+                    Boolean.TRUE));
             criteriaQuery.orderBy(criteriaBuilder.asc(root.get("request")));
 
             Query query = super.getEntityManager().createQuery(criteriaQuery).
@@ -99,5 +102,12 @@ public class GraderSessionDAOImpl extends AbstractEntityDAO
             throws OMRGraderPersistenceException {
 
         return ((GraderSessionPK) super.save(graderSession));
+    }
+
+    @Override()
+    public GraderSession update(GraderSession graderSession)
+            throws OMRGraderPersistenceException {
+
+        return ((GraderSession) super.update(graderSession));
     }
 }
