@@ -1,7 +1,6 @@
 package co.edu.udea.web.omrgrader2_0.persistence.entities;
 
 import java.io.Serializable;
-import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
@@ -9,9 +8,8 @@ import javax.persistence.Entity;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -32,6 +30,8 @@ import javax.xml.bind.annotation.XmlRootElement;
             query = "SELECT g FROM GraderSession g WHERE g.graderSessionPK.sessionName = :sessionName"),
     @NamedQuery(name = "GraderSession.findByRequest",
             query = "SELECT g FROM GraderSession g WHERE g.request = :request"),
+    @NamedQuery(name = "GraderSession.findByAvailable",
+            query = "SELECT g FROM GraderSession g WHERE g.available = :available"),
     @NamedQuery(name = "GraderSession.findByApprovalPercentage",
             query = "SELECT g FROM GraderSession g WHERE g.approvalPercentage = :approvalPercentage"),
     @NamedQuery(name = "GraderSession.findByMaximumGrade",
@@ -48,15 +48,20 @@ public class GraderSession implements IEntity, Serializable {
     protected GraderSessionPK graderSessionPK;
     @Basic(optional = false)
     @NotNull()
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date request;
+    @Column(nullable = false)
+    private Long request;
+    @Basic(optional = false)
+    @NotNull()
+    @Column(nullable = false)
+    private boolean available;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
-    @Column(name = "approval_percentage")
+    @Column(name = "approval_percentage", precision = 5, scale = 2)
     private Float approvalPercentage;
-    @Column(name = "maximum_grade")
+    @Column(name = "maximum_grade", precision = 5, scale = 2)
     private Float maximumGrade;
-    @Column(name = "decimal_precision")
-    private Character decimalPrecision;
+    @Size(max = 1)
+    @Column(name = "decimal_precision", length = 1)
+    private String decimalPrecision;
 
     public GraderSession() {
         super();
@@ -66,9 +71,11 @@ public class GraderSession implements IEntity, Serializable {
         this.graderSessionPK = graderSessionPK;
     }
 
-    public GraderSession(GraderSessionPK graderSessionPK, Date request) {
+    public GraderSession(GraderSessionPK graderSessionPK, Long request,
+            boolean available) {
         this.graderSessionPK = graderSessionPK;
         this.request = request;
+        this.available = available;
     }
 
     public GraderSession(String electronicMail, String sessionName) {
@@ -84,13 +91,22 @@ public class GraderSession implements IEntity, Serializable {
         this.graderSessionPK = graderSessionPK;
     }
 
-    public Date getRequest() {
+    public Long getRequest() {
 
         return (this.request);
     }
 
-    public void setRequest(Date request) {
+    public void setRequest(Long request) {
         this.request = request;
+    }
+
+    public boolean getAvailable() {
+
+        return (this.available);
+    }
+
+    public void setAvailable(boolean available) {
+        this.available = available;
     }
 
     public Float getApprovalPercentage() {
@@ -111,12 +127,12 @@ public class GraderSession implements IEntity, Serializable {
         this.maximumGrade = maximumGrade;
     }
 
-    public Character getDecimalPrecision() {
+    public String getDecimalPrecision() {
 
         return (this.decimalPrecision);
     }
 
-    public void setDecimalPrecision(Character decimalPrecision) {
+    public void setDecimalPrecision(String decimalPrecision) {
         this.decimalPrecision = decimalPrecision;
     }
 

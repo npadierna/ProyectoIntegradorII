@@ -20,12 +20,12 @@ public class GraderSessionPK implements Serializable {
     @Basic(optional = false)
     @NotNull()
     @Size(min = 1, max = 55)
-    @Column(name = "electronic_mail")
+    @Column(name = "electronic_mail", nullable = false, length = 55)
     private String electronicMail;
     @Basic(optional = false)
     @NotNull()
     @Size(min = 1, max = 55)
-    @Column(name = "session_name")
+    @Column(name = "session_name", nullable = false, length = 55)
     private String sessionName;
 
     public GraderSessionPK() {
