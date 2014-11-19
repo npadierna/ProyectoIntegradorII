@@ -36,6 +36,7 @@ public class EMailPropertiesReader {
                 propertyValueList.add(properties.getProperty(s));
             }
         } else {
+            // TODO: Agregar la excepción propia.
             System.out.println("Propiedades vacías");
         }
 

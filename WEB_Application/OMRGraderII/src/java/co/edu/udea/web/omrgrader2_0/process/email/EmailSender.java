@@ -10,6 +10,7 @@ import java.util.Properties;
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
 import javax.activation.FileDataSource;
+import javax.mail.Authenticator;
 import javax.mail.BodyPart;
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -32,6 +33,39 @@ public class EmailSender {
 
     public EmailSender() {
         super();
+    }
+
+    public void sendEmail(String toEmail) {
+        final String username = "calificacionexamen@gmail.com";
+        final String password = "calificacion";
+        final String host = "smtp.gmail.com";
+        final String port = "587";
+
+        Properties props = new Properties();
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.starttls.enable", "true");
+        props.put("mail.smtp.host", host);
+        props.put("mail.smtp.port", port);
+
+        Session session = Session.getInstance(props, new Authenticator() {
+            @Override()
+            protected PasswordAuthentication getPasswordAuthentication() {
+
+                return (new PasswordAuthentication(username, password));
+            }
+        });
+
+        try {
+            Message message = new MimeMessage(session);
+            message.setFrom(new InternetAddress(username));
+            message.setRecipients(Message.RecipientType.TO,
+                    InternetAddress.parse(toEmail));
+            message.setSubject("Testing Subject");
+            message.setText("This is actual message");
+
+            Transport.send(message);
+        } catch (MessagingException e) {
+        }
     }
 
     public boolean sendMail(String filePath, String examName, String toEmail)
@@ -67,7 +101,7 @@ public class EmailSender {
             properties.put("mail.smtp.port", propertyValueList.get(3));
 
             Session session = Session.getDefaultInstance(properties,
-                    new javax.mail.Authenticator() {
+                    new Authenticator() {
                 @Override()
                 protected PasswordAuthentication getPasswordAuthentication() {
 

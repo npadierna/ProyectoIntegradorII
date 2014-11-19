@@ -3,6 +3,8 @@ package co.edu.udea.web.omrgrader2_0.process.qr;
 import co.edu.udea.web.omrgrader2_0.process.exception.OMRGraderProcessException;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.BinaryBitmap;
+import com.google.zxing.DecodeHintType;
+import com.google.zxing.EncodeHintType;
 import com.google.zxing.MultiFormatReader;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.NotFoundException;
@@ -30,8 +32,8 @@ public final class QRManager {
         super();
     }
 
-    public void createQRCode(String qrCodeData, String filePath,
-            String charset, Map hintMap, int qrCodeheight, int qrCodewidth)
+    public void createQRCode(String qrCodeData, String filePath, String charset,
+            Map<EncodeHintType, ?> hintMap, int qrCodeheight, int qrCodewidth)
             throws OMRGraderProcessException {
         try {
             BitMatrix matrix = new MultiFormatWriter().encode(
@@ -46,8 +48,8 @@ public final class QRManager {
         }
     }
 
-    public String readQRCode(String filePath, String charset, Map hintMap)
-            throws OMRGraderProcessException {
+    public String readQRCode(String filePath, String charset,
+            Map<DecodeHintType, ?> hintMap) throws OMRGraderProcessException {
         try {
             BinaryBitmap binaryBitmap = new BinaryBitmap(new HybridBinarizer(
                     new BufferedImageLuminanceSource(
