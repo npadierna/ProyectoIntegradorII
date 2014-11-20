@@ -78,12 +78,13 @@ public class GraderSessionAsyncTask extends AsyncTask<Object, Void, Object[]> {
 
 			graderSession = (GraderSession) parameters[1];
 			if ((graderSession == null)
-					|| (TextUtils.isEmpty(graderSession.geteMailAccount()
-							.trim()))
-					|| (TextUtils.isEmpty(graderSession.getGraderSessionName()
-							.trim()))
+					|| (graderSession.getGraderSessionPK() == null)
+					|| (TextUtils.isEmpty(graderSession.getGraderSessionPK()
+							.getElectronicMail().trim()))
+					|| (TextUtils.isEmpty(graderSession.getGraderSessionPK()
+							.getSessionName().trim()))
 					|| (!RegexValidator.isValidEMail(graderSession
-							.geteMailAccount()))) {
+							.getGraderSessionPK().getElectronicMail()))) {
 
 				return (false);
 			}
@@ -92,15 +93,17 @@ public class GraderSessionAsyncTask extends AsyncTask<Object, Void, Object[]> {
 			return (false);
 		}
 
-		if ((graderSession.getApprovalPercentage() <= 0.0F)
-				|| (graderSession.getDecimalPrecision() <= 0)
+		if ((graderSession.getRequest() == null)
+				|| (graderSession.getApprovalPercentage() <= 0.0F)
+				|| (TextUtils.isEmpty(graderSession.getDecimalPrecision()))
+				|| (Integer.valueOf(graderSession.getDecimalPrecision()) <= 0)
 				|| (graderSession.getMaximumGrade() <= 0.0F)) {
 
 			return (false);
 		}
 
 		if ((asyncTaskKey.equals(FINISH_GRADER_SESSION))
-				&& (graderSession.getRequestTimeStamp() == null)) {
+				&& (graderSession.getRequest() == null)) {
 
 			return (false);
 		}

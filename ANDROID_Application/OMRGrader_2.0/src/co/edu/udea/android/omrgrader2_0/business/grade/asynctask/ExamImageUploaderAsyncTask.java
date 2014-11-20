@@ -94,12 +94,13 @@ public class ExamImageUploaderAsyncTask extends
 
 			graderSession = (GraderSession) parameters[1];
 			if ((graderSession == null)
-					|| (TextUtils.isEmpty(graderSession.geteMailAccount()
-							.trim()))
-					|| (TextUtils.isEmpty(graderSession.getGraderSessionName()
-							.trim()))
+					|| (graderSession.getGraderSessionPK() == null)
+					|| (TextUtils.isEmpty(graderSession.getGraderSessionPK()
+							.getElectronicMail().trim()))
+					|| (TextUtils.isEmpty(graderSession.getGraderSessionPK()
+							.getSessionName().trim()))
 					|| (!RegexValidator.isValidEMail(graderSession
-							.geteMailAccount()))) {
+							.getGraderSessionPK().getElectronicMail()))) {
 
 				return (false);
 			}
@@ -114,9 +115,10 @@ public class ExamImageUploaderAsyncTask extends
 			return (false);
 		}
 
-		if ((graderSession.getRequestTimeStamp() == null)
+		if ((graderSession.getRequest() == null)
 				|| (graderSession.getApprovalPercentage() <= 0.0F)
-				|| (graderSession.getDecimalPrecision() <= 0)
+				|| (TextUtils.isEmpty(graderSession.getDecimalPrecision()))
+				|| (Integer.valueOf(graderSession.getDecimalPrecision()) <= 0)
 				|| (graderSession.getMaximumGrade() <= 0.0F)) {
 
 			return (false);

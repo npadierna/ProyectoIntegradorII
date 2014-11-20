@@ -198,21 +198,27 @@ public final class OMRGraderProcess {
 		this.baseStorageDirectory = BaseStorageDirectory.getInstance(context);
 
 		this.graderSession = new GraderSession();
-		this.graderSession.setGraderSessionName(graderSessionName);
+		this.graderSession.getGraderSessionPK().setSessionName(
+				graderSessionName);
 
 		this.graderSession
 				.setApprovalPercentage(Float.valueOf(this.sharedPreferences.getString(
 						context.getString(R.string.percentage_shared_preference_key),
 						context.getString(R.string.percentage_default_shared_preference))));
 		this.graderSession
-				.setDecimalPrecision(Integer.valueOf(this.sharedPreferences.getString(
+				.setDecimalPrecision(this.sharedPreferences.getString(
 						context.getString(R.string.grade_precision_shared_preference_key),
 						String.valueOf(context
 								.getResources()
 								.getInteger(
-										R.integer.grade_precision_default_shared_preference)))));
+										R.integer.grade_precision_default_shared_preference))));
 		// FIXME: What's about the Email?
-		this.graderSession.seteMailAccount("");
+		this.graderSession
+				.getGraderSessionPK()
+				.setElectronicMail(
+						this.sharedPreferences.getString(
+								context.getString(R.string.email_shared_preference_key),
+								null));
 		this.graderSession
 				.setMaximumGrade(Float.valueOf(this.sharedPreferences.getString(
 						context.getString(R.string.grader_values_shared_preference_key),

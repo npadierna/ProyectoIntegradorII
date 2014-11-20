@@ -120,12 +120,13 @@ public class GraderSessionWebServiceImpl extends AbstractContextWebService
 			boolean isCreation) {
 		try {
 			if ((graderSession == null)
-					|| (TextUtils.isEmpty(graderSession.geteMailAccount()
-							.trim()))
-					|| (TextUtils.isEmpty(graderSession.getGraderSessionName()
-							.trim()))
+					|| (graderSession.getGraderSessionPK() == null)
+					|| (TextUtils.isEmpty(graderSession.getGraderSessionPK()
+							.getElectronicMail().trim()))
+					|| (TextUtils.isEmpty(graderSession.getGraderSessionPK()
+							.getSessionName().trim()))
 					|| (!RegexValidator.isValidEMail(graderSession
-							.geteMailAccount()))) {
+							.getGraderSessionPK().getElectronicMail()))) {
 
 				return (false);
 			}
@@ -134,14 +135,16 @@ public class GraderSessionWebServiceImpl extends AbstractContextWebService
 			return (false);
 		}
 
-		if ((graderSession.getApprovalPercentage() <= 0.0F)
-				|| (graderSession.getDecimalPrecision() <= 0)
+		if ((graderSession.getRequest() == null)
+				|| (graderSession.getApprovalPercentage() <= 0.0F)
+				|| (TextUtils.isEmpty(graderSession.getDecimalPrecision()))
+				|| (Integer.valueOf(graderSession.getDecimalPrecision()) <= 0)
 				|| (graderSession.getMaximumGrade() <= 0.0F)) {
 
 			return (false);
 		}
 
-		if ((!isCreation) && (graderSession.getRequestTimeStamp() == null)) {
+		if ((!isCreation) && (graderSession.getRequest() == null)) {
 
 			return (false);
 		}

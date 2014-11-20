@@ -16,6 +16,7 @@ import co.edu.udea.android.omrgrader2_0.business.grade.OMRGraderProcess;
 import co.edu.udea.android.omrgrader2_0.business.grade.asynctask.ExamImageUploaderAsyncTask;
 import co.edu.udea.android.omrgrader2_0.business.grade.asynctask.GraderSessionAsyncTask;
 import co.edu.udea.android.omrgrader2_0.webservice.model.GraderSession;
+import co.edu.udea.android.omrgrader2_0.webservice.model.GraderSessionPK;
 
 /**
  * 
@@ -70,8 +71,9 @@ public class ImageTakerActivity extends Activity {
 	public void onTakeReferenceExamImage(View view) {
 		Log.v(TAG, "Taking the Reference Exam Image.");
 
-		GraderSession graderSession = new GraderSession(60.0F, 100.0F, 3, null,
-				"npadierna@gmail.com", "Session");
+		GraderSession graderSession = new GraderSession(new GraderSessionPK(
+				"npadierna@gmail.com", "Grader Session"), Long.valueOf(0L),
+				Float.valueOf(60.0F), Float.valueOf(100.0F), "3");
 		Bitmap imageBitmap = BitmapFactory
 				.decodeFile("/storage/sdcard0/DCIM/Camera/1398827742194.jpg");
 
