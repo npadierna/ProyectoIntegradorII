@@ -3,6 +3,7 @@ package co.edu.udea.web.omrgrader2_0.process.dispatcher.thread;
 import co.edu.udea.web.omrgrader2_0.persistence.dao.IGraderSessionDAO;
 import co.edu.udea.web.omrgrader2_0.persistence.entities.GraderSession;
 import co.edu.udea.web.omrgrader2_0.process.directory.ImageFileManager;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,7 @@ import org.springframework.web.context.WebApplicationContext;
 @Scope(value = WebApplicationContext.SCOPE_APPLICATION)
 public final class GraderSessionThreadPool implements IThreadNotifier {
 
-    public static final int THREAD_POOL_SIZE = 5;
+    public static final int THREAD_POOL_SIZE = 10;
     private static List<GraderSessionThread> threadPoolList;
     @Autowired()
     private IGraderSessionDAO graderSessionDAO;
@@ -28,10 +29,10 @@ public final class GraderSessionThreadPool implements IThreadNotifier {
     private ImageFileManager imageFileManagement;
 
     static {
-        threadPoolList = Arrays.asList(null, null, null, null, null);
-//        for (int counter = 0; counter < THREAD_POOL_SIZE; counter++) {
-//            threadPoolList.add(null);
-//        }
+        threadPoolList = new ArrayList<>(THREAD_POOL_SIZE);
+        for (int index = 0; index < THREAD_POOL_SIZE; index++) {
+            threadPoolList.add(null);
+        }
     }
 
     public GraderSessionThreadPool() {
@@ -46,7 +47,7 @@ public final class GraderSessionThreadPool implements IThreadNotifier {
         if (index != -1) {
             graderSessionThread = new GraderSessionThread((long) index,
                     graderSession, this.graderSessionDAO,
-                    this.imageFileManagement);
+                    this.imageFileManagement, this);
 
             threadPoolList.set(index, graderSessionThread);
         }
@@ -56,6 +57,15 @@ public final class GraderSessionThreadPool implements IThreadNotifier {
 
     @Override()
     public void notifyEvent(Object... arguments) {
-        // TODO: Implementar.
+        if ((arguments != null) && (arguments.length != 0)
+                && (arguments[0] instanceof GraderSessionThread)) {
+            GraderSessionThread graderSessionThread = (GraderSessionThread) arguments[0];
+            int key = (int) graderSessionThread.getKey();
+
+            if ((key >= 0) && (key < (THREAD_POOL_SIZE - 1))
+                    && (threadPoolList.get(key).equals(graderSessionThread))) {
+                threadPoolList.set(key, null);
+            }
+        }
     }
 }

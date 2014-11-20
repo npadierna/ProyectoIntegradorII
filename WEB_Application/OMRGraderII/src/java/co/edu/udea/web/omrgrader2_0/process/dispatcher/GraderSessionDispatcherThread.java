@@ -75,6 +75,8 @@ public final class GraderSessionDispatcherThread extends Thread {
     }
 
     private void execute(GraderSessionThread graderSessionThread) {
-        graderSessionThread.start();
+        if (graderSessionThread != null) {
+            graderSessionThread.start();
+        }
     }
 }

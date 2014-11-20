@@ -23,12 +23,18 @@ public class GraderSessionThread extends Thread {
     private ImageFileManager imageFileManagement;
     private EmailSender emailSender;
     private GraderSession graderSession;
+    private long key;
 
-    public GraderSessionThread(long id, GraderSession graderSession,
-            IGraderSessionDAO graderSessionDAO, ImageFileManager imageFileManagement) {
+    public GraderSessionThread(long key, GraderSession graderSession,
+            IGraderSessionDAO graderSessionDAO,
+            ImageFileManager imageFileManagement,
+            IThreadNotifier threadNotifier) {
+        this.key = key;
         this.graderSession = graderSession;
         this.graderSessionDAO = graderSessionDAO;
         this.imageFileManagement = imageFileManagement;
+        this.threadNotifier = threadNotifier;
+
         this.emailSender = new EmailSender();
     }
 
@@ -41,10 +47,18 @@ public class GraderSessionThread extends Thread {
         this.graderSession = graderSession;
     }
 
+    public long getKey() {
+
+        return (this.key);
+    }
+
+    public void setKey(long key) {
+        this.key = key;
+    }
+
     @Override()
     public void run() {
         // TODO: Invocar las funciones para efectuar la calificación de los exámenes.
-
         long storageDirectoryPathName = this.imageFileManagement.
                 buildStorageDirectoryPathName(this.getGraderSession(), false);
 
@@ -61,8 +75,6 @@ public class GraderSessionThread extends Thread {
             System.out.format("%s: %d", "Directory Name", storageDirectoryPathName);
 
             this.executeNotification();
-
-            // TODO: Borrar tanto los directorios como esta entidad de la Base de Datos.
         } catch (OMRGraderProcessException | OMRGraderPersistenceException e) {
             Logger.getLogger(TAG).log(Level.SEVERE,
                     "Error while the Grader Session Thread was trying to manage a Grader Session.",
@@ -71,5 +83,6 @@ public class GraderSessionThread extends Thread {
     }
 
     private void executeNotification() {
+        this.threadNotifier.notifyEvent(new Object[]{this});
     }
 }
