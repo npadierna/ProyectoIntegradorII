@@ -17,14 +17,18 @@ $RECYCLE.BIN/
 *.apk
 
 # Android Application Generated Files
-ANDROID_Application/OMRGrader_2.0/bin/
+/ANDROID_Application/OMRGrader_2.0/bin/
 
 # Web Application Generated Files
-WEB_Application/OMRGraderII/build/web/META-INF/MANIFEST.MF
-WEB_Application/OMRGraderII/build/web/WEB-INF/*.*
-WEB_Application/OMRGraderII/build/web/WEB-INF/classes/*.*
-WEB_Application/OMRGraderII/build/web/WEB-INF/classes/META-INF/*.*
-WEB_Application/OMRGraderII/build/web/WEB-INF/lib/*.*
-WEB_Application/OMRGraderII/build/web/WEB-INF/spring-config/*.*
-WEB_Application/OMRGraderII/build/web/*.*
-WEB_Application/OMRGraderII/nbproject/*.*
+/WEB_Application/OMRGraderII/build/web/META-INF/MANIFEST.MF
+/WEB_Application/OMRGraderII/nbproject/build-impl.xml
+/WEB_Application/OMRGraderII/nbproject/genfiles.properties
+/WEB_Application/OMRGraderII/nbproject/project.properties
+/WEB_Application/OMRGraderII/build/web/WEB-INF/*.*
+/WEB_Application/OMRGraderII/build/web/WEB-INF/classes/*.*
+/WEB_Application/OMRGraderII/build/web/WEB-INF/classes/META-INF/*.*
+/WEB_Application/OMRGraderII/build/web/WEB-INF/lib/*.*
+/WEB_Application/OMRGraderII/build/web/WEB-INF/spring-config/*.*
+/WEB_Application/OMRGraderII/build/web/*.*
+/WEB_Application/OMRGraderII/nbproject/*.*
+/WEB_Application/OMRGraderII/dist/
