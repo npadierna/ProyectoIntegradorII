@@ -21,9 +21,11 @@ public class ExamSessionComparator {
 
     public void score(SheetFileInfo sheetFileInfo) {
         sheetFileInfo.setQuestionAmount(sheetFileInfo.getCorrectAnswers().size());
-        double s = sheetFileInfo.getMaximumScore() * sheetFileInfo.getPercentageToPass();
+        double s = sheetFileInfo.getGraderSession().getMaximumGrade()
+                * sheetFileInfo.getGraderSession().getApprovalPercentage();
         sheetFileInfo.setMinimumScoreToPass(s);
-        double t = sheetFileInfo.getPercentageToPass() * sheetFileInfo.getCorrectAnswers().size();
+        double t = sheetFileInfo.getGraderSession().getApprovalPercentage()
+                * sheetFileInfo.getCorrectAnswers().size();
         sheetFileInfo.setMinimumQuestionAmountToPass((int) t);
 
         int amountStudentPassed = 0;
@@ -44,7 +46,8 @@ public class ExamSessionComparator {
                 }
             }
 
-            double score = ((sheetFileInfo.getMaximumScore() * amount)
+            double score = ((sheetFileInfo.getGraderSession().getMaximumGrade()
+                    * amount)
                     / sheetFileInfo.getQuestionAmount());
 
             if (amount >= sheetFileInfo.getMinimumQuestionAmountToPass()

@@ -1,5 +1,6 @@
 package co.edu.udea.web.omrgrader2_0.process.image.model;
 
+import co.edu.udea.web.omrgrader2_0.persistence.entities.GraderSession;
 import java.util.List;
 
 /**
@@ -10,8 +11,7 @@ import java.util.List;
  */
 public class SheetFileInfo {
 
-    private String examName;
-    private double maximumScore;
+    private GraderSession graderSession;
     private List<AnswerStudent> answerStudentList;
     private List<QuestionItem> correctAnswers;
     private int studentAmount;
@@ -19,33 +19,25 @@ public class SheetFileInfo {
     private int questionAmount;
     private int minimumQuestionAmountToPass;
     private double minimumScoreToPass;
-    private double percentageToPass;
-    private int precision;
 
-    public SheetFileInfo(List<AnswerStudent> answerStudentList, List<QuestionItem> 
-            correctAnswers, double maximumScore, double percentageToPass, int precision, String examName) {
+    public SheetFileInfo() {
+        super();
+    }
+
+    public SheetFileInfo(GraderSession graderSession,
+            List<AnswerStudent> answerStudentList,
+            List<QuestionItem> correctAnswers) {
+        this.graderSession = graderSession;
         this.answerStudentList = answerStudentList;
         this.correctAnswers = correctAnswers;
-        this.maximumScore = maximumScore;
-        this.percentageToPass = percentageToPass;
-        this.precision = precision;
-        this.examName = examName;
     }
 
-    public String getExamName() {
-        return examName;
+    public GraderSession getGraderSession() {
+        return graderSession;
     }
 
-    public void setExamName(String examName) {
-        this.examName = examName;
-    }
-
-    public double getMaximumScore() {
-        return maximumScore;
-    }
-
-    public void setMaximumScore(double maximumScore) {
-        this.maximumScore = maximumScore;
+    public void setGraderSession(GraderSession graderSession) {
+        this.graderSession = graderSession;
     }
 
     public List<AnswerStudent> getAnswerStudentList() {
@@ -96,27 +88,11 @@ public class SheetFileInfo {
         this.minimumQuestionAmountToPass = minimumQuestionsToPass;
     }
 
-    public double getPercentageToPass() {
-        return percentageToPass;
-    }
-
-    public void setPercentageToPass(double percentageToPass) {
-        this.percentageToPass = percentageToPass;
-    }
-
     public double getMinimumScoreToPass() {
         return minimumScoreToPass;
     }
 
     public void setMinimumScoreToPass(double minimumScoreToPass) {
         this.minimumScoreToPass = minimumScoreToPass;
-    }
-
-    public int getPrecision() {
-        return precision;
-    }
-
-    public void setPrecision(int precision) {
-        this.precision = precision;
     }
 }

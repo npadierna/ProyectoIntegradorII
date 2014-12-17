@@ -26,4 +26,16 @@ public final class TextUtil {
 
         return (text.trim().toUpperCase());
     }
+
+    public static String removeSpaces(String text) {
+        StringBuilder formattedText = new StringBuilder();
+
+        for (int i = 0; i < text.length(); i++) {
+            if (text.charAt(i) != ' ') {
+                formattedText.append(text.charAt(i));
+            }
+        }
+
+        return (formattedText.toString());
+    }
 }
