@@ -64,7 +64,7 @@ public class GraderSessionThread extends Thread {
 
         try {
             this.emailSender.sendEmail(this.getGraderSession().
-                    getGraderSessionPK().getElectronicMail());
+                    getGraderSessionPK().getElectronicMail(), "", "");
 
             boolean eliminationResult = this.imageFileManagement
                     .deleteStorageDirectory(String.valueOf(

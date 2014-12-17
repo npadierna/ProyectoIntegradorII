@@ -1,6 +1,7 @@
 package co.edu.udea.web.omrgrader2_0.process.email.config;
 
 import co.edu.udea.web.omrgrader2_0.process.email.EmailSender;
+import co.edu.udea.web.omrgrader2_0.process.email.exception.EmailSenderException;
 import co.edu.udea.web.omrgrader2_0.util.collection.ListUtil;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -20,7 +21,8 @@ public class EMailPropertiesReader {
     }
 
     public static List<String> readProperties(List<String> propertyNames,
-            String path) throws IOException {
+            String path) throws EmailSenderException {
+
         if (ListUtil.isEmptyStringList(propertyNames)) {
 
             return (null);
@@ -28,16 +30,20 @@ public class EMailPropertiesReader {
 
         List<String> propertyValueList = new ArrayList<>();
         Properties properties = new Properties();
-        properties.load(EmailSender.class.getClassLoader().getResourceAsStream(
-                path));
+        try {
+            properties.load(EmailSender.class.getClassLoader().getResourceAsStream(
+                    path));
 
-        if (!properties.isEmpty()) {
-            for (String s : propertyNames) {
-                propertyValueList.add(properties.getProperty(s));
+            if (!properties.isEmpty()) {
+                for (String s : propertyNames) {
+                    propertyValueList.add(properties.getProperty(s));
+                }
             }
-        } else {
-            // TODO: Agregar la excepción propia.
-            System.out.println("Propiedades vacías");
+        } catch (IOException e) {
+            throw new EmailSenderException(
+                    "Fatal error while application was trying to read email "
+                    + "properties.",
+                    e.getCause());
         }
 
         return (propertyValueList);

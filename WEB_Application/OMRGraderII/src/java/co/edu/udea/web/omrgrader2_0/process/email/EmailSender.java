@@ -1,9 +1,9 @@
 package co.edu.udea.web.omrgrader2_0.process.email;
 
 import co.edu.udea.web.omrgrader2_0.process.email.config.EMailPropertiesReader;
+import co.edu.udea.web.omrgrader2_0.process.email.exception.EmailSenderException;
 import co.edu.udea.web.omrgrader2_0.process.exception.OMRGraderProcessException;
 import co.edu.udea.web.omrgrader2_0.util.text.TextUtil;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -35,54 +35,56 @@ public class EmailSender {
         super();
     }
 
-    public void sendEmail(String toEmail) {
-        final String username = "calificacionexamen@gmail.com";
-        final String password = "calificacion";
-        final String host = "smtp.gmail.com";
-        final String port = "587";
+    public boolean sendEmail(String toEmail, String subject, String text)
+            throws OMRGraderProcessException {
+        List<String> propertyValueList;
 
-        Properties props = new Properties();
-        props.put("mail.smtp.auth", "true");
-        props.put("mail.smtp.starttls.enable", "true");
-        props.put("mail.smtp.host", host);
-        props.put("mail.smtp.port", port);
+        propertyValueList = this.getPropertiesValueList();
 
-        Session session = Session.getInstance(props, new Authenticator() {
+        if (propertyValueList.isEmpty()) {
+
+            return (false);
+        }
+
+        final String fromEmail = propertyValueList.get(0);
+        final String password = propertyValueList.get(1);
+
+        Properties properties = this.getSessionProperties(
+                propertyValueList.get(2), propertyValueList.get(3));
+
+        Session session = Session.getInstance(properties, new Authenticator() {
             @Override()
             protected PasswordAuthentication getPasswordAuthentication() {
 
-                return (new PasswordAuthentication(username, password));
+                return (new PasswordAuthentication(fromEmail, password));
             }
         });
 
         try {
             Message message = new MimeMessage(session);
-            message.setFrom(new InternetAddress(username));
+            message.setFrom(new InternetAddress(fromEmail));
             message.setRecipients(Message.RecipientType.TO,
                     InternetAddress.parse(toEmail));
-            message.setSubject("Testing Subject");
-            message.setText("This is actual message");
+            message.setSubject(subject);
+            message.setText(text);
 
             Transport.send(message);
         } catch (MessagingException e) {
+            throw new OMRGraderProcessException(
+                    "Fatal error while the application was trying to send a E-Mail.",
+                    e.getCause());
         }
+
+        return (true);
     }
 
-    public boolean sendMail(String filePath, String examName, String toEmail)
+    public boolean sendEMail(String filePath, String examName, String toEmail)
             throws OMRGraderProcessException {
         toEmail = TextUtil.toLowerCase(toEmail);
-        List<String> propertyNameList = new ArrayList<>();
-        propertyNameList.add("EMAIL_ADDRESS");
-        propertyNameList.add("PASSWORD");
-        propertyNameList.add("HOST");
-        propertyNameList.add("PORT");
         List<String> propertyValueList;
 
         try {
-            propertyValueList = EMailPropertiesReader.readProperties(propertyNameList,
-                    "co/edu/udea/web/omrgrader2_0/process/email/config/"
-                    + "emailsender.properties");
-
+            propertyValueList = this.getPropertiesValueList();
 
             if (propertyValueList.isEmpty()) {
 
@@ -92,13 +94,8 @@ public class EmailSender {
             final String fromEmail = propertyValueList.get(0);
             final String password = propertyValueList.get(1);
 
-            Properties properties = new Properties();
-            properties.put("mail.smtp.host", propertyValueList.get(2));
-            properties.put("mail.smtp.socketFactory.port", propertyValueList.get(3));
-            properties.put("mail.smtp.socketFactory.class",
-                    "javax.net.ssl.SSLSocketFactory");
-            properties.put("mail.smtp.auth", "true");
-            properties.put("mail.smtp.port", propertyValueList.get(3));
+            Properties properties = this.getSessionProperties(
+                    propertyValueList.get(2), propertyValueList.get(3));
 
             Session session = Session.getDefaultInstance(properties,
                     new Authenticator() {
@@ -144,12 +141,46 @@ public class EmailSender {
             message.setContent(multipart);
 
             Transport.send(message);
-        } catch (IOException | MessagingException e) {
+        } catch (MessagingException e) {
             throw new OMRGraderProcessException(
                     "Fatal error while the application was trying to send a E-Mail.",
                     e.getCause());
         }
 
         return (true);
+    }
+
+    public List<String> getPropertiesValueList() throws OMRGraderProcessException {
+        List<String> propertyNameList = new ArrayList<>();
+        propertyNameList.add("EMAIL_ADDRESS");
+        propertyNameList.add("PASSWORD");
+        propertyNameList.add("HOST");
+        propertyNameList.add("PORT");
+        List<String> propertyValueList = null;
+
+        try {
+            propertyValueList = EMailPropertiesReader.readProperties(propertyNameList,
+                    "co/edu/udea/web/omrgrader2_0/process/email/config/"
+                    + "emailsender.properties");
+
+        } catch (EmailSenderException e) {
+            throw new OMRGraderProcessException(
+                    "Fatal error while the application was trying to read "
+                    + "e-mail properties.", e.getCause());
+        }
+
+        return (propertyValueList);
+    }
+
+    public Properties getSessionProperties(String host, String port) {
+        Properties properties = new Properties();
+        properties.put("mail.smtp.host", host);
+        properties.put("mail.smtp.socketFactory.port", port);
+        properties.put("mail.smtp.socketFactory.class",
+                "javax.net.ssl.SSLSocketFactory");
+        properties.put("mail.smtp.auth", "true");
+        properties.put("mail.smtp.port", port);
+
+        return (properties);
     }
 }
