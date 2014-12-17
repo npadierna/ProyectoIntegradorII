@@ -1,7 +1,9 @@
 package co.edu.udea.web.omrgrader2_0.process.email.report;
 
+import co.edu.udea.web.omrgrader2_0.process.exception.OMRGraderProcessException;
 import co.edu.udea.web.omrgrader2_0.process.image.model.AnswerStudent;
 import co.edu.udea.web.omrgrader2_0.process.image.model.SheetFileInfo;
+import co.edu.udea.web.omrgrader2_0.util.text.TextUtil;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
@@ -39,27 +41,40 @@ public class FileSheetReport {
         super();
     }
 
-    public String createDataSheet(String path, SheetFileInfo info) throws IOException {
+    public String createDataSheet(String path, SheetFileInfo info)
+            throws OMRGraderProcessException {
         XSSFWorkbook workbook = new XSSFWorkbook();
-        this.setPropertiesToWorkbook(workbook, info.getExamName());
+        this.setPropertiesToWorkbook(workbook, info.getGraderSession().
+                getGraderSessionPK().getSessionName());
         Sheet sheet = workbook.createSheet(this.RESULT_SHEET_NAME);
 
-        this.createExamAnswerHeaders(workbook, sheet, this.EXAM_ANSWER_ROW_START);
+        this.createExamAnswerHeaders(workbook, sheet,
+                this.EXAM_ANSWER_ROW_START);
 
-        this.createStudentInfoCells(workbook, sheet, info.getAnswerStudentList(), this.EXAM_ANSWER_ROW_START + 1, info.getPrecision());
+        this.createStudentInfoCells(workbook, sheet, info.getAnswerStudentList(),
+                this.EXAM_ANSWER_ROW_START + 1,
+                info.getGraderSession().getDecimalPrecision());
 
         this.createExamInfoHeaders(info, sheet, workbook);
 
-        path = path + info.getExamName() + this.FILE_EXTENSION;
+        path = path + TextUtil.removeSpaces(info.getGraderSession().
+                getGraderSessionPK().getSessionName()) + this.FILE_EXTENSION;
         FileOutputStream fileOut;
-        fileOut = new FileOutputStream(path);
-        workbook.write(fileOut);
-        fileOut.close();
-        
+        try {
+            fileOut = new FileOutputStream(path);
+            workbook.write(fileOut);
+            fileOut.close();
+        } catch (IOException e) {
+            throw new OMRGraderProcessException(
+                    "Fatal error while the application was trying to create "
+                    + "grades file " + this.FILE_EXTENSION + ".", e.getCause());
+        }
+
         return (path);
     }
 
-    private void createExamAnswerHeaders(XSSFWorkbook workbook, Sheet sheet, int rowNumber) {
+    private void createExamAnswerHeaders(XSSFWorkbook workbook, Sheet sheet,
+            int rowNumber) {
         Row row = sheet.createRow((short) rowNumber);
         Cell cell = row.createCell((short) 0);
         cell.setCellType(Cell.CELL_TYPE_STRING);
@@ -89,7 +104,8 @@ public class FileSheetReport {
         sheet.setColumnWidth(4, this.COLUMN_WIDTH_20);
     }
 
-    private void createExamInfoHeaders(SheetFileInfo info, Sheet sheet, XSSFWorkbook workbook) {
+    private void createExamInfoHeaders(SheetFileInfo info, Sheet sheet,
+            XSSFWorkbook workbook) {
         Row row = sheet.createRow((short) 0);
         Cell cell = row.createCell((short) 0);
         cell.setCellType(Cell.CELL_TYPE_STRING);
@@ -97,8 +113,10 @@ public class FileSheetReport {
         cell.setCellValue("Nombre del Examen");
         cell = row.createCell((short) 1);
         cell.setCellType(Cell.CELL_TYPE_STRING);
-        cell.setCellStyle(this.createInfoExamCellStyle(workbook, info.getPrecision(), false));
-        cell.setCellValue(info.getExamName());
+        cell.setCellStyle(this.createInfoExamCellStyle(workbook,
+                info.getGraderSession().getDecimalPrecision(), false));
+        cell.setCellValue(info.getGraderSession().getGraderSessionPK().
+                getSessionName());
 
         row = sheet.createRow((short) 1);
         cell = row.createCell((short) 0);
@@ -107,8 +125,9 @@ public class FileSheetReport {
         cell.setCellValue("Nota Máxima");
         cell = row.createCell((short) 1);
         cell.setCellType(Cell.CELL_TYPE_NUMERIC);
-        cell.setCellStyle(this.createInfoExamCellStyle(workbook, info.getPrecision(), true));
-        cell.setCellValue(info.getMaximumScore());
+        cell.setCellStyle(this.createInfoExamCellStyle(workbook,
+                info.getGraderSession().getDecimalPrecision(), true));
+        cell.setCellValue(info.getGraderSession().getMaximumGrade());
 
         row = sheet.createRow((short) 2);
         cell = row.createCell((short) 0);
@@ -117,7 +136,8 @@ public class FileSheetReport {
         cell.setCellValue("Número Total de Estudiantes");
         cell = row.createCell((short) 1);
         cell.setCellType(Cell.CELL_TYPE_NUMERIC);
-        cell.setCellStyle(this.createInfoExamCellStyle(workbook, info.getPrecision(), false));
+        cell.setCellStyle(this.createInfoExamCellStyle(workbook,
+                info.getGraderSession().getDecimalPrecision(), false));
         cell.setCellValue(info.getStudentAmount());
 
         row = sheet.createRow((short) 3);
@@ -127,7 +147,8 @@ public class FileSheetReport {
         cell.setCellValue("Número de Estudiantes que Aprobaron");
         cell = row.createCell((short) 1);
         cell.setCellType(Cell.CELL_TYPE_NUMERIC);
-        cell.setCellStyle(this.createInfoExamCellStyle(workbook, info.getPrecision(), false));
+        cell.setCellStyle(this.createInfoExamCellStyle(workbook,
+                info.getGraderSession().getDecimalPrecision(), false));
         cell.setCellValue(info.getStudentAmountPassed());
 
         row = sheet.createRow((short) 4);
@@ -137,7 +158,8 @@ public class FileSheetReport {
         cell.setCellValue("Cantidad Total de Preguntas");
         cell = row.createCell((short) 1);
         cell.setCellType(Cell.CELL_TYPE_NUMERIC);
-        cell.setCellStyle(this.createInfoExamCellStyle(workbook, info.getPrecision(), false));
+        cell.setCellStyle(this.createInfoExamCellStyle(workbook,
+                info.getGraderSession().getDecimalPrecision(), false));
         cell.setCellValue(info.getQuestionAmount());
 
         row = sheet.createRow((short) 5);
@@ -147,7 +169,8 @@ public class FileSheetReport {
         cell.setCellValue("Cantidad Mínima de Preguntas para Ganar");
         cell = row.createCell((short) 1);
         cell.setCellType(Cell.CELL_TYPE_NUMERIC);
-        cell.setCellStyle(this.createInfoExamCellStyle(workbook, info.getPrecision(), false));
+        cell.setCellStyle(this.createInfoExamCellStyle(workbook,
+                info.getGraderSession().getDecimalPrecision(), false));
         cell.setCellValue(info.getMinimumQuestionAmountToPass());
 
         row = sheet.createRow((short) 6);
@@ -157,7 +180,8 @@ public class FileSheetReport {
         cell.setCellValue("Nota Mínima para Ganar");
         cell = row.createCell((short) 1);
         cell.setCellType(Cell.CELL_TYPE_NUMERIC);
-        cell.setCellStyle(this.createInfoExamCellStyle(workbook, info.getPrecision(), true));
+        cell.setCellStyle(this.createInfoExamCellStyle(workbook,
+                info.getGraderSession().getDecimalPrecision(), true));
         cell.setCellValue(info.getMinimumScoreToPass());
 
         row = sheet.createRow((short) 7);
@@ -167,25 +191,35 @@ public class FileSheetReport {
         cell.setCellValue("Porcentaje para Ganar");
         cell = row.createCell((short) 1);
         cell.setCellType(Cell.CELL_TYPE_NUMERIC);
-        cell.setCellStyle(this.createInfoExamCellStyle(workbook, info.getPrecision(), true));
-        cell.setCellValue(info.getPercentageToPass());
+        cell.setCellStyle(this.createInfoExamCellStyle(workbook,
+                info.getGraderSession().getDecimalPrecision(), true));
+        cell.setCellValue(info.getGraderSession().getApprovalPercentage());
     }
 
     private void setPropertiesToWorkbook(XSSFWorkbook workbook, String examName) {
+        if (examName == null || examName.length() == 0) {
+            examName = "Exámen UdeA";
+        }
+
         POIXMLProperties properties = workbook.getProperties();
 
-        POIXMLProperties.ExtendedProperties extendedProperties = properties.getExtendedProperties();
-        extendedProperties.getUnderlyingProperties().setCompany("Departamento Ingeniería de Sistemas - UdeA");
+        POIXMLProperties.ExtendedProperties extendedProperties = properties.
+                getExtendedProperties();
+        extendedProperties.getUnderlyingProperties().setCompany(
+                "Departamento Ingeniería de Sistemas - UdeA");
         extendedProperties.getUnderlyingProperties().setTemplate("XSSF");
         extendedProperties.getUnderlyingProperties().setAppVersion("1.0");
-        extendedProperties.getUnderlyingProperties().setManager("Calificación de Exámenes UdeA");
+        extendedProperties.getUnderlyingProperties().setManager(
+                "Calificación de Exámenes UdeA");
 
-        POIXMLProperties.CoreProperties coreProperties = properties.getCoreProperties();
+        POIXMLProperties.CoreProperties coreProperties = properties.
+                getCoreProperties();
         coreProperties.setCreator("Calificación de Exámenes UdeA");
         coreProperties.setTitle(examName);
     }
 
-    private void createStudentInfoCells(XSSFWorkbook workbook, Sheet sheet, List<AnswerStudent> studentList, int rowNumberStart, int precision) {
+    private void createStudentInfoCells(XSSFWorkbook workbook, Sheet sheet,
+            List<AnswerStudent> studentList, int rowNumberStart, String precision) {
         DataFormat format = workbook.createDataFormat();
         String prec = this.constructPrecision(precision);
 
@@ -227,18 +261,20 @@ public class FileSheetReport {
         }
     }
 
-    private String constructPrecision(int precision) {
+    private String constructPrecision(String precision) {
+        int decimalPrecision = Integer.parseInt(precision);
         int i = 1;
-        String prec = "0.0";
-        while (i < precision) {
-            prec = prec + "0";
+        String decimalPrecisionFormat = "0.0";
+        while (i < decimalPrecision) {
+            decimalPrecisionFormat = decimalPrecisionFormat + "0";
             i++;
         }
 
-        return (prec);
+        return (decimalPrecisionFormat);
     }
 
-    private CellStyle createInfoExamCellStyle(XSSFWorkbook workbook, int precision, boolean prec) {
+    private CellStyle createInfoExamCellStyle(XSSFWorkbook workbook,
+            String precision, boolean prec) {
         CellStyle cellStyle = workbook.createCellStyle();
         Font font = workbook.createFont();
 
