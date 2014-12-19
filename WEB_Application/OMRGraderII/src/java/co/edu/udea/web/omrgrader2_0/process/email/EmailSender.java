@@ -2,7 +2,6 @@ package co.edu.udea.web.omrgrader2_0.process.email;
 
 import co.edu.udea.web.omrgrader2_0.process.email.config.EMailPropertiesReader;
 import co.edu.udea.web.omrgrader2_0.process.email.exception.EmailSenderException;
-import co.edu.udea.web.omrgrader2_0.process.exception.OMRGraderProcessException;
 import co.edu.udea.web.omrgrader2_0.util.text.TextUtil;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,38 +30,23 @@ import javax.mail.internet.MimeMultipart;
  */
 public class EmailSender {
 
-    public EmailSender() {
-        super();
+    private Properties properties;
+    private String fromEmail;
+    private String password;
+    private String host;
+    private String port;
+    private Session session;
+
+    public EmailSender() throws EmailSenderException {
+        this.properties = new Properties();
+        this.configEMailProperties();
     }
 
     public boolean sendEmail(String toEmail, String subject, String text)
-            throws OMRGraderProcessException {
-        List<String> propertyValueList;
-
-        propertyValueList = this.getPropertiesValueList();
-
-        if (propertyValueList.isEmpty()) {
-
-            return (false);
-        }
-
-        final String fromEmail = propertyValueList.get(0);
-        final String password = propertyValueList.get(1);
-
-        Properties properties = this.getSessionProperties(
-                propertyValueList.get(2), propertyValueList.get(3));
-
-        Session session = Session.getInstance(properties, new Authenticator() {
-            @Override()
-            protected PasswordAuthentication getPasswordAuthentication() {
-
-                return (new PasswordAuthentication(fromEmail, password));
-            }
-        });
-
+            throws EmailSenderException {
         try {
-            Message message = new MimeMessage(session);
-            message.setFrom(new InternetAddress(fromEmail));
+            Message message = new MimeMessage(this.session);
+            message.setFrom(new InternetAddress(this.fromEmail));
             message.setRecipients(Message.RecipientType.TO,
                     InternetAddress.parse(toEmail));
             message.setSubject(subject);
@@ -70,7 +54,7 @@ public class EmailSender {
 
             Transport.send(message);
         } catch (MessagingException e) {
-            throw new OMRGraderProcessException(
+            throw new EmailSenderException(
                     "Fatal error while the application was trying to send a E-Mail.",
                     e.getCause());
         }
@@ -78,36 +62,13 @@ public class EmailSender {
         return (true);
     }
 
-    public boolean sendEMail(String filePath, String examName, String toEmail)
-            throws OMRGraderProcessException {
+    public boolean sendEMail(String toEmail, String fullFilePath, String examName)
+            throws EmailSenderException {
         toEmail = TextUtil.toLowerCase(toEmail);
-        List<String> propertyValueList;
 
         try {
-            propertyValueList = this.getPropertiesValueList();
-
-            if (propertyValueList.isEmpty()) {
-
-                return (false);
-            }
-
-            final String fromEmail = propertyValueList.get(0);
-            final String password = propertyValueList.get(1);
-
-            Properties properties = this.getSessionProperties(
-                    propertyValueList.get(2), propertyValueList.get(3));
-
-            Session session = Session.getDefaultInstance(properties,
-                    new Authenticator() {
-                @Override()
-                protected PasswordAuthentication getPasswordAuthentication() {
-
-                    return (new PasswordAuthentication(fromEmail, password));
-                }
-            });
-
-            Message message = new MimeMessage(session);
-            message.setFrom(new InternetAddress(fromEmail));
+            Message message = new MimeMessage(this.session);
+            message.setFrom(new InternetAddress(this.fromEmail));
 
             // Asignando el receptor
             message.setRecipients(Message.RecipientType.TO,
@@ -123,7 +84,7 @@ public class EmailSender {
             // Cuerpo del mensaje
             // Agregando el archivo adjunto
             BodyPart messageBodyPart = new MimeBodyPart();
-            DataSource dataSource = new FileDataSource(filePath);
+            DataSource dataSource = new FileDataSource(fullFilePath);
             messageBodyPart.setDataHandler(new DataHandler(dataSource));
             messageBodyPart.setFileName(dataSource.getName());
             multipart.addBodyPart(messageBodyPart);
@@ -141,8 +102,9 @@ public class EmailSender {
             message.setContent(multipart);
 
             Transport.send(message);
+
         } catch (MessagingException e) {
-            throw new OMRGraderProcessException(
+            throw new EmailSenderException(
                     "Fatal error while the application was trying to send a E-Mail.",
                     e.getCause());
         }
@@ -150,37 +112,44 @@ public class EmailSender {
         return (true);
     }
 
-    public List<String> getPropertiesValueList() throws OMRGraderProcessException {
+    private void getPropertiesValueList() throws EmailSenderException {
         List<String> propertyNameList = new ArrayList<>();
         propertyNameList.add("EMAIL_ADDRESS");
         propertyNameList.add("PASSWORD");
         propertyNameList.add("HOST");
         propertyNameList.add("PORT");
-        List<String> propertyValueList = null;
+        List<String> propertyValueList;
 
-        try {
-            propertyValueList = EMailPropertiesReader.readProperties(propertyNameList,
-                    "co/edu/udea/web/omrgrader2_0/process/email/config/"
-                    + "emailsender.properties");
+        propertyValueList = EMailPropertiesReader.readProperties(propertyNameList,
+                "co/edu/udea/web/omrgrader2_0/process/email/config/"
+                + "emailsender.properties");
 
-        } catch (EmailSenderException e) {
-            throw new OMRGraderProcessException(
-                    "Fatal error while the application was trying to read "
-                    + "e-mail properties.", e.getCause());
-        }
-
-        return (propertyValueList);
+        this.fromEmail = propertyValueList.get(0);
+        this.password = propertyValueList.get(1);
+        this.host = propertyValueList.get(2);
+        this.port = propertyValueList.get(3);
     }
 
-    public Properties getSessionProperties(String host, String port) {
-        Properties properties = new Properties();
-        properties.put("mail.smtp.host", host);
-        properties.put("mail.smtp.socketFactory.port", port);
-        properties.put("mail.smtp.socketFactory.class",
+    private void getSessionProperties(String host, String port) {
+        this.properties.put("mail.smtp.host", host);
+        this.properties.put("mail.smtp.socketFactory.port", port);
+        this.properties.put("mail.smtp.socketFactory.class",
                 "javax.net.ssl.SSLSocketFactory");
-        properties.put("mail.smtp.auth", "true");
-        properties.put("mail.smtp.port", port);
+        this.properties.put("mail.smtp.auth", "true");
+        this.properties.put("mail.smtp.port", port);
+    }
 
-        return (properties);
+    private void configEMailProperties() throws EmailSenderException {
+        this.getPropertiesValueList();
+
+        this.getSessionProperties(this.host, this.port);
+
+        this.session = Session.getInstance(properties, new Authenticator() {
+            @Override()
+            protected PasswordAuthentication getPasswordAuthentication() {
+
+                return (new PasswordAuthentication(fromEmail, password));
+            }
+        });
     }
 }

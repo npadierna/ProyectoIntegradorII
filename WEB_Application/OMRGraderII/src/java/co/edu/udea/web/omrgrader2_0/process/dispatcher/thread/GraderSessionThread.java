@@ -4,7 +4,6 @@ import co.edu.udea.web.omrgrader2_0.persistence.dao.IGraderSessionDAO;
 import co.edu.udea.web.omrgrader2_0.persistence.entities.GraderSession;
 import co.edu.udea.web.omrgrader2_0.persistence.exception.OMRGraderPersistenceException;
 import co.edu.udea.web.omrgrader2_0.process.directory.ImageFileManager;
-import co.edu.udea.web.omrgrader2_0.process.email.EmailSender;
 import co.edu.udea.web.omrgrader2_0.process.exception.OMRGraderProcessException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -21,7 +20,6 @@ public class GraderSessionThread extends Thread {
     private IGraderSessionDAO graderSessionDAO;
     private IThreadNotifier threadNotifier;
     private ImageFileManager imageFileManagement;
-    private EmailSender emailSender;
     private GraderSession graderSession;
     private long key;
 
@@ -34,8 +32,6 @@ public class GraderSessionThread extends Thread {
         this.graderSessionDAO = graderSessionDAO;
         this.imageFileManagement = imageFileManagement;
         this.threadNotifier = threadNotifier;
-
-        this.emailSender = new EmailSender();
     }
 
     public GraderSession getGraderSession() {
@@ -63,9 +59,6 @@ public class GraderSessionThread extends Thread {
                 buildStorageDirectoryPathName(this.getGraderSession(), false);
 
         try {
-            this.emailSender.sendEmail(this.getGraderSession().
-                    getGraderSessionPK().getElectronicMail(), "", "");
-
             boolean eliminationResult = this.imageFileManagement
                     .deleteStorageDirectory(String.valueOf(
                     storageDirectoryPathName));

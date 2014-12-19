@@ -4,7 +4,6 @@ import co.edu.udea.web.omrgrader2_0.persistence.dao.IGraderSessionDAO;
 import co.edu.udea.web.omrgrader2_0.persistence.entities.GraderSession;
 import co.edu.udea.web.omrgrader2_0.process.directory.ImageFileManager;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
