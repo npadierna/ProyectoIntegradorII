@@ -28,17 +28,19 @@ import javax.imageio.ImageIO;
  */
 public final class QRManager {
 
+    private final int PIXEL_LESS = 5;
+
     public QRManager() {
         super();
     }
 
     public void createQRCode(String qrCodeData, String filePath, String charset,
-            Map<EncodeHintType, ?> hintMap, int qrCodeheight, int qrCodewidth)
+            Map<EncodeHintType, ?> hintMap, int qrEdge)
             throws OMRGraderProcessException {
         try {
             BitMatrix matrix = new MultiFormatWriter().encode(
                     new String(qrCodeData.getBytes(charset), charset),
-                    BarcodeFormat.QR_CODE, qrCodewidth, qrCodeheight, hintMap);
+                    BarcodeFormat.QR_CODE, qrEdge, qrEdge, hintMap);
             MatrixToImageWriter.writeToPath(matrix, filePath.substring(filePath
                     .lastIndexOf('.') + 1), Paths.get(filePath));
         } catch (IOException | WriterException e) {
@@ -48,12 +50,48 @@ public final class QRManager {
         }
     }
 
-    public String readQRCode(String filePath, String charset,
-            Map<DecodeHintType, ?> hintMap) throws OMRGraderProcessException {
+    public String readQRCode(String filePath, Map<DecodeHintType, ?> hintMap)
+            throws OMRGraderProcessException {
         try {
             BinaryBitmap binaryBitmap = new BinaryBitmap(new HybridBinarizer(
                     new BufferedImageLuminanceSource(
                     ImageIO.read(new FileInputStream(filePath)))));
+            Result qrCodeResult = new MultiFormatReader().decode(binaryBitmap,
+                    hintMap);
+
+            return (qrCodeResult.getText());
+        } catch (IOException | NotFoundException e) {
+            throw new OMRGraderProcessException(
+                    "Fatal error while the application was trying to read a QR Code.",
+                    e.getCause());
+        }
+    }
+
+    public String readQRCode(String filePath, Map<DecodeHintType, ?> hintMap,
+            int left, int right, int top, int bottom)
+            throws OMRGraderProcessException {
+        if (right <= left || bottom <= top) {
+
+            return (null);
+        }
+
+        int edge = right - left;
+        int temp = bottom - top;
+        if (temp > edge) {
+
+            edge = temp;
+        }
+
+        left -= this.PIXEL_LESS;
+        top -= this.PIXEL_LESS;
+        edge += 2 * this.PIXEL_LESS;
+
+        try {
+            BinaryBitmap binaryBitmap = new BinaryBitmap(new HybridBinarizer(
+                    new BufferedImageLuminanceSource(
+                    ImageIO.read(new FileInputStream(filePath)), left, top,
+                    edge, edge)));
+
             Result qrCodeResult = new MultiFormatReader().decode(binaryBitmap,
                     hintMap);
 
