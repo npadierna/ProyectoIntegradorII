@@ -12,7 +12,7 @@ import co.edu.udea.android.omrgrader2_0.webservice.model.GraderSession;
  */
 public interface IExamImageWebService {
 
-	public int buildStorageDirectoryPathName(GraderSession graderSession);
+	public long buildStorageDirectoryPathName(GraderSession graderSession);
 
 	public boolean uploadReferenceExamImageFile(
 			Bitmap referenceExamImageBitmap, GraderSession graderSession)

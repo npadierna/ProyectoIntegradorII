@@ -62,12 +62,13 @@ public class GraderSessionWebServiceImpl extends AbstractContextWebService
 			if (httpEntity != null) {
 				String entityResponse = EntityUtils.toString(httpEntity);
 
-				GraderSession gs = (GraderSession) (new GraderSession()
+				GraderSession responsedGraderSession = (GraderSession) (new GraderSession()
 						.unpackJsonOjectToEntity(new JSONObject(entityResponse)));
-				Log.v(TAG, String.valueOf(ExamImageWebServiceImpl.getInstance()
-						.buildStorageDirectoryPathName(gs)));
 
-				return (gs);
+				Log.v(TAG, String.valueOf(ExamImageWebServiceImpl.getInstance()
+						.buildStorageDirectoryPathName(responsedGraderSession)));
+
+				return (responsedGraderSession);
 			}
 		} catch (Exception e) {
 			throw new OMRGraderWebServiceException(
@@ -135,8 +136,7 @@ public class GraderSessionWebServiceImpl extends AbstractContextWebService
 			return (false);
 		}
 
-		if ((graderSession.getRequest() == null)
-				|| (graderSession.getApprovalPercentage() <= 0.0F)
+		if ((graderSession.getApprovalPercentage() <= 0.0F)
 				|| (TextUtils.isEmpty(graderSession.getDecimalPrecision()))
 				|| (Integer.valueOf(graderSession.getDecimalPrecision()) <= 0)
 				|| (graderSession.getMaximumGrade() <= 0.0F)) {

@@ -1,8 +1,6 @@
 package co.edu.udea.android.omrgrader2_0.business.grade;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -160,7 +158,7 @@ public final class OMRGraderProcess {
 			this.examImageUploaderAsyncTask.execute(new Object[] {
 					ExamImageUploaderAsyncTask.UPLOAD_STUDENT_EXAM_IMAGE,
 					this.graderSession, studentExamImageBitMap,
-					Integer.valueOf(position) });
+					Integer.valueOf(position + 1) });
 
 			try {
 				returnedValue = this.examImageUploaderAsyncTask.get();

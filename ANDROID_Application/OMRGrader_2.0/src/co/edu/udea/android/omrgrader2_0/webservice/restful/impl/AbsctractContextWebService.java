@@ -59,9 +59,9 @@ abstract class AbstractContextWebService {
 		}
 
 		String httpProcol = "http";
-		String serverIP = "192.168.0.199";
-		String serverPort = "8084";
-		String webApplicatonContext = "UploadImageWebApplication";
+		String serverIP = "192.168.0.191";
+		String serverPort = "8080";
+		String webApplicatonContext = "omrgrader";
 		String webServiceContext = "rest";
 
 		URI uri = new URI(httpProcol, "", serverIP,

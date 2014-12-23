@@ -48,7 +48,7 @@ public class ExamImageWebServiceImpl extends AbstractContextWebService
 	}
 
 	@Override()
-	public int buildStorageDirectoryPathName(GraderSession graderSession) {
+	public long buildStorageDirectoryPathName(GraderSession graderSession) {
 
 		return (Math.abs(graderSession.getGraderSessionPK().getElectronicMail()
 				.hashCode()
@@ -67,13 +67,13 @@ public class ExamImageWebServiceImpl extends AbstractContextWebService
 		}
 
 		Map<String, Object> parametersMap = new HashMap<String, Object>();
-		// parametersMap
-		// .put(WebServicePathContract.ExamImageWebServiceContract.DIRECTORY_STORAGE_ID_PARAMETER,
-		// Integer.valueOf(this
-		// .buildStorageDirectoryPathName(graderSession)));
 		parametersMap
 				.put(WebServicePathContract.ExamImageWebServiceContract.DIRECTORY_STORAGE_ID_PARAMETER,
-						"temporal");
+						String.valueOf(this
+								.buildStorageDirectoryPathName(graderSession)));
+//		parametersMap
+//				.put(WebServicePathContract.ExamImageWebServiceContract.DIRECTORY_STORAGE_ID_PARAMETER,
+//						"temporal");
 
 		try {
 			HttpPost httpPost = this.createRequestForImageUploading(
@@ -113,17 +113,17 @@ public class ExamImageWebServiceImpl extends AbstractContextWebService
 		parametersMap
 				.put(WebServicePathContract.ExamImageWebServiceContract.STUDENT_EXAM_IMAGE_FILE_ID_PARAMETER,
 						imageFileId);
-		// parametersMap
-		// .put(WebServicePathContract.ExamImageWebServiceContract.DIRECTORY_STORAGE_ID_PARAMETER,
-		// Integer.valueOf(this
-		// .buildStorageDirectoryPathName(graderSession)));
 		parametersMap
 				.put(WebServicePathContract.ExamImageWebServiceContract.DIRECTORY_STORAGE_ID_PARAMETER,
-						"temporal");
+						String.valueOf(this
+								.buildStorageDirectoryPathName(graderSession)));
+//		parametersMap
+//				.put(WebServicePathContract.ExamImageWebServiceContract.DIRECTORY_STORAGE_ID_PARAMETER,
+//						"temporal");
 
 		try {
 			HttpPost httpPost = this.createRequestForImageUploading(
-					studentExamImageBitmap, true);
+					studentExamImageBitmap, false);
 			HttpEntity httpEntity = super
 					.executeHTTPMethod(
 							new String[] {

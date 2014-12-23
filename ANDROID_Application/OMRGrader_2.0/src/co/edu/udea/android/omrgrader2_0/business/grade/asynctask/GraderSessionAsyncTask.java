@@ -93,8 +93,7 @@ public class GraderSessionAsyncTask extends AsyncTask<Object, Void, Object[]> {
 			return (false);
 		}
 
-		if ((graderSession.getRequest() == null)
-				|| (graderSession.getApprovalPercentage() <= 0.0F)
+		if ((graderSession.getApprovalPercentage() <= 0.0F)
 				|| (TextUtils.isEmpty(graderSession.getDecimalPrecision()))
 				|| (Integer.valueOf(graderSession.getDecimalPrecision()) <= 0)
 				|| (graderSession.getMaximumGrade() <= 0.0F)) {

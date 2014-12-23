@@ -13,8 +13,6 @@ import org.json.JSONObject;
  */
 public class GraderSessionPK implements IJSONContext, Serializable {
 
-	// jsonObject.put(E_MAIL_ACCOUNT, this.geteMailAccount());
-	// jsonObject.put(GRADER_SESSION_NAME, this.getGraderSessionName());
 	private static final long serialVersionUID = 2045541944837331846L;
 
 	public static final String ELECTRONIC_MAIL = "electronicMail";

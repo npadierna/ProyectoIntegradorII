@@ -71,6 +71,20 @@ public class ImageTakerActivity extends Activity {
 
 	public void onGradeExams(View view) {
 		Log.v(TAG, "Starting The Grade for Exams.");
+
+		// FIXME: Think more about how to handle this exception.
+		try {
+			boolean createdSession = this.omrGraderProcess
+					.createGraderSession();
+			boolean uploadedReferenceExam = this.omrGraderProcess
+					.uploadReferenceExamImage();
+			boolean[] uploadedStudentsExams = this.omrGraderProcess
+					.uploadStudentExamImage();
+			boolean finishedSession = this.omrGraderProcess
+					.finishGraderSession();
+		} catch (OMRGraderBusinessException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void onStartTakingStudentsExamsImages(View view) {

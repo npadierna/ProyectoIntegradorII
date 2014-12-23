@@ -109,7 +109,8 @@ public class GraderSession implements IJSONContext, Serializable {
 	public JSONObject packEntityToJsonObject() throws JSONException {
 		JSONObject jsonObject = new JSONObject();
 
-		jsonObject.put(GRADER_SESSION_PK, this.getGraderSessionPK());
+		jsonObject.put(GRADER_SESSION_PK, this.getGraderSessionPK()
+				.packEntityToJsonObject());
 		jsonObject.put(REQUEST, this.getRequest());
 		jsonObject.put(AVAILABLE, this.getAvailable());
 		jsonObject.put(APPROVAL_PERCENTAGE, this.getApprovalPercentage());
@@ -162,8 +163,6 @@ public class GraderSession implements IJSONContext, Serializable {
 
 	@Override()
 	public boolean equals(Object object) {
-		// TODO: Warning - this method won't work in the case the id fields are
-		// not set
 		if (!(object instanceof GraderSession)) {
 
 			return (false);
