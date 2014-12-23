@@ -23,8 +23,6 @@ public final class BaseStorageDirectory {
 
 	private BaseStorageDirectory(Context context)
 			throws OMRGraderBusinessException {
-		super();
-
 		this.context = context;
 
 		this.creatBaseStorage();
@@ -50,8 +48,7 @@ public final class BaseStorageDirectory {
 				throw new OMRGraderBusinessException(
 						"The Base Storage Directory File was not created successfully.");
 			} else {
-				// boolean storageDirectoryFileOk =
-				// storageDirectoryFile.mkdirs();
+				storageDirectoryFile.mkdirs();
 
 				this.baseStorageDirectoryFile = storageDirectoryFile;
 			}
@@ -69,7 +66,8 @@ public final class BaseStorageDirectory {
 		return (new File(storageDirectoryPath.toString()));
 	}
 
-	public File createDirectoryForSession(CharSequence sessionNameCharSequence)
+	public File[] createDirectoriesFilesForSession(
+			CharSequence sessionNameCharSequence)
 			throws OMRGraderBusinessException {
 		StringBuilder pathStringBuilder = new StringBuilder();
 		File sessionDirectoryFile = null;
@@ -93,6 +91,6 @@ public final class BaseStorageDirectory {
 					"The creation of the needed directories files for the storage the session's images was not successfully.");
 		}
 
-		return (sessionDirectoryFile);
+		return (new File[] { sessionDirectoryFile, studentsImagesDirectoryFile });
 	}
 }

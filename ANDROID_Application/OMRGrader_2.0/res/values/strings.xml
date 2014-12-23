@@ -28,6 +28,9 @@
     <string name="application_name">OMRGrader 2.0</string>
     <string name="accept_button_label">Aceptar</string>
     <string name="cancel_button_label">Cancelar</string>
+    <string name="extension_picture_sufix">.jpg</string>
+    <string name="reference_exam_picture_file_name">ReferenceExam_</string>
+    <string name="student_exam_picture_file_name">StudentExam_</string>
 
     <!-- Image Taker Activity -->
     <string name="image_taker_activity_name">Sesión De Calificación</string>

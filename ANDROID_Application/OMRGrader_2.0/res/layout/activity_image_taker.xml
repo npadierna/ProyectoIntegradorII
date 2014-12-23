@@ -73,6 +73,7 @@
     </Button>
 
     <Button
+        android:id="@+id/start_taking_student_exams_images_button"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:enabled="false"
@@ -82,6 +83,7 @@
     </Button>
 
     <Button
+        android:id="@+id/grade_exams_button"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:enabled="false"

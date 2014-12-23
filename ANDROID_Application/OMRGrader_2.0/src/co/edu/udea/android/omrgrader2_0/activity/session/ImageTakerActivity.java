@@ -1,22 +1,19 @@
 package co.edu.udea.android.omrgrader2_0.activity.session;
 
-import java.util.concurrent.ExecutionException;
+import java.io.File;
+import java.io.IOException;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import co.edu.udea.android.omrgrader2_0.R;
 import co.edu.udea.android.omrgrader2_0.business.exception.OMRGraderBusinessException;
 import co.edu.udea.android.omrgrader2_0.business.grade.OMRGraderProcess;
-import co.edu.udea.android.omrgrader2_0.business.grade.asynctask.ExamImageUploaderAsyncTask;
-import co.edu.udea.android.omrgrader2_0.business.grade.asynctask.GraderSessionAsyncTask;
-import co.edu.udea.android.omrgrader2_0.webservice.model.GraderSession;
-import co.edu.udea.android.omrgrader2_0.webservice.model.GraderSessionPK;
 
 /**
  * 
@@ -35,18 +32,30 @@ public class ImageTakerActivity extends Activity {
 
 	private OMRGraderProcess omrGraderProcess;
 
+	private File newExamPictureFile;
+
+	private Button startTakingStudentExamsImagesButton;
+	private Button gradeExamsButton;
+
 	@Override()
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		switch (requestCode) {
 		case REQUEST_FOR_TAKING_REFERENCE_EXAM:
 			if (resultCode == Activity.RESULT_OK) {
+				this.omrGraderProcess
+						.setReferenceExamImageFile(this.newExamPictureFile);
 
+				this.addFileToGalleryImages(this.newExamPictureFile);
+
+				this.startTakingStudentExamsImagesButton.setEnabled(true);
 			}
 			break;
 
 		case REQUEST_FOR_TAKING_STUDENT_EXAM:
 			if (resultCode == Activity.RESULT_OK) {
+				this.addFileToGalleryImages(this.newExamPictureFile);
 
+				this.gradeExamsButton.setEnabled(true);
 			}
 			break;
 		}
@@ -66,37 +75,38 @@ public class ImageTakerActivity extends Activity {
 
 	public void onStartTakingStudentsExamsImages(View view) {
 		Log.v(TAG, "Start Taking Students Exams Images.");
+
+		// FIXME: Think more about how to handle this exception.
+		try {
+			this.newExamPictureFile = this.createIntentForTakingPicture(
+					super.getString(R.string.student_exam_picture_file_name),
+					this.omrGraderProcess.getSessionStudentDirectoryFile(),
+					REQUEST_FOR_TAKING_STUDENT_EXAM);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void onTakeReferenceExamImage(View view) {
 		Log.v(TAG, "Taking the Reference Exam Image.");
 
-		GraderSession graderSession = new GraderSession(new GraderSessionPK(
-				"npadierna@gmail.com", "Grader Session"), Long.valueOf(0L),
-				Float.valueOf(60.0F), Float.valueOf(100.0F), "3");
-		Bitmap imageBitmap = BitmapFactory
-				.decodeFile("/storage/sdcard0/DCIM/Camera/1398827742194.jpg");
-
-		AsyncTask<Object, Void, Integer> examImageUploaderAsyncTask = new ExamImageUploaderAsyncTask();
-		// examImageUploaderAsyncTask.execute(new Object[] { imageBitmap });
-
-		AsyncTask<Object, Void, Object[]> graderSessionAsyncTask = new GraderSessionAsyncTask();
-		graderSessionAsyncTask.execute(new Object[] {
-				GraderSessionAsyncTask.CREATE_GRADER_SESSION, graderSession });
-
+		// FIXME: Think more about how to handle this exception.
 		try {
-			// examImageUploaderAsyncTask.get();
-			Object[] returns = graderSessionAsyncTask.get();
-
-			Log.v(TAG, String.valueOf(returns.length));
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		} catch (ExecutionException e) {
+			this.newExamPictureFile = this.createIntentForTakingPicture(
+					super.getString(R.string.reference_exam_picture_file_name),
+					this.omrGraderProcess.getSessionBaseDirectoryFile(),
+					REQUEST_FOR_TAKING_REFERENCE_EXAM);
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
 	private void createComponents(Bundle bundle) {
+		this.startTakingStudentExamsImagesButton = (Button) super
+				.findViewById(R.id.start_taking_student_exams_images_button);
+		this.gradeExamsButton = (Button) super
+				.findViewById(R.id.grade_exams_button);
+
 		// FIXME: Think more about how to handle this exception.
 
 		try {
@@ -106,5 +116,30 @@ public class ImageTakerActivity extends Activity {
 		} catch (OMRGraderBusinessException e) {
 			e.printStackTrace();
 		}
+	}
+
+	private File createIntentForTakingPicture(String pictureName,
+			File pictureDestinationDirectoryFile, int requestCode)
+			throws IOException {
+		File takenPictureFile = File.createTempFile(pictureName,
+				super.getString(R.string.extension_picture_sufix),
+				pictureDestinationDirectoryFile);
+
+		Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+		takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
+				Uri.fromFile(takenPictureFile));
+
+		super.startActivityForResult(takePictureIntent, requestCode);
+
+		return (takenPictureFile);
+	}
+
+	private void addFileToGalleryImages(File pictureFile) {
+		Uri uri = Uri.fromFile(pictureFile);
+
+		Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+		intent.setData(uri);
+
+		super.sendBroadcast(intent);
 	}
 }

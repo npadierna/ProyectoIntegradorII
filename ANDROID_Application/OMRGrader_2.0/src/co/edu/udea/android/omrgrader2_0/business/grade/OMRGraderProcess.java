@@ -29,9 +29,8 @@ public final class OMRGraderProcess {
 	private BaseStorageDirectory baseStorageDirectory;
 	private GraderSession graderSession;
 
-	private File sessionDirectoryFile;
+	private File[] sessionDirectoriesFiles;
 	private File referenceExamImageFile;
-	private List<File> studentsExamsImagesFilesList;
 
 	private AsyncTask<Object, Void, Integer> examImageUploaderAsyncTask;
 	private AsyncTask<Object, Void, Object[]> graderSessionAsyncTask;
@@ -43,6 +42,18 @@ public final class OMRGraderProcess {
 		this.createComponents(context, graderSessionName);
 	}
 
+	public File getSessionBaseDirectoryFile() {
+
+		return ((this.sessionDirectoriesFiles != null) ? this.sessionDirectoriesFiles[0]
+				: null);
+	}
+
+	public File getSessionStudentDirectoryFile() {
+
+		return ((this.sessionDirectoriesFiles != null) ? this.sessionDirectoriesFiles[1]
+				: null);
+	}
+
 	public File getReferenceExamImageFile() {
 
 		return (this.referenceExamImageFile);
@@ -50,16 +61,6 @@ public final class OMRGraderProcess {
 
 	public void setReferenceExamImageFile(File referenceExamImageFile) {
 		this.referenceExamImageFile = referenceExamImageFile;
-	}
-
-	public List<File> getStudentsExamsImagesFilesList() {
-
-		return (this.studentsExamsImagesFilesList);
-	}
-
-	public void setStudentsExamsImagesFilesList(
-			List<File> studentsExamsImagesFilesList) {
-		this.studentsExamsImagesFilesList = studentsExamsImagesFilesList;
 	}
 
 	public boolean createGraderSession() throws OMRGraderBusinessException {
@@ -141,18 +142,17 @@ public final class OMRGraderProcess {
 	}
 
 	public boolean[] uploadStudentExamImage() throws OMRGraderBusinessException {
-		boolean[] successfulUploadings = new boolean[this
-				.getStudentsExamsImagesFilesList().size()];
+		File[] studentsExamsImagesFiles = this.getSessionStudentDirectoryFile()
+				.listFiles();
+		boolean[] successfulUploadings = new boolean[studentsExamsImagesFiles.length];
 
 		File studentExamImageFile = null;
 		Integer returnedValue = null;
 
 		Bitmap studentExamImageBitMap = null;
 
-		for (int position = 0; position < this
-				.getStudentsExamsImagesFilesList().size(); position++) {
-			studentExamImageFile = this.getStudentsExamsImagesFilesList().get(
-					position);
+		for (int position = 0; position < studentsExamsImagesFiles.length; position++) {
+			studentExamImageFile = studentsExamsImagesFiles[position];
 			studentExamImageBitMap = BitmapFactory
 					.decodeFile(studentExamImageFile.getAbsolutePath());
 
@@ -167,10 +167,10 @@ public final class OMRGraderProcess {
 
 				successfulUploadings[position] = (returnedValue == ExamImageUploaderAsyncTask.SUCCESS_UPLOADING);
 			} catch (Exception e) {
-				// throw new OMRGraderBusinessException(
-				// String.format(
-				// "The application could not upload the Student Exam Image: %s",
-				// studentExamImageFile.getAbsoluteFile()), e);
+				throw new OMRGraderBusinessException(
+						String.format(
+								"The application could not upload the Student Exam Image: %s",
+								studentExamImageFile.getAbsoluteFile()), e);
 			}
 		}
 
@@ -190,12 +190,12 @@ public final class OMRGraderProcess {
 					"The instance was not created dued the parameters are null, empty or invalid");
 		}
 
-		this.studentsExamsImagesFilesList = new ArrayList<File>();
-
 		this.sharedPreferences = PreferenceManager
 				.getDefaultSharedPreferences(context);
 
 		this.baseStorageDirectory = BaseStorageDirectory.getInstance(context);
+		this.sessionDirectoriesFiles = this.baseStorageDirectory
+				.createDirectoriesFilesForSession(graderSessionName);
 
 		this.graderSession = new GraderSession();
 		this.graderSession.getGraderSessionPK().setSessionName(
