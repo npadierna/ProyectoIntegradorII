@@ -3,8 +3,11 @@ package co.edu.udea.web.omrgrader2_0.process.image.opencv;
 import co.edu.udea.web.omrgrader2_0.process.image.opencv.util.ImageProcessUtil;
 import co.edu.udea.web.omrgrader2_0.process.image.model.Exam;
 import co.edu.udea.web.omrgrader2_0.process.image.model.QuestionItem;
+import co.edu.udea.web.omrgrader2_0.process.image.model.Student;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import javax.annotation.PostConstruct;
 import org.opencv.calib3d.Calib3d;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
@@ -22,6 +25,7 @@ import org.opencv.features2d.Features2d;
 import org.opencv.features2d.KeyPoint;
 import org.opencv.highgui.Highgui;
 import org.opencv.utils.Converters;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.WebApplicationContext;
@@ -33,16 +37,16 @@ import org.springframework.web.context.WebApplicationContext;
  * @author Neiber Padierna P&eacute;rez
  */
 @Component()
+@DependsOn(value = {"openCVLibraryLoader"})
 @Scope(value = WebApplicationContext.SCOPE_APPLICATION)
 public final class OMRGraderProcess {
 
+    public static final String ONLY_LOGOS_TEMPLATE_IMAGE_NAME = "Only_Logos_Templage.png";
     private static final DescriptorExtractor DESCRIPTOR_EXTRACTOR;
     private static final DescriptorMatcher DESCRIPTOR_MATCHER;
     private static final FeatureDetector FEATURE_DETECTOR;
 
     static {
-        System.load("/home/pivb/Software/Libraries/OpenCV2.4.8/opencv_java248.so");
-
         DESCRIPTOR_EXTRACTOR = DescriptorExtractor
                 .create(DescriptorExtractor.SURF);
         DESCRIPTOR_MATCHER = DescriptorMatcher
@@ -51,15 +55,23 @@ public final class OMRGraderProcess {
                 .create(FeatureDetector.SURF);
     }
     private ExamProcess examProcess;
+    public Exam onlyLogosTemplateExam;
 
     public OMRGraderProcess() {
         this.examProcess = new ExamProcess();
     }
 
-//    @PostConstruct()
-//    public void initialize() {
-//        this.examProcess = new ExamProcess();
-//    }
+    @PostConstruct()
+    public void initialize() {
+        this.onlyLogosTemplateExam = this.extractFeatures(this.getClass().
+                getResource(File.separator.concat(
+                ONLY_LOGOS_TEMPLATE_IMAGE_NAME)).getPath());
+    }
+
+    public Exam getOnlyLogosTemplateExam() {
+
+        return (this.onlyLogosTemplateExam);
+    }
 
     public Exam extractFeatures(String examImageAbsolutePath) {
         Mat imageDescriptorsMat = new Mat();
@@ -72,11 +84,12 @@ public final class OMRGraderProcess {
                 imageDescriptorsMat);
 
         return (new Exam(examImageAbsolutePath, grayScaledImageMat,
-                imageDescriptorsMat, imageMatOfKeyPoints, null));
+                imageMatOfKeyPoints, imageDescriptorsMat));
     }
 
-    public List<QuestionItem> executeProcessing(Exam onlyLogosTemplate,
-            Exam exam, String processedImageDestinationDirectoryPath,
+    public Exam executeExamProcessing(Exam onlyLogosTemplate,
+            Exam exam, boolean referenceExam,
+            String processedImageDestinationDirectoryPath,
             String blackWhiteImageDestinationDirectoryPath,
             String imageProcessedName, String imageBlackWhiteName) {
         MatOfDMatch matOfDMatch = new MatOfDMatch();
@@ -135,10 +148,10 @@ public final class OMRGraderProcess {
         List<Point> corners_template = new ArrayList<>();
         List<Point> corners_solu = new ArrayList<>();
         corners_template.add(new Point(0.0, 0.0));
-        corners_template.add(new Point(onlyLogosTemplate.getGrayScaledImageMat().cols(),
-                0.0));
-        corners_template.add(new Point(onlyLogosTemplate.getGrayScaledImageMat().cols(),
-                onlyLogosTemplate.getGrayScaledImageMat().rows()));
+        corners_template.add(new Point(onlyLogosTemplate.getGrayScaledImageMat()
+                .cols(), 0.0));
+        corners_template.add(new Point(onlyLogosTemplate.getGrayScaledImageMat()
+                .cols(), onlyLogosTemplate.getGrayScaledImageMat().rows()));
         corners_template.add(new Point(0.0,
                 onlyLogosTemplate.getGrayScaledImageMat().rows()));
 
@@ -182,20 +195,36 @@ public final class OMRGraderProcess {
                 center_locations_t, corners_template, new Scalar(0, 0, 255), 2,
                 11);
 
-        String computedAnsweredPhotodPath = ImageProcessUtil.writeImageFile(
-                imageProcessedName, img_matches, new java.io.File(
-                processedImageDestinationDirectoryPath));
+        if (this.checkDirectoryPathName(processedImageDestinationDirectoryPath)
+                && (this.checkImageName(imageProcessedName))) {
+            ImageProcessUtil.writeImageFile(
+                    imageProcessedName, img_matches, new File(
+                    processedImageDestinationDirectoryPath));
+        }
+
         Mat blackAndWhiteImage = ImageProcessUtil.convertImageToBlackWhite(
                 exam.getGrayScaledImageMat(), false);
-        String blackAndWhitePhotodPath = ImageProcessUtil.writeImageFile(
-                imageBlackWhiteName, blackAndWhiteImage, new java.io.File(
-                blackWhiteImageDestinationDirectoryPath));
 
-        return (this.examProcess.findAnswers(blackAndWhiteImage,
-                center_locations_t));
+        if (this.checkDirectoryPathName(blackWhiteImageDestinationDirectoryPath)
+                && (this.checkImageName(imageBlackWhiteName))) {
+            ImageProcessUtil.writeImageFile(
+                    imageBlackWhiteName, blackAndWhiteImage, new File(
+                    blackWhiteImageDestinationDirectoryPath));
+        }
+
+        exam.setQuestionsItemsList(this.examProcess.findAnswers(
+                blackAndWhiteImage, center_locations_t));
+
+        if (referenceExam) {
+            exam.setStudent(this.executeQRCordeProcessing(exam,
+                    qr_corners_solu));
+        }
+
+        return (exam);
     }
 
-    public List<QuestionItem> executeProcessing(String refer_path, String solu_path,
+    public Exam executeExamProcessing(String refer_path,
+            String solu_path, boolean referenceExam,
             String processedImageDestinationDirectoryPath,
             String blackWhiteImageDestinationDirectoryPath,
             String imageProcessedName, String imageBlackWhiteName) {
@@ -215,8 +244,10 @@ public final class OMRGraderProcess {
         Mat descriptors_ref = new Mat();
         Mat descriptors_solu = new Mat();
 
-        DESCRIPTOR_EXTRACTOR.compute(image_refer, keyPoints_ref, descriptors_ref);
-        DESCRIPTOR_EXTRACTOR.compute(image_solu, keyPoints_solu, descriptors_solu);
+        DESCRIPTOR_EXTRACTOR.compute(image_refer, keyPoints_ref,
+                descriptors_ref);
+        DESCRIPTOR_EXTRACTOR.compute(image_solu, keyPoints_solu,
+                descriptors_solu);
 
         /* 3 Haciendo el Maching */
         MatOfDMatch matOfDMatch = new MatOfDMatch();
@@ -311,17 +342,58 @@ public final class OMRGraderProcess {
         ImageProcessUtil.drawTransferredBubbles(img_matches,
                 center_locations_t, corners_template, new Scalar(0, 0, 255), 2,
                 11);
+        if (this.checkDirectoryPathName(processedImageDestinationDirectoryPath)
+                && (this.checkImageName(imageProcessedName))) {
+            ImageProcessUtil.writeImageFile(
+                    imageProcessedName, img_matches, new File(
+                    processedImageDestinationDirectoryPath));
+        }
 
-        String computedAnsweredPhotodPath = ImageProcessUtil.writeImageFile(
-                imageProcessedName, img_matches, new java.io.File(
-                processedImageDestinationDirectoryPath));
         Mat blackAndWhiteImage = ImageProcessUtil.convertImageToBlackWhite(
                 image_solu, false);
-        String blackAndWhitePhotodPath = ImageProcessUtil.writeImageFile(
-                imageBlackWhiteName, blackAndWhiteImage, new java.io.File(
-                blackWhiteImageDestinationDirectoryPath));
 
-        return (this.examProcess.findAnswers(blackAndWhiteImage,
-                center_locations_t));
+        if (this.checkDirectoryPathName(blackWhiteImageDestinationDirectoryPath)
+                && (this.checkImageName(imageBlackWhiteName))) {
+            ImageProcessUtil.writeImageFile(
+                    imageBlackWhiteName, blackAndWhiteImage, new File(
+                    blackWhiteImageDestinationDirectoryPath));
+        }
+
+        Exam exam = new Exam(solu_path, image_solu, keyPoints_solu,
+                descriptors_solu);
+        exam.setQuestionsItemsList(this.examProcess.findAnswers(
+                blackAndWhiteImage, center_locations_t));
+
+        if (referenceExam) {
+            exam.setStudent(this.executeQRCordeProcessing(exam,
+                    qr_corners_solu));
+        }
+
+        return (exam);
+    }
+
+    /*
+     * 0: Esquina superior izquierda.
+     * 1: Esquina superior derecha.
+     * 2: Esquina inferior izquierda.
+     * 3: Esquina inferior derecha.
+     */
+    public Student executeQRCordeProcessing(Exam studentExam,
+            List<Point> qrCordeCornersPoints) {
+        String examImageAbsolutePath = studentExam.getImageAbsolutePath();
+
+        return (new Student(null, null, null));
+    }
+
+    private boolean checkDirectoryPathName(String directoryPathName) {
+
+        return ((directoryPathName != null)
+                && (!directoryPathName.trim().isEmpty()));
+    }
+
+    private boolean checkImageName(String imageName) {
+
+        return ((imageName != null)
+                && (!imageName.trim().isEmpty()));
     }
 }

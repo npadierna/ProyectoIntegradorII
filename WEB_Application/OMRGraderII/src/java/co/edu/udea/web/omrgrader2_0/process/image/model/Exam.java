@@ -13,29 +13,19 @@ import org.opencv.core.MatOfKeyPoint;
  */
 public class Exam {
 
-    private List<QuestionItem> questionsItemsList;
     private String imageAbsolutePath;
+    private Student student;
+    private List<QuestionItem> questionsItemsList;
     private Mat grayScaledImageMat;
     private Mat imageDescriptorsMat;
     private MatOfKeyPoint imageMatOfKeyPoints;
 
     public Exam(String imageAbsolutePath, Mat grayScaledImageMat,
-            Mat imageDescriptorsMat, MatOfKeyPoint imageMatOfKeyPoints,
-            List<QuestionItem> questionsItemsList) {
-        this.grayScaledImageMat = grayScaledImageMat;
+            MatOfKeyPoint imageMatOfKeyPoints, Mat imageDescriptorsMat) {
         this.imageAbsolutePath = imageAbsolutePath;
-        this.imageDescriptorsMat = imageDescriptorsMat;
+        this.grayScaledImageMat = grayScaledImageMat;
         this.imageMatOfKeyPoints = imageMatOfKeyPoints;
-        this.questionsItemsList = questionsItemsList;
-    }
-
-    public List<QuestionItem> getQuestionsItemsList() {
-
-        return (this.questionsItemsList);
-    }
-
-    public void setQuestionsItemsList(List<QuestionItem> questionsItemsList) {
-        this.questionsItemsList = questionsItemsList;
+        this.imageDescriptorsMat = imageDescriptorsMat;
     }
 
     public String getImageAbsolutePath() {
@@ -45,6 +35,24 @@ public class Exam {
 
     public void setImageAbsolutePath(String imageAbsolutePath) {
         this.imageAbsolutePath = imageAbsolutePath;
+    }
+
+    public Student getStudent() {
+
+        return (this.student);
+    }
+
+    public void setStudent(Student student) {
+        this.student = student;
+    }
+
+    public List<QuestionItem> getQuestionsItemsList() {
+
+        return (this.questionsItemsList);
+    }
+
+    public void setQuestionsItemsList(List<QuestionItem> questionsItemsList) {
+        this.questionsItemsList = questionsItemsList;
     }
 
     public Mat getGrayScaledImageMat() {
