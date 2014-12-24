@@ -8,7 +8,7 @@ import java.util.List;
  * @author Miguel &Aacute;ngel Ossa Ruiz
  * @author Neiber Padierna P&eacute;rez
  */
-public class ListUtil {
+public final class ListUtil {
 
     private ListUtil() {
         super();

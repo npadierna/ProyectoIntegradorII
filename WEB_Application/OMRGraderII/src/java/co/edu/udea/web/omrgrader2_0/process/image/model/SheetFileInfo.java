@@ -33,6 +33,7 @@ public class SheetFileInfo {
     }
 
     public GraderSession getGraderSession() {
+
         return graderSession;
     }
 
@@ -41,6 +42,7 @@ public class SheetFileInfo {
     }
 
     public List<AnswerStudent> getAnswerStudentList() {
+
         return answerStudentList;
     }
 
@@ -49,6 +51,7 @@ public class SheetFileInfo {
     }
 
     public List<QuestionItem> getCorrectAnswers() {
+
         return correctAnswers;
     }
 
@@ -57,6 +60,7 @@ public class SheetFileInfo {
     }
 
     public int getStudentAmount() {
+
         return studentAmount;
     }
 
@@ -65,6 +69,7 @@ public class SheetFileInfo {
     }
 
     public int getStudentAmountPassed() {
+
         return studentAmountPassed;
     }
 
@@ -73,6 +78,7 @@ public class SheetFileInfo {
     }
 
     public int getQuestionAmount() {
+
         return questionAmount;
     }
 
@@ -81,6 +87,7 @@ public class SheetFileInfo {
     }
 
     public int getMinimumQuestionAmountToPass() {
+
         return minimumQuestionAmountToPass;
     }
 
@@ -89,6 +96,7 @@ public class SheetFileInfo {
     }
 
     public double getMinimumScoreToPass() {
+
         return minimumScoreToPass;
     }
 

@@ -239,7 +239,7 @@ public class FileSheetReport {
             cell = row.createCell((short) 2);
             cell.setCellType(Cell.CELL_TYPE_STRING);
             cell.setCellStyle(this.createInfoStudentCellStyle(workbook, 0, true, false));
-            cell.setCellValue(as.getStudent().geteMail());
+            cell.setCellValue(as.getStudent().getElectronicMail());
 
             cell = row.createCell((short) 3);
             cell.setCellType(Cell.CELL_TYPE_NUMERIC);
@@ -252,6 +252,7 @@ public class FileSheetReport {
             if (as.getPassed()) {
                 color = 1;
             }
+
             CellStyle cellStyle = this.createInfoStudentCellStyle(workbook, color, true, true);
             cellStyle.setDataFormat(format.getFormat(prec));
             cell.setCellStyle(cellStyle);
@@ -265,6 +266,7 @@ public class FileSheetReport {
         int decimalPrecision = Integer.parseInt(precision);
         int i = 1;
         String decimalPrecisionFormat = "0.0";
+
         while (i < decimalPrecision) {
             decimalPrecisionFormat = decimalPrecisionFormat + "0";
             i++;

@@ -7,27 +7,29 @@ package co.edu.udea.web.omrgrader2_0.process.image.model;
  * @author Neiber Padierna P&eacute;rez
  */
 public class Student {
-    
-    private String eMail;
+
+    private String electronicMail;
     private String fullName;
     private String idNumber;
-    
-    public Student(String eMail, String fullName, String idNumber){
+
+    public Student(String electronicMail, String fullName, String idNumber) {
         this.fullName = fullName;
-        this.eMail = eMail;
+        this.electronicMail = electronicMail;
         this.idNumber = idNumber;
     }
 
-    public String geteMail() {
-        return eMail;
+    public String getElectronicMail() {
+
+        return (this.electronicMail);
     }
 
-    public void seteMail(String eMail) {
-        this.eMail = eMail;
+    public void setElectronicMail(String electronicMail) {
+        this.electronicMail = electronicMail;
     }
 
     public String getFullName() {
-        return fullName;
+
+        return (this.fullName);
     }
 
     public void setFullName(String fullName) {
@@ -35,7 +37,8 @@ public class Student {
     }
 
     public String getIdNumber() {
-        return idNumber;
+
+        return (this.idNumber);
     }
 
     public void setIdNumber(String idNumber) {

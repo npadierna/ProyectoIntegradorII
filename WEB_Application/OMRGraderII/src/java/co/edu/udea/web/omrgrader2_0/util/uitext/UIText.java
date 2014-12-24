@@ -12,7 +12,7 @@ import org.apache.log4j.Logger;
  * @author Miguel &Aacute;ngel Ossa Ruiz
  * @author Neiber Padierna P&eacute;rez
  */
-public class UIText {
+public final class UIText {
 
     private static final Logger logger = Logger.getLogger(UIText.class.getName());
     private static final String RESOURCE_PACKAGE_NAME =
@@ -21,6 +21,7 @@ public class UIText {
             ResourceBundle.getBundle(RESOURCE_PACKAGE_NAME);
 
     private UIText() {
+        super();
     }
 
     public static void loadResourcePackage(Locale locale) {

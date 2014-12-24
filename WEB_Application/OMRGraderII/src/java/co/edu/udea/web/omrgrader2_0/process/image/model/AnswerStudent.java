@@ -28,6 +28,7 @@ public class AnswerStudent {
     }
 
     public List<QuestionItem> getAnswerList() {
+
         return answerList;
     }
 
@@ -36,6 +37,7 @@ public class AnswerStudent {
     }
 
     public Student getStudent() {
+
         return student;
     }
 
@@ -44,6 +46,7 @@ public class AnswerStudent {
     }
 
     public int getCorrectAnswersAmount() {
+
         return correctAnswersAmount;
     }
 
@@ -52,6 +55,7 @@ public class AnswerStudent {
     }
 
     public List<Boolean> getAnswersScore() {
+
         return answersScore;
     }
 
@@ -60,6 +64,7 @@ public class AnswerStudent {
     }
 
     public double getScore() {
+
         return score;
     }
 
@@ -68,6 +73,7 @@ public class AnswerStudent {
     }
 
     public boolean getPassed() {
+
         return passed;
     }
 
