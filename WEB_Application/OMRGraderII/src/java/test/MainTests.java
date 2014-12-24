@@ -8,23 +8,21 @@ import co.edu.udea.web.omrgrader2_0.process.email.report.FileSheetReport;
 import co.edu.udea.web.omrgrader2_0.process.exception.OMRGraderProcessException;
 import co.edu.udea.web.omrgrader2_0.process.grade.ExamSessionComparator;
 import co.edu.udea.web.omrgrader2_0.process.image.model.AnswerStudent;
+import co.edu.udea.web.omrgrader2_0.process.image.model.Exam;
 import co.edu.udea.web.omrgrader2_0.process.image.model.QuestionItem;
 import co.edu.udea.web.omrgrader2_0.process.image.model.SheetFileInfo;
 import co.edu.udea.web.omrgrader2_0.process.image.model.Student;
-import co.edu.udea.web.omrgrader2_0.process.image.opencv.OMRProcess;
+import co.edu.udea.web.omrgrader2_0.process.image.opencv.OMRGraderProcess;
 import co.edu.udea.web.omrgrader2_0.process.qr.QRManager;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.Rect;
 import org.opencv.highgui.Highgui;
@@ -43,9 +41,9 @@ public class MainTests {
         long timeEnd;
         long fullTime;
         timeStart = System.currentTimeMillis();
-        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+//        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 
-
+        testOMR();
 
         timeEnd = System.currentTimeMillis();
         fullTime = timeEnd - timeStart;
@@ -87,31 +85,28 @@ public class MainTests {
     }
 
     public static void testOMR() {
-        Properties constants = new Properties();
+        OMRGraderProcess oMRGraderProcess = new OMRGraderProcess();
+//        oMRGraderProcess.initialize();
+        
+        String examAbsolutePath = "/home/pivb/Imágenes/UdeA/Prueba_(1).jpg";
 
-        try {
-            constants.load(MainTests.class.getClassLoader().getResourceAsStream(
-                    "constants.properties"));
-        } catch (IOException e) {
-            System.out.println("Error al leer archivo de propiedades.");
-            e.printStackTrace();
-        }
+        oMRGraderProcess
+                .executeProcessing("/home/pivb/Imágenes/UdeA/Only_Logos_Templage.png",
+                examAbsolutePath,
+                "/home/pivb/Imágenes/UdeA/",
+                "/home/pivb/Imágenes/UdeA/",
+                "examForProcessing-Processed.png",
+                "examForProcessing-BlackAndWhite.png");
 
-        if (!constants.isEmpty()) {
-            OMRProcess
-                    .getInstance()
-                    .executeProcessing(
-                    constants.getProperty("refer_path"),
-                    constants.getProperty("solu_path"),
-                    constants.getProperty("processedImageDirectory"),
-                    constants.getProperty("blackWhiteImageDirectory"),
-                    constants
-                    .getProperty("examForProcessingName-Processed"),
-                    constants
-                    .getProperty("examForProcessingName-BlackAndWhite"));
-        } else {
-            System.out.println("Propiedades vacías");
-        }
+        Exam referenceExam = oMRGraderProcess.extractFeatures(
+                "/home/pivb/Imágenes/UdeA/Only_Logos_Templage.png");
+        Exam studentExam = oMRGraderProcess.extractFeatures(
+                examAbsolutePath);
+        oMRGraderProcess.executeProcessing(referenceExam, studentExam,
+                "/home/pivb/Imágenes/UdeA/",
+                "/home/pivb/Imágenes/UdeA/",
+                "examForProcessing-Processed_(1).png",
+                "examForProcessing-BlackAndWhite_(1).png");
     }
 
     public static void testEMailSenderWithAttached() throws EmailSenderException {
