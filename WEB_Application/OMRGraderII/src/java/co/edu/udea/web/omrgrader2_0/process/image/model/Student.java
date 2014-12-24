@@ -8,32 +8,35 @@ package co.edu.udea.web.omrgrader2_0.process.image.model;
  */
 public class Student {
 
-    private String electronicMail;
-    private String fullName;
+    public static final String ID_NUMBER_KEY = "idNumber";
+    public static final String FULL_NAMES_KEY = "fullNames";
+    public static final String E_MAIL_KEY = "eMail";
+    private String eMail;
+    private String fullNames;
     private String idNumber;
 
-    public Student(String electronicMail, String fullName, String idNumber) {
-        this.fullName = fullName;
-        this.electronicMail = electronicMail;
+    public Student(String eMail, String fullNames, String idNumber) {
+        this.fullNames = fullNames;
+        this.eMail = eMail;
         this.idNumber = idNumber;
     }
 
-    public String getElectronicMail() {
+    public String geteMail() {
 
-        return (this.electronicMail);
+        return (this.eMail);
     }
 
-    public void setElectronicMail(String electronicMail) {
-        this.electronicMail = electronicMail;
+    public void seteMail(String eMail) {
+        this.eMail = eMail;
     }
 
-    public String getFullName() {
+    public String getFullNames() {
 
-        return (this.fullName);
+        return (this.fullNames);
     }
 
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
+    public void setFullNames(String fullNames) {
+        this.fullNames = fullNames;
     }
 
     public String getIdNumber() {

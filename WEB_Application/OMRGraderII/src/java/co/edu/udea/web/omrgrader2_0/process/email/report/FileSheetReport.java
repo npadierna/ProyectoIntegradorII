@@ -1,8 +1,8 @@
 package co.edu.udea.web.omrgrader2_0.process.email.report;
 
 import co.edu.udea.web.omrgrader2_0.process.exception.OMRGraderProcessException;
-import co.edu.udea.web.omrgrader2_0.process.image.model.AnswerStudent;
-import co.edu.udea.web.omrgrader2_0.process.image.model.SheetFileInfo;
+import co.edu.udea.web.omrgrader2_0.process.image.model.ExamResult;
+import co.edu.udea.web.omrgrader2_0.process.image.model.SheetFileInformation;
 import co.edu.udea.web.omrgrader2_0.util.text.TextUtil;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -41,7 +41,7 @@ public class FileSheetReport {
         super();
     }
 
-    public String createDataSheet(String path, SheetFileInfo info)
+    public String createDataSheet(String path, SheetFileInformation info)
             throws OMRGraderProcessException {
         XSSFWorkbook workbook = new XSSFWorkbook();
         this.setPropertiesToWorkbook(workbook, info.getGraderSession().
@@ -104,7 +104,7 @@ public class FileSheetReport {
         sheet.setColumnWidth(4, this.COLUMN_WIDTH_20);
     }
 
-    private void createExamInfoHeaders(SheetFileInfo info, Sheet sheet,
+    private void createExamInfoHeaders(SheetFileInformation info, Sheet sheet,
             XSSFWorkbook workbook) {
         Row row = sheet.createRow((short) 0);
         Cell cell = row.createCell((short) 0);
@@ -219,17 +219,17 @@ public class FileSheetReport {
     }
 
     private void createStudentInfoCells(XSSFWorkbook workbook, Sheet sheet,
-            List<AnswerStudent> studentList, int rowNumberStart, String precision) {
+            List<ExamResult> studentList, int rowNumberStart, String precision) {
         DataFormat format = workbook.createDataFormat();
         String prec = this.constructPrecision(precision);
 
         int rowNumber = rowNumberStart;
-        for (AnswerStudent as : studentList) {
+        for (ExamResult as : studentList) {
             Row row = sheet.createRow((short) rowNumber);
             Cell cell = row.createCell((short) 0);
             cell.setCellType(Cell.CELL_TYPE_STRING);
             cell.setCellStyle(this.createInfoStudentCellStyle(workbook, 0, false, false));
-            cell.setCellValue(as.getStudent().getFullName());
+            cell.setCellValue(as.getStudent().getFullNames());
 
             cell = row.createCell((short) 1);
             cell.setCellType(Cell.CELL_TYPE_STRING);
@@ -239,7 +239,7 @@ public class FileSheetReport {
             cell = row.createCell((short) 2);
             cell.setCellType(Cell.CELL_TYPE_STRING);
             cell.setCellStyle(this.createInfoStudentCellStyle(workbook, 0, true, false));
-            cell.setCellValue(as.getStudent().getElectronicMail());
+            cell.setCellValue(as.getStudent().geteMail());
 
             cell = row.createCell((short) 3);
             cell.setCellType(Cell.CELL_TYPE_NUMERIC);

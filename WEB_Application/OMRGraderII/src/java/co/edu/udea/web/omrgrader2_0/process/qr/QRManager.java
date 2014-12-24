@@ -1,6 +1,7 @@
 package co.edu.udea.web.omrgrader2_0.process.qr;
 
 import co.edu.udea.web.omrgrader2_0.process.exception.OMRGraderProcessException;
+import co.edu.udea.web.omrgrader2_0.process.image.model.Student;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.BinaryBitmap;
 import com.google.zxing.DecodeHintType;
@@ -17,8 +18,13 @@ import com.google.zxing.common.HybridBinarizer;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.StringTokenizer;
 import javax.imageio.ImageIO;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+import org.springframework.web.context.WebApplicationContext;
 
 /**
  *
@@ -26,9 +32,13 @@ import javax.imageio.ImageIO;
  * @author Miguel &Aacute;ngel Ossa Ruiz
  * @author Neiber Padierna P&eacute;rez
  */
+@Component()
+@Scope(value = WebApplicationContext.SCOPE_APPLICATION)
 public final class QRManager {
 
-    private final int PIXEL_LESS = 5;
+    private static final String SEPARATOR = ":";
+    private static final String TOKEN = ",";
+    private static final int PIXEL_LESS = 5;
 
     public QRManager() {
         super();
@@ -67,10 +77,11 @@ public final class QRManager {
         }
     }
 
-    public String readQRCode(String filePath, Map<DecodeHintType, ?> hintMap,
-            int left, int right, int top, int bottom)
-            throws OMRGraderProcessException {
-        if (right <= left || bottom <= top) {
+    // TODO: Andersson, pruebe, pruebe...
+    public Map<String, String> readQRCode(String filePath,
+            Map<DecodeHintType, ?> hintMap, int left, int right, int top,
+            int bottom) throws OMRGraderProcessException {
+        if ((right <= left) || (bottom <= top)) {
 
             return (null);
         }
@@ -78,28 +89,60 @@ public final class QRManager {
         int edge = right - left;
         int temp = bottom - top;
         if (temp > edge) {
-
             edge = temp;
         }
 
-        left -= this.PIXEL_LESS;
-        top -= this.PIXEL_LESS;
-        edge += 2 * this.PIXEL_LESS;
+        left -= PIXEL_LESS;
+        top -= PIXEL_LESS;
+        edge += 2 * PIXEL_LESS;
 
         try {
             BinaryBitmap binaryBitmap = new BinaryBitmap(new HybridBinarizer(
                     new BufferedImageLuminanceSource(
                     ImageIO.read(new FileInputStream(filePath)), left, top,
                     edge, edge)));
-
             Result qrCodeResult = new MultiFormatReader().decode(binaryBitmap,
                     hintMap);
 
-            return (qrCodeResult.getText());
+            return (this.tokenStudentInformation(qrCodeResult.getText()));
         } catch (IOException | NotFoundException e) {
             throw new OMRGraderProcessException(
                     "Fatal error while the application was trying to read a QR Code.",
                     e.getCause());
         }
+    }
+
+    private Map<String, String> tokenStudentInformation(
+            String studentInformation) {
+        Map<String, String> studentInformationMap = new HashMap<>();
+        StringTokenizer stringTokenizer = new StringTokenizer(studentInformation,
+                TOKEN);
+
+        String keyValueData;
+        int counter = 0;
+        while (stringTokenizer.hasMoreElements()) {
+            keyValueData = stringTokenizer.nextToken();
+
+            int index = keyValueData.indexOf(SEPARATOR);
+            switch (counter) {
+                case 0:
+                    studentInformationMap.put(Student.ID_NUMBER_KEY,
+                            keyValueData.substring(index));
+                    break;
+
+                case 1:
+                    studentInformationMap.put(Student.FULL_NAMES_KEY,
+                            keyValueData.substring(index));
+                    break;
+
+                case 2:
+                    studentInformationMap.put(Student.E_MAIL_KEY,
+                            keyValueData.substring(index));
+                    break;
+            }
+            counter++;
+        }
+
+        return (studentInformationMap);
     }
 }

@@ -1,7 +1,7 @@
 package co.edu.udea.web.omrgrader2_0.process.email.config;
 
 import co.edu.udea.web.omrgrader2_0.process.email.EmailSender;
-import co.edu.udea.web.omrgrader2_0.process.email.exception.EmailSenderException;
+import co.edu.udea.web.omrgrader2_0.process.email.exception.OMRGraderEmailException;
 import co.edu.udea.web.omrgrader2_0.util.collection.ListUtil;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -21,7 +21,7 @@ public class EMailPropertiesReader {
     }
 
     public static List<String> readProperties(List<String> propertyNames,
-            String path) throws EmailSenderException {
+            String path) throws OMRGraderEmailException {
 
         if (ListUtil.isEmptyStringList(propertyNames)) {
 
@@ -40,7 +40,7 @@ public class EMailPropertiesReader {
                 }
             }
         } catch (IOException e) {
-            throw new EmailSenderException(
+            throw new OMRGraderEmailException(
                     "Fatal error while application was trying to read email "
                     + "properties.",
                     e.getCause());

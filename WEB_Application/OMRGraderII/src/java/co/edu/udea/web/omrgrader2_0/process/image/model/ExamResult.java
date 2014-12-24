@@ -1,3 +1,4 @@
+// TODO: Refactorizar moviendo para el paquete donde quede SheetFilInfo.
 package co.edu.udea.web.omrgrader2_0.process.image.model;
 
 import java.util.List;
@@ -8,23 +9,25 @@ import java.util.List;
  * @author Miguel &Aacute;ngel Ossa Ruiz
  * @author Neiber Padierna P&eacute;rez
  */
-public class AnswerStudent {
+public class ExamResult {
 
+    // TODO: Esto vuela... Porque ya está en Exam.
     private List<QuestionItem> answerList;
     private Student student;
+    // TODO: Esto vuela... Porque aquí no se hace las comparaciones.
     private List<Boolean> answersScore;
     private int correctAnswersAmount;
     private double score;
-    private boolean passed = false;
+    private boolean passed;
 
-    public AnswerStudent(List<QuestionItem> answerList, Student student) {
+    public ExamResult() {
+        super();
+    }
+
+    public ExamResult(List<QuestionItem> answerList, Student student) {
         super();
         this.answerList = answerList;
         this.student = student;
-    }
-
-    public AnswerStudent() {
-        super();
     }
 
     public List<QuestionItem> getAnswerList() {

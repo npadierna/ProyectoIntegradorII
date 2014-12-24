@@ -1,7 +1,7 @@
 package co.edu.udea.web.omrgrader2_0.process.email;
 
 import co.edu.udea.web.omrgrader2_0.process.email.config.EMailPropertiesReader;
-import co.edu.udea.web.omrgrader2_0.process.email.exception.EmailSenderException;
+import co.edu.udea.web.omrgrader2_0.process.email.exception.OMRGraderEmailException;
 import co.edu.udea.web.omrgrader2_0.util.text.TextUtil;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,13 +37,13 @@ public class EmailSender {
     private String port;
     private Session session;
 
-    public EmailSender() throws EmailSenderException {
+    public EmailSender() throws OMRGraderEmailException {
         this.properties = new Properties();
         this.configEMailProperties();
     }
 
     public boolean sendEmail(String toEmail, String subject, String text)
-            throws EmailSenderException {
+            throws OMRGraderEmailException {
         try {
             Message message = new MimeMessage(this.session);
             message.setFrom(new InternetAddress(this.fromEmail));
@@ -54,7 +54,7 @@ public class EmailSender {
 
             Transport.send(message);
         } catch (MessagingException e) {
-            throw new EmailSenderException(
+            throw new OMRGraderEmailException(
                     "Fatal error while the application was trying to send a E-Mail.",
                     e.getCause());
         }
@@ -63,7 +63,7 @@ public class EmailSender {
     }
 
     public boolean sendEMail(String toEmail, String fullFilePath, String examName)
-            throws EmailSenderException {
+            throws OMRGraderEmailException {
         toEmail = TextUtil.toLowerCase(toEmail);
 
         try {
@@ -104,7 +104,7 @@ public class EmailSender {
             Transport.send(message);
 
         } catch (MessagingException e) {
-            throw new EmailSenderException(
+            throw new OMRGraderEmailException(
                     "Fatal error while the application was trying to send a E-Mail.",
                     e.getCause());
         }
@@ -112,7 +112,7 @@ public class EmailSender {
         return (true);
     }
 
-    private void getPropertiesValueList() throws EmailSenderException {
+    private void getPropertiesValueList() throws OMRGraderEmailException {
         List<String> propertyNameList = new ArrayList<>();
         propertyNameList.add("EMAIL_ADDRESS");
         propertyNameList.add("PASSWORD");
@@ -139,7 +139,7 @@ public class EmailSender {
         this.properties.put("mail.smtp.port", port);
     }
 
-    private void configEMailProperties() throws EmailSenderException {
+    private void configEMailProperties() throws OMRGraderEmailException {
         this.getPropertiesValueList();
 
         this.getSessionProperties(this.host, this.port);

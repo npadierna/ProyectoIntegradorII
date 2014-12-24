@@ -1,11 +1,14 @@
 package co.edu.udea.web.omrgrader2_0.process.grade;
 
-import co.edu.udea.web.omrgrader2_0.process.image.model.AnswerStudent;
+import co.edu.udea.web.omrgrader2_0.process.image.model.ExamResult;
 import co.edu.udea.web.omrgrader2_0.process.image.model.QuestionItem;
-import co.edu.udea.web.omrgrader2_0.process.image.model.SheetFileInfo;
+import co.edu.udea.web.omrgrader2_0.process.image.model.SheetFileInformation;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+import org.springframework.web.context.WebApplicationContext;
 
 /**
  *
@@ -13,13 +16,15 @@ import java.util.List;
  * @author Miguel &Aacute;ngel Ossa Ruiz
  * @author Neiber Padierna P&eacute;rez
  */
+@Component()
+@Scope(value = WebApplicationContext.SCOPE_APPLICATION)
 public class ExamSessionComparator {
 
     public ExamSessionComparator() {
         super();
     }
 
-    public void score(SheetFileInfo sheetFileInfo) {
+    public void score(SheetFileInformation sheetFileInfo) {
         sheetFileInfo.setQuestionAmount(sheetFileInfo.getCorrectAnswers().size());
         double s = sheetFileInfo.getGraderSession().getMaximumGrade()
                 * sheetFileInfo.getGraderSession().getApprovalPercentage();
@@ -30,11 +35,11 @@ public class ExamSessionComparator {
 
         int amountStudentPassed = 0;
 
-        List<AnswerStudent> answerStudentList = new ArrayList<>();
-        for (AnswerStudent answerStudent : sheetFileInfo.getAnswerStudentList()) {
+        List<ExamResult> answerStudentList = new ArrayList<>();
+        for (ExamResult answerStudent : sheetFileInfo.getAnswerStudentList()) {
             List<Boolean> scoreList = this.compareAnswers(sheetFileInfo.
                     getCorrectAnswers(), answerStudent.getAnswerList());
-            AnswerStudent temp = new AnswerStudent();
+            ExamResult temp = new ExamResult();
             temp.setAnswerList(answerStudent.getAnswerList());
             temp.setAnswersScore(scoreList);
             temp.setStudent(answerStudent.getStudent());

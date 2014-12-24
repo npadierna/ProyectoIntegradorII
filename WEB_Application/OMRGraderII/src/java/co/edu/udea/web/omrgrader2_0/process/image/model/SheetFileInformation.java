@@ -1,3 +1,4 @@
+// TODO: Refactorizar moviendo para algún lado.
 package co.edu.udea.web.omrgrader2_0.process.image.model;
 
 import co.edu.udea.web.omrgrader2_0.persistence.entities.GraderSession;
@@ -9,10 +10,11 @@ import java.util.List;
  * @author Miguel &Aacute;ngel Ossa Ruiz
  * @author Neiber Padierna P&eacute;rez
  */
-public class SheetFileInfo {
+public class SheetFileInformation {
 
     private GraderSession graderSession;
-    private List<AnswerStudent> answerStudentList;
+    private List<ExamResult> answerStudentList;
+    // TODO: Cambiar por una referencia a un objeto Exam.
     private List<QuestionItem> correctAnswers;
     private int studentAmount;
     private int studentAmountPassed;
@@ -20,12 +22,12 @@ public class SheetFileInfo {
     private int minimumQuestionAmountToPass;
     private double minimumScoreToPass;
 
-    public SheetFileInfo() {
+    public SheetFileInformation() {
         super();
     }
 
-    public SheetFileInfo(GraderSession graderSession,
-            List<AnswerStudent> answerStudentList,
+    public SheetFileInformation(GraderSession graderSession,
+            List<ExamResult> answerStudentList,
             List<QuestionItem> correctAnswers) {
         this.graderSession = graderSession;
         this.answerStudentList = answerStudentList;
@@ -34,25 +36,25 @@ public class SheetFileInfo {
 
     public GraderSession getGraderSession() {
 
-        return graderSession;
+        return (this.graderSession);
     }
 
     public void setGraderSession(GraderSession graderSession) {
         this.graderSession = graderSession;
     }
 
-    public List<AnswerStudent> getAnswerStudentList() {
+    public List<ExamResult> getAnswerStudentList() {
 
-        return answerStudentList;
+        return (this.answerStudentList);
     }
 
-    public void setAnswerStudentList(List<AnswerStudent> answerStudentList) {
+    public void setAnswerStudentList(List<ExamResult> answerStudentList) {
         this.answerStudentList = answerStudentList;
     }
 
     public List<QuestionItem> getCorrectAnswers() {
 
-        return correctAnswers;
+        return (this.correctAnswers);
     }
 
     public void setCorrectAnswers(List<QuestionItem> correctAnswers) {
@@ -61,7 +63,7 @@ public class SheetFileInfo {
 
     public int getStudentAmount() {
 
-        return studentAmount;
+        return (this.studentAmount);
     }
 
     public void setStudentAmount(int studentAmount) {
@@ -70,7 +72,7 @@ public class SheetFileInfo {
 
     public int getStudentAmountPassed() {
 
-        return studentAmountPassed;
+        return (this.studentAmountPassed);
     }
 
     public void setStudentAmountPassed(int studentAmountPassed) {
@@ -79,7 +81,7 @@ public class SheetFileInfo {
 
     public int getQuestionAmount() {
 
-        return questionAmount;
+        return (this.questionAmount);
     }
 
     public void setQuestionAmount(int questionAmount) {
@@ -88,7 +90,7 @@ public class SheetFileInfo {
 
     public int getMinimumQuestionAmountToPass() {
 
-        return minimumQuestionAmountToPass;
+        return (this.minimumQuestionAmountToPass);
     }
 
     public void setMinimumQuestionAmountToPass(int minimumQuestionsToPass) {
@@ -97,7 +99,7 @@ public class SheetFileInfo {
 
     public double getMinimumScoreToPass() {
 
-        return minimumScoreToPass;
+        return (this.minimumScoreToPass);
     }
 
     public void setMinimumScoreToPass(double minimumScoreToPass) {
