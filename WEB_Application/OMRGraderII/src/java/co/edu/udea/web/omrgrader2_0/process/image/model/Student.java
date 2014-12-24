@@ -1,5 +1,7 @@
 package co.edu.udea.web.omrgrader2_0.process.image.model;
 
+import java.util.Map;
+
 /**
  *
  * @author Andersson Garc&iacute;a Sotelo
@@ -15,10 +17,28 @@ public class Student {
     private String fullNames;
     private String idNumber;
 
-    public Student(String eMail, String fullNames, String idNumber) {
+    public Student() {
+        this(null, null, null);
+    }
+
+    public Student(String idNumber, String fullNames, String eMail) {
+        this.idNumber = idNumber;
         this.fullNames = fullNames;
         this.eMail = eMail;
-        this.idNumber = idNumber;
+    }
+
+    public Student(Map<String, String> studentMap) {
+        if (studentMap.containsKey(ID_NUMBER_KEY)) {
+            this.idNumber = studentMap.get(ID_NUMBER_KEY);
+        }
+
+        if (studentMap.containsKey(FULL_NAMES_KEY)) {
+            this.fullNames = studentMap.get(FULL_NAMES_KEY);
+        }
+
+        if (studentMap.containsKey(E_MAIL_KEY)) {
+            this.eMail = studentMap.get(E_MAIL_KEY);
+        }
     }
 
     public String geteMail() {

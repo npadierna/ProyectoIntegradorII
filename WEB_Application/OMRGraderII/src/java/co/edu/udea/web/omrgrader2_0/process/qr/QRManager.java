@@ -15,9 +15,11 @@ import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.common.HybridBinarizer;
+import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
@@ -39,6 +41,12 @@ public final class QRManager {
     private static final String SEPARATOR = ":";
     private static final String TOKEN = ",";
     private static final int PIXEL_LESS = 5;
+    public static final Map HINT_MAP;
+
+    static {
+        HINT_MAP = new HashMap();
+        HINT_MAP.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.H);
+    }
 
     public QRManager() {
         super();
@@ -77,7 +85,6 @@ public final class QRManager {
         }
     }
 
-    // TODO: Andersson, pruebe, pruebe...
     public Map<String, String> readQRCode(String filePath,
             Map<DecodeHintType, ?> hintMap, int left, int right, int top,
             int bottom) throws OMRGraderProcessException {
@@ -123,7 +130,7 @@ public final class QRManager {
         while (stringTokenizer.hasMoreElements()) {
             keyValueData = stringTokenizer.nextToken();
 
-            int index = keyValueData.indexOf(SEPARATOR);
+            int index = keyValueData.indexOf(SEPARATOR) + 1;
             switch (counter) {
                 case 0:
                     studentInformationMap.put(Student.ID_NUMBER_KEY,

@@ -1,12 +1,14 @@
 package co.edu.udea.web.omrgrader2_0.process.image.opencv;
 
+import co.edu.udea.web.omrgrader2_0.process.exception.OMRGraderProcessException;
 import co.edu.udea.web.omrgrader2_0.process.image.opencv.util.ImageProcessUtil;
 import co.edu.udea.web.omrgrader2_0.process.image.model.Exam;
-import co.edu.udea.web.omrgrader2_0.process.image.model.QuestionItem;
 import co.edu.udea.web.omrgrader2_0.process.image.model.Student;
+import co.edu.udea.web.omrgrader2_0.process.qr.QRManager;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import javax.annotation.PostConstruct;
 import org.opencv.calib3d.Calib3d;
 import org.opencv.core.Core;
@@ -25,6 +27,7 @@ import org.opencv.features2d.Features2d;
 import org.opencv.features2d.KeyPoint;
 import org.opencv.highgui.Highgui;
 import org.opencv.utils.Converters;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -54,6 +57,8 @@ public final class OMRGraderProcess {
         FEATURE_DETECTOR = FeatureDetector
                 .create(FeatureDetector.SURF);
     }
+    @Autowired
+    private QRManager qRManager;
     private ExamProcess examProcess;
     public Exam onlyLogosTemplateExam;
 
@@ -380,9 +385,20 @@ public final class OMRGraderProcess {
      */
     public Student executeQRCordeProcessing(Exam studentExam,
             List<Point> qrCordeCornersPoints) {
-        String examImageAbsolutePath = studentExam.getImageAbsolutePath();
+        try {
+            Map<String, String> studentInformation = qRManager.readQRCode(
+                    studentExam.getImageAbsolutePath(), QRManager.HINT_MAP,
+                    (int) qrCordeCornersPoints.get(0).x,
+                    (int) qrCordeCornersPoints.get(3).x,
+                    (int) qrCordeCornersPoints.get(0).y,
+                    (int) qrCordeCornersPoints.get(3).y);
 
-        return (new Student(null, null, null));
+            return ((studentInformation != null)
+                    ? new Student(studentInformation) : new Student());
+        } catch (OMRGraderProcessException ex) {
+
+            return (new Student());
+        }
     }
 
     private boolean checkDirectoryPathName(String directoryPathName) {
