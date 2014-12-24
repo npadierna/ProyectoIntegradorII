@@ -3,16 +3,17 @@ package test;
 import co.edu.udea.web.omrgrader2_0.persistence.entities.GraderSession;
 import co.edu.udea.web.omrgrader2_0.persistence.entities.GraderSessionPK;
 import co.edu.udea.web.omrgrader2_0.process.email.EmailSender;
-import co.edu.udea.web.omrgrader2_0.process.email.exception.EmailSenderException;
+import co.edu.udea.web.omrgrader2_0.process.email.exception.OMRGraderEmailException;
 import co.edu.udea.web.omrgrader2_0.process.email.report.FileSheetReport;
 import co.edu.udea.web.omrgrader2_0.process.exception.OMRGraderProcessException;
 import co.edu.udea.web.omrgrader2_0.process.grade.ExamSessionComparator;
-import co.edu.udea.web.omrgrader2_0.process.image.model.AnswerStudent;
+import co.edu.udea.web.omrgrader2_0.process.image.model.ExamResult;
 import co.edu.udea.web.omrgrader2_0.process.image.model.Exam;
 import co.edu.udea.web.omrgrader2_0.process.image.model.QuestionItem;
-import co.edu.udea.web.omrgrader2_0.process.image.model.SheetFileInfo;
+import co.edu.udea.web.omrgrader2_0.process.image.model.SheetFileInformation;
 import co.edu.udea.web.omrgrader2_0.process.image.model.Student;
 import co.edu.udea.web.omrgrader2_0.process.image.opencv.OMRGraderProcess;
+import static co.edu.udea.web.omrgrader2_0.process.image.opencv.OMRGraderProcess.ONLY_LOGOS_TEMPLATE_IMAGE_NAME;
 import co.edu.udea.web.omrgrader2_0.process.qr.QRManager;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
@@ -41,7 +42,7 @@ public class MainTests {
         long timeEnd;
         long fullTime;
         timeStart = System.currentTimeMillis();
-//        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+        System.load("/home/pivb/Software/Libraries/OpenCV2.4.8/opencv_java248.so");
 
         testOMR();
 
@@ -50,9 +51,11 @@ public class MainTests {
         System.out.println("Time Processing: " + fullTime + "milliseconds.");
     }
 
-    /* Este método lo que hace es recortar una imagen usando OpenCV y la guarda.
-     No está en ninguna clase pero se deja acá por si en algún momento se necesita
-     algo similar.*/
+    /* 
+     * Este método lo que hace es recortar una imagen usando OpenCV y la guarda.
+     * No está en ninguna clase pero se deja acá por si en algún momento se
+     * necesita algo similar.
+     */
     public static void testCropImage() {
         String imagePath = "/home/pivb/Escritorio/Temporales/Foto_Nueva_(1).jpg";
         Mat image = Highgui.imread(imagePath);
@@ -75,10 +78,10 @@ public class MainTests {
         hintMap.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.H);
 
         try {
+            Map<String, String> studentInformationMap = qrManager.readQRCode(
+                    imagePath, hintMap, 447, 576, 100, 233);
 
-            String result = qrManager.readQRCode(imagePath, hintMap, 447, 576, 100, 233);
-
-            System.out.println("Result: " + result);
+            System.out.println(studentInformationMap);
         } catch (OMRGraderProcessException ex) {
             Logger.getLogger(MainTests.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -86,49 +89,49 @@ public class MainTests {
 
     public static void testOMR() {
         OMRGraderProcess oMRGraderProcess = new OMRGraderProcess();
-//        oMRGraderProcess.initialize();
-        
-        String examAbsolutePath = "/home/pivb/Imágenes/UdeA/Prueba_(1).jpg";
+        oMRGraderProcess.initialize();
+
+        String examAbsolutePath = "/home/pivb/Imágenes/UdeA/Foto_(1).jpg";
 
         oMRGraderProcess
-                .executeProcessing("/home/pivb/Imágenes/UdeA/Only_Logos_Templage.png",
-                examAbsolutePath,
+                .executeExamProcessing(MainTests.class.getResource(File.separator.concat(
+                ONLY_LOGOS_TEMPLATE_IMAGE_NAME)).getPath(),
+                examAbsolutePath, false,
                 "/home/pivb/Imágenes/UdeA/",
                 "/home/pivb/Imágenes/UdeA/",
                 "examForProcessing-Processed.png",
                 "examForProcessing-BlackAndWhite.png");
 
-        Exam referenceExam = oMRGraderProcess.extractFeatures(
-                "/home/pivb/Imágenes/UdeA/Only_Logos_Templage.png");
+        Exam referenceExam = oMRGraderProcess.getOnlyLogosTemplateExam();
         Exam studentExam = oMRGraderProcess.extractFeatures(
                 examAbsolutePath);
-        oMRGraderProcess.executeProcessing(referenceExam, studentExam,
+        oMRGraderProcess.executeExamProcessing(referenceExam, studentExam, false,
                 "/home/pivb/Imágenes/UdeA/",
                 "/home/pivb/Imágenes/UdeA/",
                 "examForProcessing-Processed_(1).png",
                 "examForProcessing-BlackAndWhite_(1).png");
     }
 
-    public static void testEMailSenderWithAttached() throws EmailSenderException {
+    public static void testEMailSenderWithAttached() throws OMRGraderEmailException {
         EmailSender emailSender = new EmailSender();
 
         try {
             emailSender.sendEMail("anderssongarciasotelo@gmail.com",
                     "/home/pivb/Escritorio/Temporales/OpenCV Linux.txt",
                     "Testing With Attached");
-        } catch (EmailSenderException ex) {
+        } catch (OMRGraderEmailException ex) {
             Logger.getLogger(MainTests.class.getName()).
                     log(Level.SEVERE, null, ex);
         }
     }
 
-    public static void testEMailSenderWithoutAttached() throws EmailSenderException {
+    public static void testEMailSenderWithoutAttached() throws OMRGraderEmailException {
         EmailSender emailSender = new EmailSender();
 
         try {
             emailSender.sendEmail("anderssongarciasotelo@gmail.com", "Oelo 1.1",
                     "Probando maricadas.");
-        } catch (EmailSenderException ex) {
+        } catch (OMRGraderEmailException ex) {
             Logger.getLogger(MainTests.class.getName()).
                     log(Level.SEVERE, null, ex);
         }
@@ -155,7 +158,7 @@ public class MainTests {
             qi = new QuestionItem((short) 5, choises);
             correctAnswers.add(qi);
 
-            List<AnswerStudent> answerStudents = new ArrayList<>();
+            List<ExamResult> answerStudents = new ArrayList<>();
             List<QuestionItem> answers = new ArrayList<>();
 
             choises = new boolean[]{true, false, false, false, false};
@@ -174,7 +177,7 @@ public class MainTests {
             qi = new QuestionItem((short) 5, choises);
             answers.add(qi);
             Student student = new Student("anderssongs5@outlook.com", "Andersson García Sotelo", "1037622083");
-            answerStudents.add(new AnswerStudent(answers, student));
+            answerStudents.add(new ExamResult(answers, student));
 
             answers = new ArrayList<>();
             choises = new boolean[]{false, true, false, false, false};
@@ -193,7 +196,7 @@ public class MainTests {
             qi = new QuestionItem((short) 5, choises);
             answers.add(qi);
             student = new Student("npadierna@gmail.com", "Neiber de Jesús Padierna Pérez", "1022095657");
-            answerStudents.add(new AnswerStudent(answers, student));
+            answerStudents.add(new ExamResult(answers, student));
 
             answers = new ArrayList<>();
             choises = new boolean[]{true, false, false, false, false};
@@ -212,7 +215,7 @@ public class MainTests {
             qi = new QuestionItem((short) 5, choises);
             answers.add(qi);
             student = new Student("miguelcold8@gmail.com", "Miguel Angel Ossa Ruiz", "1035859551");
-            answerStudents.add(new AnswerStudent(answers, student));
+            answerStudents.add(new ExamResult(answers, student));
 
             float percentage = 60f / 100f;
             GraderSession gs = new GraderSession(
@@ -220,7 +223,7 @@ public class MainTests {
             gs.setApprovalPercentage(percentage);
             gs.setDecimalPrecision("3");
             gs.setMaximumGrade(5f);
-            SheetFileInfo sfi = new SheetFileInfo(gs, answerStudents, correctAnswers);
+            SheetFileInformation sfi = new SheetFileInformation(gs, answerStudents, correctAnswers);
             ExamSessionComparator esc = new ExamSessionComparator();
             esc.score(sfi);
 
@@ -250,7 +253,7 @@ public class MainTests {
             emailSender.sendEMail(sfi.getGraderSession().getGraderSessionPK().
                     getElectronicMail(), fileXSLXPath,
                     sfi.getGraderSession().getGraderSessionPK().getSessionName());
-        } catch (EmailSenderException ex) {
+        } catch (OMRGraderEmailException ex) {
             Logger.getLogger(MainTests.class.getName()).
                     log(Level.SEVERE, null, ex);
         }

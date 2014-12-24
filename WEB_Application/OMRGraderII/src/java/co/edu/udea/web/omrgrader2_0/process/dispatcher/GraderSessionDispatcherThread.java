@@ -5,7 +5,6 @@ import co.edu.udea.web.omrgrader2_0.process.dispatcher.thread.GraderSessionThrea
 import co.edu.udea.web.omrgrader2_0.persistence.dao.IGraderSessionDAO;
 import co.edu.udea.web.omrgrader2_0.persistence.entities.GraderSession;
 import co.edu.udea.web.omrgrader2_0.persistence.exception.OMRGraderPersistenceException;
-import co.edu.udea.web.omrgrader2_0.process.image.opencv.OMRGraderProcess;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,8 +28,6 @@ public final class GraderSessionDispatcherThread extends Thread {
     private IGraderSessionDAO graderSessionDAO;
     @Autowired()
     private GraderSessionThreadPool graderSessionThreadPool;
-    @Autowired()
-    private OMRGraderProcess oMRGraderProcess;
     private boolean isRunning;
 
     public GraderSessionDispatcherThread() {

@@ -13,7 +13,7 @@ import org.opencv.core.Point;
  * @author Miguel &Aacute;ngel Ossa Ruiz
  * @author Neiber Padierna P&eacute;rez
  */
-public class ExamProcess {
+public final class ExamProcess {
 
     private static final List<Integer> QR_Y_COORDINATE = Arrays.asList(119,
             333);

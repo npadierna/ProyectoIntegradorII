@@ -14,7 +14,7 @@ import org.apache.log4j.Logger;
  */
 public final class UIText {
 
-    private static final Logger logger = Logger.getLogger(UIText.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(UIText.class.getName());
     private static final String RESOURCE_PACKAGE_NAME =
             "co.edu.udea.test.uimessages.config.UIMessages";
     private static ResourceBundle currentResourcePackage =
@@ -42,10 +42,10 @@ public final class UIText {
 
             return (currentResourcePackage.getString(key));
         } catch (MissingResourceException excepcion) {
-            logger.error("Exception trying to get text from properties: ",
+            LOGGER.error("Exception trying to get text from properties: ",
                     excepcion);
 
-            return "Invalid Key: [" + key + "]";
+            return ("Invalid Key: [" + key + "]");
         }
     }
 }
