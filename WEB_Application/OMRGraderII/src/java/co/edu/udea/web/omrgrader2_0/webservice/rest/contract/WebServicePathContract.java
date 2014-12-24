@@ -47,11 +47,6 @@ public final class WebServicePathContract {
         public static final String END_POINT_INTERFACE = "co.edu.udea.web.omrgrader2_0.webservice.IGraderSessionWebService";
         public static final String FINISH_GRADER_SESSION_PATH = "/finish";
         public static final String ROOT_PATH = "/gradersession";
-        /*
-         * Parameteres
-         */
-//        public static final String E_MAIL_ACCOUNT_PARAMETER = "emailAccount";
-//        public static final String GRADER_SESSION_NAME_PARAMETER = "graderSessionName";
 
         private GraderSessionWebServiceContract() {
             super();

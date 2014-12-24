@@ -3,6 +3,7 @@ package co.edu.udea.web.omrgrader2_0.process.dispatcher.thread;
 import co.edu.udea.web.omrgrader2_0.persistence.dao.IGraderSessionDAO;
 import co.edu.udea.web.omrgrader2_0.persistence.entities.GraderSession;
 import co.edu.udea.web.omrgrader2_0.process.directory.ImageFileManager;
+import co.edu.udea.web.omrgrader2_0.process.image.opencv.OMRGraderProcess;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,8 @@ public final class GraderSessionThreadPool implements IThreadNotifier {
     private IGraderSessionDAO graderSessionDAO;
     @Autowired()
     private ImageFileManager imageFileManagement;
+    @Autowired()
+    private OMRGraderProcess oMRGraderProcess;
 
     static {
         threadPoolList = new ArrayList<>(THREAD_POOL_SIZE);
@@ -45,7 +48,7 @@ public final class GraderSessionThreadPool implements IThreadNotifier {
 
         if (index != -1) {
             graderSessionThread = new GraderSessionThread((long) index,
-                    graderSession, this.graderSessionDAO,
+                    graderSession, this.oMRGraderProcess, this.graderSessionDAO,
                     this.imageFileManagement, this);
 
             threadPoolList.set(index, graderSessionThread);

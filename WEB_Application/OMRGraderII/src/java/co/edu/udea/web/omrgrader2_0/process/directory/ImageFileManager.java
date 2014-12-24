@@ -5,9 +5,9 @@ import co.edu.udea.web.omrgrader2_0.process.exception.OMRGraderProcessException;
 import co.edu.udea.web.omrgrader2_0.util.text.TextUtil;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FilenameFilter;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.Date;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.context.WebApplicationContext;
@@ -20,7 +20,7 @@ import org.springframework.web.context.WebApplicationContext;
  */
 @Repository()
 @Scope(value = WebApplicationContext.SCOPE_APPLICATION)
-public class ImageFileManager {
+public class ImageFileManager implements FilenameFilter {
 
     public static final String IMAGE_FILE_SUFFIX = ".jpeg";
     public static final String REFERENCE_EXAM_IMAGE_FILE_DEFAULT_NAME = "referenceExamImageFile";
@@ -180,6 +180,14 @@ public class ImageFileManager {
         }
     }
 
+    public long buildStorageDirectoryPathName(GraderSession graderSession) {
+
+        return (Math.abs(graderSession.getGraderSessionPK().getElectronicMail()
+                .hashCode()
+                + graderSession.getGraderSessionPK().getSessionName().hashCode()
+                + graderSession.getRequest().hashCode()));
+    }
+
     private String buildExamImageFileName(String rawExamImageFileName)
             throws OMRGraderProcessException {
         if ((TextUtil.isEmpty(rawExamImageFileName))
@@ -191,15 +199,10 @@ public class ImageFileManager {
         return (rawExamImageFileName.concat(IMAGE_FILE_SUFFIX));
     }
 
-    public long buildStorageDirectoryPathName(GraderSession graderSession,
-            boolean isCreation) {
-        if (isCreation) {
-            graderSession.setRequest(Long.valueOf(new Date().getTime()));
-        }
+    @Override()
+    public boolean accept(File dir, String name) {
 
-        return (Math.abs(graderSession.getGraderSessionPK().getElectronicMail()
-                .hashCode()
-                + graderSession.getGraderSessionPK().getSessionName().hashCode()
-                + graderSession.getRequest().hashCode()));
+        return ((dir != null) && (name != null) && (!name.trim().isEmpty())
+                && (name.trim().endsWith(IMAGE_FILE_SUFFIX)));
     }
 }

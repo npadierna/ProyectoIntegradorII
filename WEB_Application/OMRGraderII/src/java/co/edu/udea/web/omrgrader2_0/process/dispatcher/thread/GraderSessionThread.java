@@ -5,6 +5,10 @@ import co.edu.udea.web.omrgrader2_0.persistence.entities.GraderSession;
 import co.edu.udea.web.omrgrader2_0.persistence.exception.OMRGraderPersistenceException;
 import co.edu.udea.web.omrgrader2_0.process.directory.ImageFileManager;
 import co.edu.udea.web.omrgrader2_0.process.exception.OMRGraderProcessException;
+import co.edu.udea.web.omrgrader2_0.process.image.model.Exam;
+import co.edu.udea.web.omrgrader2_0.process.image.model.ExamResult;
+import co.edu.udea.web.omrgrader2_0.process.image.opencv.OMRGraderProcess;
+import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -21,14 +25,17 @@ public class GraderSessionThread extends Thread {
     private IThreadNotifier threadNotifier;
     private ImageFileManager imageFileManagement;
     private GraderSession graderSession;
+    private OMRGraderProcess oMRGraderProcess;
     private long key;
 
     public GraderSessionThread(long key, GraderSession graderSession,
+            OMRGraderProcess oMRGraderProcess,
             IGraderSessionDAO graderSessionDAO,
             ImageFileManager imageFileManagement,
             IThreadNotifier threadNotifier) {
         this.key = key;
         this.graderSession = graderSession;
+        this.oMRGraderProcess = oMRGraderProcess;
         this.graderSessionDAO = graderSessionDAO;
         this.imageFileManagement = imageFileManagement;
         this.threadNotifier = threadNotifier;
@@ -56,16 +63,23 @@ public class GraderSessionThread extends Thread {
     public void run() {
         // TODO: Invocar las funciones para efectuar la calificación de los exámenes.
         long storageDirectoryPathName = this.imageFileManagement.
-                buildStorageDirectoryPathName(this.getGraderSession(), false);
+                buildStorageDirectoryPathName(this.getGraderSession());
 
         try {
+            File referenceExamImageFile = new File(this.imageFileManagement.
+                    buildUploadedFileDirectoryPath(String.valueOf(
+                    storageDirectoryPathName), false)).listFiles(
+                    this.imageFileManagement)[0];
+            File[] studentExamsImagesFiles = new File(this.imageFileManagement.
+                    buildUploadedFileDirectoryPath(String.valueOf(
+                    storageDirectoryPathName), true)).listFiles(
+                    this.imageFileManagement);
+
             boolean eliminationResult = this.imageFileManagement
                     .deleteStorageDirectory(String.valueOf(
                     storageDirectoryPathName));
             this.graderSessionDAO.delete(this.getGraderSession()
                     .getGraderSessionPK());
-
-            System.out.format("%s: %d", "Directory Name", storageDirectoryPathName);
 
             this.executeNotification();
         } catch (OMRGraderProcessException | OMRGraderPersistenceException e) {

@@ -8,6 +8,7 @@ import co.edu.udea.web.omrgrader2_0.process.exception.OMRGraderProcessException;
 import co.edu.udea.web.omrgrader2_0.util.text.TextUtil;
 import co.edu.udea.web.omrgrader2_0.webservice.IGraderSessionWebService;
 import co.edu.udea.web.omrgrader2_0.webservice.rest.contract.WebServicePathContract;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.jws.WebService;
@@ -55,8 +56,10 @@ public class GraderSessionWebServiceImpl implements IGraderSessionWebService {
             return (Response.status(Response.Status.BAD_REQUEST).build());
         }
 
+        graderSession.setRequest(Long.valueOf(new Date().getTime()));
+
         long storageDirectoryPathName = this.imageFileManagement.
-                buildStorageDirectoryPathName(graderSession, true);
+                buildStorageDirectoryPathName(graderSession);
 
         try {
             graderSession.setAvailable(false);
