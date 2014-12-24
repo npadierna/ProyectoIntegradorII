@@ -3,17 +3,12 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans-3.0.xsd" >
-<!--
-    <bean
-        name="graderSessionDAO"
-        class="co.edu.udea.web.omrgrader2_0.persistence.dao.hibernate.impl.GraderSessionDAOImpl"
-        scope="singleton" >
-    </bean>
-    -->
 
+    <!--
     <bean
         name="openCVLibraryLoader"
         class="co.edu.udea.web.omrgrader2_0.process.image.opencv.util.OpenCVLibraryLoader"
         scope="singleton" >
     </bean>
+    -->
 </beans>

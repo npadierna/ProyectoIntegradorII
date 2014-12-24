@@ -32,6 +32,10 @@
     <context:component-scan
         base-package="co.edu.udea.web.omrgrader2_0.process.image.opencv" />
     <context:component-scan
+        base-package="co.edu.udea.web.omrgrader2_0.process.grade" />
+    <context:component-scan
+        base-package="co.edu.udea.web.omrgrader2_0.process.qr" />
+    <context:component-scan
         base-package="co.edu.udea.web.omrgrader2_0.webservice.rest.impl" />
 
     <tx:annotation-driven />
