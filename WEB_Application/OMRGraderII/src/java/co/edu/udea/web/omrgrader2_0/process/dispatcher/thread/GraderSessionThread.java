@@ -7,8 +7,11 @@ import co.edu.udea.web.omrgrader2_0.process.directory.ImageFileManager;
 import co.edu.udea.web.omrgrader2_0.process.exception.OMRGraderProcessException;
 import co.edu.udea.web.omrgrader2_0.process.image.model.Exam;
 import co.edu.udea.web.omrgrader2_0.process.image.model.ExamResult;
+import co.edu.udea.web.omrgrader2_0.process.image.model.SheetFileInformation;
 import co.edu.udea.web.omrgrader2_0.process.image.opencv.OMRGraderProcess;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -61,19 +64,60 @@ public class GraderSessionThread extends Thread {
 
     @Override()
     public void run() {
-        // TODO: Invocar las funciones para efectuar la calificación de los exámenes.
+        ExamResult referenceExamResult;
+        List<ExamResult> studentsExamsResultsList;
+
         long storageDirectoryPathName = this.imageFileManagement.
                 buildStorageDirectoryPathName(this.getGraderSession());
 
         try {
-            File referenceExamImageFile = new File(this.imageFileManagement.
+            File[] referenceExamImageFiles = new File(this.imageFileManagement.
                     buildUploadedFileDirectoryPath(String.valueOf(
                     storageDirectoryPathName), false)).listFiles(
-                    this.imageFileManagement)[0];
+                    this.imageFileManagement);
             File[] studentExamsImagesFiles = new File(this.imageFileManagement.
                     buildUploadedFileDirectoryPath(String.valueOf(
                     storageDirectoryPathName), true)).listFiles(
                     this.imageFileManagement);
+
+            if ((referenceExamImageFiles != null)
+                    && (referenceExamImageFiles.length > 0)
+                    && (studentExamsImagesFiles != null)
+                    && (studentExamsImagesFiles.length > 0)) {
+                Exam exam = this.oMRGraderProcess.extractFeatures(
+                        referenceExamImageFiles[0].getAbsolutePath());
+                exam = this.oMRGraderProcess.executeExamProcessing(
+                        this.oMRGraderProcess.getOnlyLogosTemplateExam(), exam,
+                        true, null, null, null, null);
+                exam.setGrayScaledImageMat(null);
+                exam.setImageDescriptorsMat(null);
+                exam.setImageMatOfKeyPoints(null);
+
+                referenceExamResult = new ExamResult(exam);
+                studentsExamsResultsList = new ArrayList<>(studentExamsImagesFiles.length);
+
+                ExamResult examResult;
+                for (File studentExamImageFile : studentExamsImagesFiles) {
+                    exam = this.oMRGraderProcess.extractFeatures(
+                            studentExamImageFile.getAbsolutePath());
+                    exam = this.oMRGraderProcess.executeExamProcessing(
+                            this.oMRGraderProcess.getOnlyLogosTemplateExam(),
+                            exam, false, null, null, null, null);
+                    exam.setGrayScaledImageMat(null);
+                    exam.setImageDescriptorsMat(null);
+                    exam.setImageMatOfKeyPoints(null);
+
+                    examResult = new ExamResult(exam);
+
+                    studentsExamsResultsList.add(examResult);
+                }
+
+                SheetFileInformation sheetFileInformation = new SheetFileInformation(
+                        this.graderSession, referenceExamResult,
+                        studentsExamsResultsList);
+                // TODO: Proceder a crear el archivo con la información y a
+                // enviar el correo electrónico.
+            }
 
             boolean eliminationResult = this.imageFileManagement
                     .deleteStorageDirectory(String.valueOf(

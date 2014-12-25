@@ -22,7 +22,7 @@ import org.springframework.web.context.WebApplicationContext;
 @Scope(value = WebApplicationContext.SCOPE_APPLICATION)
 public class ImageFileManager implements FilenameFilter {
 
-    public static final String IMAGE_FILE_SUFFIX = ".jpeg";
+    public static final String IMAGE_FILE_SUFFIX = ".jpg";
     public static final String REFERENCE_EXAM_IMAGE_FILE_DEFAULT_NAME = "referenceExamImageFile";
     public static final String STUDENT_EXAM_IMAGE_FILE_DEFAULT_NAME = "studentExamImageFile_";
     public static final String STUDENT_EXAM_IMAGE_FILE_DIRECTORY_PATH = "Students_Exams_Images";
