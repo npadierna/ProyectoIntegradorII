@@ -119,38 +119,4 @@ public final class ExamProcess {
 
         return (countedWhitePixeles);
     }
-
-//    private List<Point> buildBubblesCenterLocations() {
-//        List<Point> centerLocationsPoints = new ArrayList<>();
-//        int length = BUBBLE_X_COORDINATE.size() / QUESTION_ITEMS_COLUMNS_AMOUNT;
-//
-//        for (int columnCounter = 1; columnCounter <= QUESTION_ITEMS_COLUMNS_AMOUNT;
-//                columnCounter++) {
-//            for (int yCoordinate : BUBBLE_Y_COORDINATE) {
-//                for (int pos = ((columnCounter - 1) * length); pos
-//                        < (columnCounter * length); pos++) {
-//                    centerLocationsPoints.add(new Point(
-//                            BUBBLE_X_COORDINATE.get(pos), yCoordinate));
-//                }
-//            }
-//        }
-//
-//        return (centerLocationsPoints);
-//    }
-
-//    private List<Point> buildQRCornersLocations() {
-//        List<Point> qrCornersLocationsPoints = new ArrayList<>();
-//
-//        for (int rowCounter = 0; rowCounter < QR_Y_COORDINATE.size();
-//                rowCounter++) {
-//            for (int columnCounter = 0; columnCounter < QR_X_COORDINATE.size();
-//                    columnCounter++) {
-//                qrCornersLocationsPoints.add(new Point(
-//                        QR_X_COORDINATE.get(columnCounter),
-//                        QR_Y_COORDINATE.get(rowCounter)));
-//            }
-//        }
-//
-//        return (qrCornersLocationsPoints);
-//    }
 }

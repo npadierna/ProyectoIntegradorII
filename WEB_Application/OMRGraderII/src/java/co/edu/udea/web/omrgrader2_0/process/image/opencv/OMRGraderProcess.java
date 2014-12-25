@@ -220,7 +220,7 @@ public final class OMRGraderProcess {
         exam.setQuestionsItemsList(this.examProcess.findAnswers(
                 blackAndWhiteImage, center_locations_t));
 
-        if (referenceExam) {
+        if (!referenceExam) {
             exam.setStudent(this.executeQRCordeProcessing(exam,
                     qr_corners_solu));
         }
@@ -369,7 +369,7 @@ public final class OMRGraderProcess {
         exam.setQuestionsItemsList(this.examProcess.findAnswers(
                 blackAndWhiteImage, center_locations_t));
 
-        if (referenceExam) {
+        if (!referenceExam) {
             exam.setStudent(this.executeQRCordeProcessing(exam,
                     qr_corners_solu));
         }
