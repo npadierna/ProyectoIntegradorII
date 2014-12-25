@@ -30,6 +30,8 @@
     <context:component-scan
         base-package="co.edu.udea.web.omrgrader2_0.process.dispatcher" />
     <context:component-scan
+        base-package="co.edu.udea.web.omrgrader2_0.process.email" />
+    <context:component-scan
         base-package="co.edu.udea.web.omrgrader2_0.process.image.opencv" />
     <context:component-scan
         base-package="co.edu.udea.web.omrgrader2_0.process.grade" />

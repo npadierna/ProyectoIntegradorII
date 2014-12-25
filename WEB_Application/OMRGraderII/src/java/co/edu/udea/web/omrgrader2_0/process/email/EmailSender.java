@@ -21,6 +21,9 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+import org.springframework.web.context.WebApplicationContext;
 
 /**
  *
@@ -28,7 +31,9 @@ import javax.mail.internet.MimeMultipart;
  * @author Miguel &Aacute;ngel Ossa Ruiz
  * @author Neiber Padierna P&eacute;rez
  */
-public class EmailSender {
+@Component()
+@Scope(value = WebApplicationContext.SCOPE_APPLICATION)
+public final class EmailSender {
 
     private Properties properties;
     private String fromEmail;
@@ -39,7 +44,7 @@ public class EmailSender {
 
     public EmailSender() throws OMRGraderEmailException {
         this.properties = new Properties();
-        this.configEMailProperties();
+        this.configureEMailProperties();
     }
 
     public boolean sendEmail(String toEmail, String subject, String text)
@@ -62,8 +67,8 @@ public class EmailSender {
         return (true);
     }
 
-    public boolean sendEMail(String toEmail, String fullFilePath, String examName)
-            throws OMRGraderEmailException {
+    public boolean sendEMail(String toEmail, String fullFilePath,
+            String examName) throws OMRGraderEmailException {
         toEmail = TextUtil.toLowerCase(toEmail);
 
         try {
@@ -120,6 +125,7 @@ public class EmailSender {
         propertyNameList.add("PORT");
         List<String> propertyValueList;
 
+        // TODO: Creo que esta ruta se puede mejorar, es decir, en su obtención.
         propertyValueList = EMailPropertiesReader.readProperties(propertyNameList,
                 "co/edu/udea/web/omrgrader2_0/process/email/config/"
                 + "emailsender.properties");
@@ -139,7 +145,7 @@ public class EmailSender {
         this.properties.put("mail.smtp.port", port);
     }
 
-    private void configEMailProperties() throws OMRGraderEmailException {
+    private void configureEMailProperties() throws OMRGraderEmailException {
         this.getPropertiesValueList();
 
         this.getSessionProperties(this.host, this.port);
