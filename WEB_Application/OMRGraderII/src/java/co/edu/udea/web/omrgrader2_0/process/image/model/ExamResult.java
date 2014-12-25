@@ -1,8 +1,6 @@
 // TODO: Refactorizar moviendo para el paquete donde quede SheetFilInfo.
 package co.edu.udea.web.omrgrader2_0.process.image.model;
 
-import java.util.List;
-
 /**
  *
  * @author Andersson Garc&iacute;a Sotelo
@@ -11,73 +9,45 @@ import java.util.List;
  */
 public class ExamResult {
 
-    // TODO: Esto vuela... Porque ya está en Exam.
-    private List<QuestionItem> answerList;
-    private Student student;
-    // TODO: Esto vuela... Porque aquí no se hace las comparaciones.
-    private List<Boolean> answersScore;
+    private Exam exam;
     private int correctAnswersAmount;
     private double score;
     private boolean passed;
 
-    public ExamResult() {
-        super();
+    public ExamResult(Exam exam) {
+        this.exam = exam;
     }
 
-    public ExamResult(List<QuestionItem> answerList, Student student) {
-        super();
-        this.answerList = answerList;
-        this.student = student;
+    public Exam getExam() {
+
+        return (this.exam);
     }
 
-    public List<QuestionItem> getAnswerList() {
-
-        return answerList;
-    }
-
-    public void setAnswerList(List<QuestionItem> answerList) {
-        this.answerList = answerList;
-    }
-
-    public Student getStudent() {
-
-        return student;
-    }
-
-    public void setStudent(Student student) {
-        this.student = student;
+    public void setExam(Exam exam) {
+        this.exam = exam;
     }
 
     public int getCorrectAnswersAmount() {
 
-        return correctAnswersAmount;
+        return (this.correctAnswersAmount);
     }
 
     public void setCorrectAnswersAmount(int correctAnswersAmount) {
         this.correctAnswersAmount = correctAnswersAmount;
     }
 
-    public List<Boolean> getAnswersScore() {
-
-        return answersScore;
-    }
-
-    public void setAnswersScore(List<Boolean> answersScore) {
-        this.answersScore = answersScore;
-    }
-
     public double getScore() {
 
-        return score;
+        return (this.score);
     }
 
     public void setScore(double score) {
         this.score = score;
     }
 
-    public boolean getPassed() {
+    public boolean isPassed() {
 
-        return passed;
+        return (this.passed);
     }
 
     public void setPassed(boolean passed) {

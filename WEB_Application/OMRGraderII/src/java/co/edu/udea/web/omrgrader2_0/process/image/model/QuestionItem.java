@@ -1,5 +1,7 @@
 package co.edu.udea.web.omrgrader2_0.process.image.model;
 
+import java.util.Arrays;
+
 /**
  *
  * @author Andersson Garc&iacute;a Sotelo
@@ -40,8 +42,40 @@ public final class QuestionItem {
         this.id = id;
     }
 
-    public int describeContents() {
+    @Override()
+    public int hashCode() {
+        int hash = 5;
 
-        return (0);
+        hash = 47 * hash + Arrays.hashCode(this.getChoises());
+        hash = 47 * hash + this.getId();
+
+        return (hash);
+    }
+
+    // TODO: ¿Qué pasaría sí el examen no tiene 60 preguntas sino por ejemplo 50?
+    @Override()
+    public boolean equals(Object obj) {
+        if (obj == null) {
+
+            return (false);
+        }
+
+        if (getClass() != obj.getClass()) {
+
+            return (false);
+        }
+
+        final QuestionItem other = (QuestionItem) obj;
+        if (!Arrays.equals(this.getChoises(), other.getChoises())) {
+
+            return (false);
+        }
+
+        if (this.getId() != other.getId()) {
+
+            return (false);
+        }
+
+        return (true);
     }
 }

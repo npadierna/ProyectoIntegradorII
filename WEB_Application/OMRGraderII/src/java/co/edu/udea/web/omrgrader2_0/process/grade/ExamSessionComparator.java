@@ -3,6 +3,7 @@ package co.edu.udea.web.omrgrader2_0.process.grade;
 import co.edu.udea.web.omrgrader2_0.process.image.model.ExamResult;
 import co.edu.udea.web.omrgrader2_0.process.image.model.QuestionItem;
 import co.edu.udea.web.omrgrader2_0.process.image.model.SheetFileInformation;
+import co.edu.udea.web.omrgrader2_0.process.image.opencv.ExamProcess;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -24,25 +25,24 @@ public class ExamSessionComparator {
         super();
     }
 
-    public void score(SheetFileInformation sheetFileInfo) {
-        sheetFileInfo.setQuestionAmount(sheetFileInfo.getCorrectAnswers().size());
-        double s = sheetFileInfo.getGraderSession().getMaximumGrade()
-                * sheetFileInfo.getGraderSession().getApprovalPercentage();
-        sheetFileInfo.setMinimumScoreToPass(s);
-        double t = sheetFileInfo.getGraderSession().getApprovalPercentage()
-                * sheetFileInfo.getCorrectAnswers().size();
-        sheetFileInfo.setMinimumQuestionAmountToPass((int) t);
+    // TODO: Me tocó refactorizar este método, no sé si esté bueno, así que toca
+    // ya que al usar ExamResult, y al mover las relaciones entre las clases,
+    // algunos atributos se movieron.
+    public void score(SheetFileInformation sheetFileInformation) {
+        sheetFileInformation.setQuestionAmount(sheetFileInformation.
+                getReferenceExam().getExam().getQuestionsItemsList().size());
+
+        double t = sheetFileInformation.getGraderSession().getApprovalPercentage()
+                * sheetFileInformation.getReferenceExam().getExam().
+                getQuestionsItemsList().size();
+        sheetFileInformation.setMinimumQuestionAmountToPass((int) t);
 
         int amountStudentPassed = 0;
-
-        List<ExamResult> answerStudentList = new ArrayList<>();
-        for (ExamResult answerStudent : sheetFileInfo.getAnswerStudentList()) {
-            List<Boolean> scoreList = this.compareAnswers(sheetFileInfo.
-                    getCorrectAnswers(), answerStudent.getAnswerList());
-            ExamResult temp = new ExamResult();
-            temp.setAnswerList(answerStudent.getAnswerList());
-            temp.setAnswersScore(scoreList);
-            temp.setStudent(answerStudent.getStudent());
+        for (ExamResult examResult : sheetFileInformation.
+                getStudentsExamsResultsList()) {
+            List<Boolean> scoreList = this.compareAnswers(sheetFileInformation.
+                    getReferenceExam().getExam().getQuestionsItemsList(),
+                    examResult.getExam().getQuestionsItemsList());
 
             int amount = 0;
             for (int i = 0; i < scoreList.size(); i++) {
@@ -51,40 +51,43 @@ public class ExamSessionComparator {
                 }
             }
 
-            double score = ((sheetFileInfo.getGraderSession().getMaximumGrade()
-                    * amount)
-                    / sheetFileInfo.getQuestionAmount());
+            double score = ((sheetFileInformation.getGraderSession().
+                    getMaximumGrade() * amount)
+                    / sheetFileInformation.getQuestionAmount());
 
-            if (amount >= sheetFileInfo.getMinimumQuestionAmountToPass()
-                    && score >= sheetFileInfo.getMinimumScoreToPass()) {
+            if (amount >= sheetFileInformation.getMinimumQuestionAmountToPass()
+                    && score >= sheetFileInformation.getMinimumScoreToPass()) {
                 amountStudentPassed++;
-                temp.setPassed(true);
+                examResult.setPassed(true);
             }
 
-            temp.setCorrectAnswersAmount(amount);
-            temp.setScore(score);
-
-            answerStudentList.add(temp);
+            examResult.setCorrectAnswersAmount(amount);
+            examResult.setScore(score);
         }
 
-        sheetFileInfo.setAnswerStudentList(answerStudentList);
-        sheetFileInfo.setStudentAmount(answerStudentList.size());
-        sheetFileInfo.setStudentAmountPassed(amountStudentPassed);
+        sheetFileInformation.setStudentAmountPassed(amountStudentPassed);
     }
 
     private List<Boolean> compareAnswers(List<QuestionItem> correctAnswers,
             List<QuestionItem> studentAnswers) {
-        if (correctAnswers.size() != studentAnswers.size()) {
+        if ((correctAnswers == null) || (studentAnswers == null)
+                || (correctAnswers.isEmpty()) || (studentAnswers.isEmpty())
+                || (correctAnswers.size() != studentAnswers.size())) {
 
             return (null);
         }
 
+        // TODO: No sé sí esto es un machetazo. ATT: Fry
+        boolean[] invalidAnswer = new boolean[ExamProcess.BUBBLE_OPTIONS_AMOUNT];
         List<Boolean> scoreList = new ArrayList<>();
         for (int i = 0; i < correctAnswers.size(); i++) {
-            scoreList.add(Arrays.equals(correctAnswers.get(i).getChoises(), studentAnswers.
-                    get(i).getChoises()));
+            if (Arrays.equals(correctAnswers.get(i).getChoises(), invalidAnswer)) {
+                break;
+            }
+            
+            scoreList.add(correctAnswers.get(i).equals(studentAnswers.get(i)));
         }
 
-        return scoreList;
+        return (scoreList);
     }
 }

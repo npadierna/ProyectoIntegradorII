@@ -13,25 +13,19 @@ import java.util.List;
 public class SheetFileInformation {
 
     private GraderSession graderSession;
-    private List<ExamResult> answerStudentList;
-    // TODO: Cambiar por una referencia a un objeto Exam.
-    private List<QuestionItem> correctAnswers;
-    private int studentAmount;
+    private List<ExamResult> studentsExamsResultsList;
+    private ExamResult referenceExam;
     private int studentAmountPassed;
+    // TODO: Creo que estos atributos al ser derivados es mejor calcularlos.
     private int questionAmount;
     private int minimumQuestionAmountToPass;
-    private double minimumScoreToPass;
-
-    public SheetFileInformation() {
-        super();
-    }
 
     public SheetFileInformation(GraderSession graderSession,
-            List<ExamResult> answerStudentList,
-            List<QuestionItem> correctAnswers) {
+            ExamResult refereExamResult,
+            List<ExamResult> studentsExamsResultsList) {
         this.graderSession = graderSession;
-        this.answerStudentList = answerStudentList;
-        this.correctAnswers = correctAnswers;
+        this.referenceExam = refereExamResult;
+        this.studentsExamsResultsList = studentsExamsResultsList;
     }
 
     public GraderSession getGraderSession() {
@@ -43,31 +37,29 @@ public class SheetFileInformation {
         this.graderSession = graderSession;
     }
 
-    public List<ExamResult> getAnswerStudentList() {
+    public List<ExamResult> getStudentsExamsResultsList() {
 
-        return (this.answerStudentList);
+        return (this.studentsExamsResultsList);
     }
 
-    public void setAnswerStudentList(List<ExamResult> answerStudentList) {
-        this.answerStudentList = answerStudentList;
+    public void setStudentsExamsResultsList(
+            List<ExamResult> studentsExamsResultsList) {
+        this.studentsExamsResultsList = studentsExamsResultsList;
     }
 
-    public List<QuestionItem> getCorrectAnswers() {
+    public ExamResult getReferenceExam() {
 
-        return (this.correctAnswers);
+        return (this.referenceExam);
     }
 
-    public void setCorrectAnswers(List<QuestionItem> correctAnswers) {
-        this.correctAnswers = correctAnswers;
+    public void setReferenceExam(ExamResult referenceExam) {
+        this.referenceExam = referenceExam;
     }
 
-    public int getStudentAmount() {
+    public int getStudentsAmount() {
 
-        return (this.studentAmount);
-    }
-
-    public void setStudentAmount(int studentAmount) {
-        this.studentAmount = studentAmount;
+        return ((this.getStudentsExamsResultsList() != null)
+                ? this.getStudentsExamsResultsList().size() : -1);
     }
 
     public int getStudentAmountPassed() {
@@ -93,16 +85,17 @@ public class SheetFileInformation {
         return (this.minimumQuestionAmountToPass);
     }
 
-    public void setMinimumQuestionAmountToPass(int minimumQuestionsToPass) {
-        this.minimumQuestionAmountToPass = minimumQuestionsToPass;
+    public void setMinimumQuestionAmountToPass(int minimumQuestionAmountToPass) {
+        this.minimumQuestionAmountToPass = minimumQuestionAmountToPass;
     }
 
     public double getMinimumScoreToPass() {
+        if (this.getGraderSession() != null) {
 
-        return (this.minimumScoreToPass);
-    }
+            return (this.getGraderSession().getMaximumGrade()
+                    * this.getGraderSession().getApprovalPercentage());
+        }
 
-    public void setMinimumScoreToPass(double minimumScoreToPass) {
-        this.minimumScoreToPass = minimumScoreToPass;
+        return (-1.0);
     }
 }

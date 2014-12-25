@@ -51,7 +51,8 @@ public class FileSheetReport {
         this.createExamAnswerHeaders(workbook, sheet,
                 this.EXAM_ANSWER_ROW_START);
 
-        this.createStudentInfoCells(workbook, sheet, info.getAnswerStudentList(),
+        this.createStudentInfoCells(workbook, sheet,
+                info.getStudentsExamsResultsList(),
                 this.EXAM_ANSWER_ROW_START + 1,
                 info.getGraderSession().getDecimalPrecision());
 
@@ -138,7 +139,7 @@ public class FileSheetReport {
         cell.setCellType(Cell.CELL_TYPE_NUMERIC);
         cell.setCellStyle(this.createInfoExamCellStyle(workbook,
                 info.getGraderSession().getDecimalPrecision(), false));
-        cell.setCellValue(info.getStudentAmount());
+        cell.setCellValue(info.getStudentsAmount());
 
         row = sheet.createRow((short) 3);
         cell = row.createCell((short) 0);
@@ -219,49 +220,56 @@ public class FileSheetReport {
     }
 
     private void createStudentInfoCells(XSSFWorkbook workbook, Sheet sheet,
-            List<ExamResult> studentList, int rowNumberStart, String precision) {
+            List<ExamResult> examsResultsList, int rowNumberStart,
+            String precision) {
         DataFormat format = workbook.createDataFormat();
         String prec = this.constructPrecision(precision);
 
         int rowNumber = rowNumberStart;
-        for (ExamResult as : studentList) {
+        for (ExamResult examResult : examsResultsList) {
             Row row = sheet.createRow((short) rowNumber);
             Cell cell = row.createCell((short) 0);
             cell.setCellType(Cell.CELL_TYPE_STRING);
-            cell.setCellStyle(this.createInfoStudentCellStyle(workbook, 0, false, false));
-            cell.setCellValue(as.getStudent().getFullNames());
+            cell.setCellStyle(this.createInfoStudentCellStyle(workbook, 0, false,
+                    false));
+            cell.setCellValue(examResult.getExam().getStudent().getFullNames());
 
             cell = row.createCell((short) 1);
             cell.setCellType(Cell.CELL_TYPE_STRING);
-            cell.setCellStyle(this.createInfoStudentCellStyle(workbook, 0, true, false));
-            cell.setCellValue(as.getStudent().getIdNumber());
+            cell.setCellStyle(this.createInfoStudentCellStyle(workbook, 0, true,
+                    false));
+            cell.setCellValue(examResult.getExam().getStudent().getIdNumber());
 
             cell = row.createCell((short) 2);
             cell.setCellType(Cell.CELL_TYPE_STRING);
-            cell.setCellStyle(this.createInfoStudentCellStyle(workbook, 0, true, false));
-            cell.setCellValue(as.getStudent().geteMail());
+            cell.setCellStyle(this.createInfoStudentCellStyle(workbook, 0, true,
+                    false));
+            cell.setCellValue(examResult.getExam().getStudent().geteMail());
 
             cell = row.createCell((short) 3);
             cell.setCellType(Cell.CELL_TYPE_NUMERIC);
-            cell.setCellStyle(this.createInfoStudentCellStyle(workbook, 0, true, false));
-            cell.setCellValue(as.getCorrectAnswersAmount());
+            cell.setCellStyle(this.createInfoStudentCellStyle(workbook, 0, true,
+                    false));
+            cell.setCellValue(examResult.getCorrectAnswersAmount());
 
             cell = row.createCell((short) 4);
             cell.setCellType(Cell.CELL_TYPE_NUMERIC);
             int color = 2;
-            if (as.getPassed()) {
+            if (examResult.isPassed()) {
                 color = 1;
             }
 
-            CellStyle cellStyle = this.createInfoStudentCellStyle(workbook, color, true, true);
+            CellStyle cellStyle = this.createInfoStudentCellStyle(workbook,
+                    color, true, true);
             cellStyle.setDataFormat(format.getFormat(prec));
             cell.setCellStyle(cellStyle);
-            cell.setCellValue(as.getScore());
+            cell.setCellValue(examResult.getScore());
 
             rowNumber++;
         }
     }
 
+    // TODO: ¿La precisión se tiene que expresar por ejemplo: 0.0000?
     private String constructPrecision(String precision) {
         int decimalPrecision = Integer.parseInt(precision);
         int i = 1;
