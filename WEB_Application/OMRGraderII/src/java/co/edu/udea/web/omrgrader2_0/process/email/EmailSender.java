@@ -1,10 +1,9 @@
 package co.edu.udea.web.omrgrader2_0.process.email;
 
-import co.edu.udea.web.omrgrader2_0.process.email.config.EMailPropertiesReader;
 import co.edu.udea.web.omrgrader2_0.process.email.exception.OMRGraderEmailException;
 import co.edu.udea.web.omrgrader2_0.util.text.TextUtil;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
@@ -60,8 +59,8 @@ public final class EmailSender {
             Transport.send(message);
         } catch (MessagingException e) {
             throw new OMRGraderEmailException(
-                    "Fatal error while the application was trying to send a E-Mail.",
-                    e.getCause());
+                    "Fatal error while the application was trying to send a "
+                    + "E-Mail.", e.getCause());
         }
 
         return (true);
@@ -98,8 +97,8 @@ public final class EmailSender {
             messageBodyPart = new MimeBodyPart();
             String htmlText = "<h2>Calificación de Examen: " + examName
                     + "</h2><p>Adjunto se encuentra la hoja de cálculo con los "
-                    + "resultados del examen.</p><p>--<b><h4><font color =\"gray\">"
-                    + "Calificación Examen - UdeA</h4></font></p></b>";
+                    + "resultados del examen.</p><p>--<b><h4><font color "
+                    + "=\"gray\">Calificación Examen - UdeA</h4></font></p></b>";
             messageBodyPart.setContent(htmlText, "text/html");
             multipart.addBodyPart(messageBodyPart);
 
@@ -110,30 +109,32 @@ public final class EmailSender {
 
         } catch (MessagingException e) {
             throw new OMRGraderEmailException(
-                    "Fatal error while the application was trying to send a E-Mail.",
-                    e.getCause());
+                    "Fatal error while the application was trying to send a "
+                    + "E-Mail.", e.getCause());
         }
 
         return (true);
     }
 
-    private void getPropertiesValueList() throws OMRGraderEmailException {
-        List<String> propertyNameList = new ArrayList<>();
-        propertyNameList.add("EMAIL_ADDRESS");
-        propertyNameList.add("PASSWORD");
-        propertyNameList.add("HOST");
-        propertyNameList.add("PORT");
-        List<String> propertyValueList;
-
-        // TODO: Creo que esta ruta se puede mejorar, es decir, en su obtención.
-        propertyValueList = EMailPropertiesReader.readProperties(propertyNameList,
-                "co/edu/udea/web/omrgrader2_0/process/email/config/"
+    private void getEMailAccountProperties() throws OMRGraderEmailException {
+        Properties properties = new Properties();
+        InputStream inputStream = getClass().getResourceAsStream(
+                "/co/edu/udea/web/omrgrader2_0/process/email/config/"
                 + "emailsender.properties");
 
-        this.fromEmail = propertyValueList.get(0);
-        this.password = propertyValueList.get(1);
-        this.host = propertyValueList.get(2);
-        this.port = propertyValueList.get(3);
+        try {
+            properties.load(inputStream);
+            inputStream.close();
+        } catch (IOException e) {
+            throw new OMRGraderEmailException(
+                    "Fatal error while application was trying to read E-Mail "
+                    + "properties.", e.getCause());
+        }
+
+        this.fromEmail = properties.getProperty("EMAIL_ADDRESS");
+        this.password = properties.getProperty("PASSWORD");
+        this.host = properties.getProperty("HOST");
+        this.port = properties.getProperty("PORT");
     }
 
     private void getSessionProperties(String host, String port) {
@@ -146,8 +147,7 @@ public final class EmailSender {
     }
 
     private void configureEMailProperties() throws OMRGraderEmailException {
-        this.getPropertiesValueList();
-
+        this.getEMailAccountProperties();
         this.getSessionProperties(this.host, this.port);
 
         this.session = Session.getInstance(properties, new Authenticator() {
