@@ -17,11 +17,19 @@ import static co.edu.udea.web.omrgrader2_0.process.image.opencv.OMRGraderProcess
 import co.edu.udea.web.omrgrader2_0.process.qr.QRManager;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
+import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
+import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.opencv.core.Mat;
@@ -36,7 +44,8 @@ import org.opencv.highgui.Highgui;
  */
 public class MainTests {
 
-    public static void main(String[] args) throws OMRGraderProcessException {
+    public static void main(String[] args) throws OMRGraderProcessException,
+            OMRGraderEmailException {
 
         long timeStart;
         long timeEnd;
@@ -44,7 +53,7 @@ public class MainTests {
         timeStart = System.currentTimeMillis();
         System.load("/home/pivb/Software/Libraries/OpenCV2.4.8/opencv_java248.so");
 
-        testOMR();
+        testDataSheetGeneratorAndEmaiSender();
 
         timeEnd = System.currentTimeMillis();
         fullTime = timeEnd - timeStart;
@@ -112,6 +121,23 @@ public class MainTests {
                 "examForProcessing-BlackAndWhite_(1).png");
     }
 
+    public static void testReadEmailProperties() throws OMRGraderEmailException {
+        ResourceBundle resourceBundle = ResourceBundle.getBundle(
+                "co.edu.udea.web.omrgrader2_0.process.email.config.emailsender");
+        System.out.println("EMAIL_ADDRESS_BUNDLE: " + resourceBundle.getString("EMAIL_ADDRESS"));
+        System.out.println("PASSWORD_BUNDLE: " + resourceBundle.getString("PASSWORD"));
+        System.out.println("HOST_BUNDLE: " + resourceBundle.getString("HOST"));
+        System.out.println("PORT_BUNDLE: " + resourceBundle.getString("PORT"));
+
+        System.out.println("\n");
+
+        Properties properties = new Test().readProperties();
+        System.out.println("EMAIL_ADDRESS_InSt: " + properties.getProperty("EMAIL_ADDRESS"));
+        System.out.println("PASSWORD_InSt: " + properties.getProperty("PASSWORD"));
+        System.out.println("HOST_InSt: " + properties.getProperty("HOST"));
+        System.out.println("PORT_InSt: " + properties.getProperty("PORT"));
+    }
+
     public static void testEMailSenderWithAttached() throws OMRGraderEmailException {
         EmailSender emailSender = new EmailSender();
 
@@ -129,134 +155,144 @@ public class MainTests {
         EmailSender emailSender = new EmailSender();
 
         try {
-            emailSender.sendEmail("anderssongarciasotelo@gmail.com", "Oelo 1.1",
-                    "Probando maricadas.");
+            emailSender.sendEmail("anderssongarciasotelo@gmail.com",
+                    "Testing Without Attached", "Probando maricadas.");
         } catch (OMRGraderEmailException ex) {
             Logger.getLogger(MainTests.class.getName()).
                     log(Level.SEVERE, null, ex);
         }
     }
 
-    // TODO: Comenté esta "prueba" para que Andersson la refactorice como es.
-//    public static void testDataSheetGeneratorAndEmaiSender() {
-//        try {
-//            String path = "/home/pivb/Escritorio/Temporales/";
-//
-//            List<QuestionItem> correctAnswers = new ArrayList<>();
-//            boolean[] choises = {true, false, false, false, false};
-//            QuestionItem qi = new QuestionItem((short) 1, choises);
-//            correctAnswers.add(qi);
-//            choises = new boolean[]{false, true, false, false, false};
-//            qi = new QuestionItem((short) 2, choises);
-//            correctAnswers.add(qi);
-//            choises = new boolean[]{false, false, false, false, true};
-//            qi = new QuestionItem((short) 3, choises);
-//            correctAnswers.add(qi);
-//            choises = new boolean[]{false, false, false, true, false};
-//            qi = new QuestionItem((short) 4, choises);
-//            correctAnswers.add(qi);
-//            choises = new boolean[]{false, false, true, false, false};
-//            qi = new QuestionItem((short) 5, choises);
-//            correctAnswers.add(qi);
-//
-//            List<ExamResult> answerStudents = new ArrayList<>();
-//            List<QuestionItem> answers = new ArrayList<>();
-//
-//            choises = new boolean[]{true, false, false, false, false};
-//            qi = new QuestionItem((short) 1, choises);
-//            answers.add(qi);
-//            choises = new boolean[]{false, true, false, false, false};
-//            qi = new QuestionItem((short) 2, choises);
-//            answers.add(qi);
-//            choises = new boolean[]{false, false, false, false, true};
-//            qi = new QuestionItem((short) 3, choises);
-//            answers.add(qi);
-//            choises = new boolean[]{false, false, false, true, false};
-//            qi = new QuestionItem((short) 4, choises);
-//            answers.add(qi);
-//            choises = new boolean[]{false, false, true, false, false};
-//            qi = new QuestionItem((short) 5, choises);
-//            answers.add(qi);
-//            Student student = new Student("anderssongs5@outlook.com", "Andersson García Sotelo", "1037622083");
-//            answerStudents.add(new ExamResult(answers, student));
-//
-//            answers = new ArrayList<>();
-//            choises = new boolean[]{false, true, false, false, false};
-//            qi = new QuestionItem((short) 1, choises);
-//            answers.add(qi);
-//            choises = new boolean[]{false, true, false, false, false};
-//            qi = new QuestionItem((short) 2, choises);
-//            answers.add(qi);
-//            choises = new boolean[]{false, false, false, false, true};
-//            qi = new QuestionItem((short) 3, choises);
-//            answers.add(qi);
-//            choises = new boolean[]{false, false, false, false, true};
-//            qi = new QuestionItem((short) 4, choises);
-//            answers.add(qi);
-//            choises = new boolean[]{false, false, true, false, false};
-//            qi = new QuestionItem((short) 5, choises);
-//            answers.add(qi);
-//            student = new Student("npadierna@gmail.com", "Neiber de Jesús Padierna Pérez", "1022095657");
-//            answerStudents.add(new ExamResult(answers, student));
-//
-//            answers = new ArrayList<>();
-//            choises = new boolean[]{true, false, false, false, false};
-//            qi = new QuestionItem((short) 1, choises);
-//            answers.add(qi);
-//            choises = new boolean[]{false, false, false, true, false};
-//            qi = new QuestionItem((short) 2, choises);
-//            answers.add(qi);
-//            choises = new boolean[]{false, false, false, false, true};
-//            qi = new QuestionItem((short) 3, choises);
-//            answers.add(qi);
-//            choises = new boolean[]{false, true, false, false, false};
-//            qi = new QuestionItem((short) 4, choises);
-//            answers.add(qi);
-//            choises = new boolean[]{false, false, false, false, false};
-//            qi = new QuestionItem((short) 5, choises);
-//            answers.add(qi);
-//            student = new Student("miguelcold8@gmail.com", "Miguel Angel Ossa Ruiz", "1035859551");
-//            answerStudents.add(new ExamResult(answers, student));
-//
-//            float percentage = 60f / 100f;
-//            GraderSession gs = new GraderSession(
-//                    new GraderSessionPK("anderssongarciasotelo@gmail.com", "Examen I Prueba"));
-//            gs.setApprovalPercentage(percentage);
-//            gs.setDecimalPrecision("3");
-//            gs.setMaximumGrade(5f);
-//            SheetFileInformation sfi = new SheetFileInformation(gs, answerStudents, correctAnswers);
-//            ExamSessionComparator esc = new ExamSessionComparator();
-//            esc.score(sfi);
-//
-//            System.out.println("Exam Name: " + sfi.getGraderSession().
-//                    getGraderSessionPK().getSessionName());
-//            System.out.println("Maximum Score: " + sfi.getGraderSession().
-//                    getMaximumGrade());
-//            System.out.println("Student Amount: " + sfi.getStudentAmount());
-//            System.out.println("Passed Student Amount: " + sfi.getStudentAmountPassed());
-//            System.out.println("Question Amount: " + sfi.getQuestionAmount());
-//            System.out.println("Minimum Question Amount to Pass: "
-//                    + sfi.getMinimumQuestionAmountToPass());
-//            System.out.println("Minimum Score to Pass: " + sfi.getMinimumScoreToPass());
-//            System.out.println("Percentage to Pass: "
-//                    + sfi.getGraderSession().getApprovalPercentage());
-//
-//            FileSheetReport fileSheetReport = new FileSheetReport();
-//            String fileXSLXPath = "";
-//            try {
-//                fileXSLXPath = fileSheetReport.createDataSheet(path, sfi);
-//                System.out.println("\nFile Full Path: " + fileXSLXPath);
-//            } catch (OMRGraderProcessException ex) {
-//                ex.printStackTrace();
-//            }
-//
-//            EmailSender emailSender = new EmailSender();
-//            emailSender.sendEMail(sfi.getGraderSession().getGraderSessionPK().
-//                    getElectronicMail(), fileXSLXPath,
-//                    sfi.getGraderSession().getGraderSessionPK().getSessionName());
-//        } catch (OMRGraderEmailException ex) {
-//            Logger.getLogger(MainTests.class.getName()).
-//                    log(Level.SEVERE, null, ex);
-//        }
-//    }
+    public static void testDataSheetGeneratorAndEmaiSender() throws OMRGraderEmailException {
+        String path = "/home/pivb/Escritorio/Temporales/";
+
+        List<QuestionItem> correctAnswers = new ArrayList<>();
+        boolean[] choises = {true, false, false, false, false};
+        QuestionItem qi = new QuestionItem((short) 1, choises);
+        correctAnswers.add(qi);
+        choises = new boolean[]{false, true, false, false, false};
+        qi = new QuestionItem((short) 2, choises);
+        correctAnswers.add(qi);
+        choises = new boolean[]{false, false, false, false, true};
+        qi = new QuestionItem((short) 3, choises);
+        correctAnswers.add(qi);
+        choises = new boolean[]{false, false, false, true, false};
+        qi = new QuestionItem((short) 4, choises);
+        correctAnswers.add(qi);
+        choises = new boolean[]{false, false, true, false, false};
+        qi = new QuestionItem((short) 5, choises);
+        correctAnswers.add(qi);
+        Exam exam = new Exam(null, null, null, null);
+        exam.setQuestionsItemsList(correctAnswers);
+
+        ExamResult referenceExam = new ExamResult(exam);
+        List<ExamResult> answerStudents = new ArrayList<>();
+        List<QuestionItem> answers = new ArrayList<>();
+
+        choises = new boolean[]{true, false, false, false, false};
+        qi = new QuestionItem((short) 1, choises);
+        answers.add(qi);
+        choises = new boolean[]{false, true, false, false, false};
+        qi = new QuestionItem((short) 2, choises);
+        answers.add(qi);
+        choises = new boolean[]{false, false, false, false, true};
+        qi = new QuestionItem((short) 3, choises);
+        answers.add(qi);
+        choises = new boolean[]{false, false, false, true, false};
+        qi = new QuestionItem((short) 4, choises);
+        answers.add(qi);
+        choises = new boolean[]{false, false, true, false, false};
+        qi = new QuestionItem((short) 5, choises);
+        answers.add(qi);
+        Student student = new Student("1037622083", "Andersson García Sotelo", "anderssongs5@outlook.com");
+        exam = new Exam(null, null, null, null);
+        exam.setStudent(student);
+        exam.setQuestionsItemsList(answers);
+        answerStudents.add(new ExamResult(exam));
+
+        answers = new ArrayList<>();
+        choises = new boolean[]{false, true, false, false, false};
+        qi = new QuestionItem((short) 1, choises);
+        answers.add(qi);
+        choises = new boolean[]{false, true, false, false, false};
+        qi = new QuestionItem((short) 2, choises);
+        answers.add(qi);
+        choises = new boolean[]{false, false, false, false, true};
+        qi = new QuestionItem((short) 3, choises);
+        answers.add(qi);
+        choises = new boolean[]{false, false, false, false, true};
+        qi = new QuestionItem((short) 4, choises);
+        answers.add(qi);
+        choises = new boolean[]{false, false, true, false, false};
+        qi = new QuestionItem((short) 5, choises);
+        answers.add(qi);
+        student = new Student("1022095657", "Neiber de Jesús Padierna Pérez", "npadierna@gmail.com");
+        exam = new Exam(null, null, null, null);
+        exam.setStudent(student);
+        exam.setQuestionsItemsList(answers);
+        answerStudents.add(new ExamResult(exam));
+
+        answers = new ArrayList<>();
+        choises = new boolean[]{true, false, false, false, false};
+        qi = new QuestionItem((short) 1, choises);
+        answers.add(qi);
+        choises = new boolean[]{false, false, false, true, false};
+        qi = new QuestionItem((short) 2, choises);
+        answers.add(qi);
+        choises = new boolean[]{false, false, false, false, true};
+        qi = new QuestionItem((short) 3, choises);
+        answers.add(qi);
+        choises = new boolean[]{false, true, false, false, false};
+        qi = new QuestionItem((short) 4, choises);
+        answers.add(qi);
+        choises = new boolean[]{false, false, false, false, false};
+        qi = new QuestionItem((short) 5, choises);
+        answers.add(qi);
+        student = new Student("1035859551", "Miguel Angel Ossa Ruiz", "miguelcold8@gmail.com");
+        exam = new Exam(null, null, null, null);
+        exam.setStudent(student);
+        exam.setQuestionsItemsList(answers);
+        answerStudents.add(new ExamResult(exam));
+
+        float percentage = 60f / 100f;
+        GraderSession gs = new GraderSession(
+                new GraderSessionPK("anderssongarciasotelo@gmail.com", "Examen I Prueba"));
+        gs.setApprovalPercentage(percentage);
+        gs.setDecimalPrecision("2");
+        gs.setMaximumGrade(5f);
+        SheetFileInformation sfi = new SheetFileInformation(gs, referenceExam, answerStudents);
+        ExamSessionComparator esc = new ExamSessionComparator();
+        esc.score(sfi);
+
+        DecimalFormat df = new DecimalFormat(sfi.getPrecisionPattern());
+
+        System.out.println("Exam Name: " + sfi.getGraderSession().
+                getGraderSessionPK().getSessionName());
+        System.out.println("Maximum Score: " + (Double.parseDouble(df.format(
+                sfi.getGraderSession().getMaximumGrade()).
+                replace(',', '.'))));
+        System.out.println("Student Amount: " + sfi.getStudentsAmount());
+        System.out.println("Passed Student Amount: " + sfi.getStudentAmountPassed());
+        System.out.println("Question Amount: " + sfi.getQuestionAmount());
+        System.out.println("Minimum Question Amount to Pass: "
+                + sfi.getMinimumQuestionAmountToPass());
+        System.out.println("Minimum Score to Pass: " + sfi.getMinimumScoreToPass());
+        System.out.println("Percentage to Pass: "
+                + (Double.parseDouble(df.format(sfi.getGraderSession().
+                getApprovalPercentage()).replace(',', '.'))));
+
+        FileSheetReport fileSheetReport = new FileSheetReport();
+        String fileXSLXPath = "";
+        try {
+            fileXSLXPath = fileSheetReport.createDataSheet(path, sfi);
+            System.out.println("\nFile Full Path: " + fileXSLXPath);
+        } catch (OMRGraderProcessException ex) {
+            ex.printStackTrace();
+        }
+
+        EmailSender emailSender = new EmailSender();
+        emailSender.sendEMail(sfi.getGraderSession().getGraderSessionPK().
+                getElectronicMail(), fileXSLXPath,
+                sfi.getGraderSession().getGraderSessionPK().getSessionName());
+    }
 }
