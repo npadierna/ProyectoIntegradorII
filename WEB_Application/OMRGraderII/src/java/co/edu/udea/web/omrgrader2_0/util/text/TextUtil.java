@@ -38,4 +38,23 @@ public final class TextUtil {
 
         return (formattedText.toString());
     }
+
+    public static boolean hasOnlyNumbers(String text) {
+        if (isEmpty(text)) {
+
+            return (true);
+        }
+
+        char c;
+        for (int i = 0; i < text.length(); i++) {
+            c = text.charAt(i);
+
+            if (c < '0' || c > '9') {
+
+                return (true);
+            }
+        }
+
+        return (false);
+    }
 }

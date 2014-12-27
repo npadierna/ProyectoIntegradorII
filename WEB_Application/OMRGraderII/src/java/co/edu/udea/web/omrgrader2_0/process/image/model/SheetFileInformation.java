@@ -2,6 +2,9 @@
 package co.edu.udea.web.omrgrader2_0.process.image.model;
 
 import co.edu.udea.web.omrgrader2_0.persistence.entities.GraderSession;
+import co.edu.udea.web.omrgrader2_0.process.email.report.FileSheetReport;
+import co.edu.udea.web.omrgrader2_0.util.text.TextUtil;
+import java.text.DecimalFormat;
 import java.util.List;
 
 /**
@@ -16,9 +19,7 @@ public class SheetFileInformation {
     private List<ExamResult> studentsExamsResultsList;
     private ExamResult referenceExam;
     private int studentAmountPassed;
-    // TODO: Creo que estos atributos al ser derivados es mejor calcularlos.
-    private int questionAmount;
-    private int minimumQuestionAmountToPass;
+    private String precisionPattern;
 
     public SheetFileInformation(GraderSession graderSession,
             ExamResult refereExamResult,
@@ -26,6 +27,9 @@ public class SheetFileInformation {
         this.graderSession = graderSession;
         this.referenceExam = refereExamResult;
         this.studentsExamsResultsList = studentsExamsResultsList;
+
+        this.constructPrecision(this.graderSession.getDecimalPrecision().
+                toString());
     }
 
     public GraderSession getGraderSession() {
@@ -71,31 +75,72 @@ public class SheetFileInformation {
         this.studentAmountPassed = studentAmountPassed;
     }
 
-    public int getQuestionAmount() {
-
-        return (this.questionAmount);
+    public String getPrecisionPattern() {
+        return (this.precisionPattern);
     }
 
-    public void setQuestionAmount(int questionAmount) {
-        this.questionAmount = questionAmount;
-    }
-
-    public int getMinimumQuestionAmountToPass() {
-
-        return (this.minimumQuestionAmountToPass);
-    }
-
-    public void setMinimumQuestionAmountToPass(int minimumQuestionAmountToPass) {
-        this.minimumQuestionAmountToPass = minimumQuestionAmountToPass;
+    public void setPrecisionPattern(String precisionPattern) {
+        this.precisionPattern = precisionPattern;
     }
 
     public double getMinimumScoreToPass() {
         if (this.getGraderSession() != null) {
 
-            return (this.getGraderSession().getMaximumGrade()
-                    * this.getGraderSession().getApprovalPercentage());
+            DecimalFormat df = new DecimalFormat(this.getPrecisionPattern());
+            String num = df.format((Double.parseDouble(df.format(
+                    this.getGraderSession().getMaximumGrade()).
+                    replace(',', '.'))) * (Double.parseDouble(df.format(
+                    this.getGraderSession().getApprovalPercentage()).
+                    replace(',', '.')))).replace(',', '.');
+
+            return (Double.parseDouble(num));
         }
 
         return (-1.0);
+    }
+
+    public int getQuestionAmount() {
+        if (this.getGraderSession() != null
+                && this.getReferenceExam().getExam().getQuestionsItemsList() != null
+                && !this.getReferenceExam().getExam().getQuestionsItemsList().isEmpty()) {
+
+            return (this.getReferenceExam().getExam().getQuestionsItemsList().size());
+        }
+
+        return (-1);
+    }
+
+    public int getMinimumQuestionAmountToPass() {
+        if (this.getGraderSession() != null
+                && this.getReferenceExam().getExam().getQuestionsItemsList() != null
+                && !this.getReferenceExam().getExam().getQuestionsItemsList().isEmpty()) {
+            DecimalFormat df = new DecimalFormat(this.getPrecisionPattern());
+
+            return (int) ((Double.parseDouble(df.format(this.getGraderSession().
+                    getApprovalPercentage()).replace(',', '.')))
+                    * this.getReferenceExam().getExam().getQuestionsItemsList().
+                    size());
+        }
+
+        return (-1);
+    }
+
+    private void constructPrecision(String precision) {
+        String decimalPrecisionFormat = "0.0";
+        if (TextUtil.hasOnlyNumbers(precision)) {
+            this.setPrecisionPattern(decimalPrecisionFormat);
+
+            return;
+        }
+
+        int decimalPrecision = Integer.parseInt(precision);
+        int i = 1;
+
+        while (i < decimalPrecision) {
+            decimalPrecisionFormat = decimalPrecisionFormat + "0";
+            i++;
+        }
+
+        this.setPrecisionPattern(decimalPrecisionFormat);
     }
 }

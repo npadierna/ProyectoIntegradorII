@@ -1,12 +1,15 @@
 package co.edu.udea.web.omrgrader2_0.process.grade;
 
+import co.edu.udea.web.omrgrader2_0.process.email.report.FileSheetReport;
 import co.edu.udea.web.omrgrader2_0.process.image.model.ExamResult;
 import co.edu.udea.web.omrgrader2_0.process.image.model.QuestionItem;
 import co.edu.udea.web.omrgrader2_0.process.image.model.SheetFileInformation;
 import co.edu.udea.web.omrgrader2_0.process.image.opencv.ExamProcess;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import org.apache.poi.hssf.record.FileSharingRecord;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.WebApplicationContext;
@@ -25,17 +28,17 @@ public class ExamSessionComparator {
         super();
     }
 
-    // TODO: Me tocó refactorizar este método, no sé si esté bueno, así que toca
-    // ya que al usar ExamResult, y al mover las relaciones entre las clases,
-    // algunos atributos se movieron.
     public void score(SheetFileInformation sheetFileInformation) {
-        sheetFileInformation.setQuestionAmount(sheetFileInformation.
-                getReferenceExam().getExam().getQuestionsItemsList().size());
+        DecimalFormat decimalFormat = new DecimalFormat(
+                sheetFileInformation.getPrecisionPattern());
 
-        double t = sheetFileInformation.getGraderSession().getApprovalPercentage()
+        int minimumQuestionAmountToPass = (int) ((Double.parseDouble(
+                decimalFormat.format(sheetFileInformation.
+                getGraderSession().getApprovalPercentage()).replace(',', '.')))
                 * sheetFileInformation.getReferenceExam().getExam().
-                getQuestionsItemsList().size();
-        sheetFileInformation.setMinimumQuestionAmountToPass((int) t);
+                getQuestionsItemsList().size());
+        int questionAmount = sheetFileInformation.
+                getReferenceExam().getExam().getQuestionsItemsList().size();
 
         int amountStudentPassed = 0;
         for (ExamResult examResult : sheetFileInformation.
@@ -51,11 +54,12 @@ public class ExamSessionComparator {
                 }
             }
 
-            double score = ((sheetFileInformation.getGraderSession().
-                    getMaximumGrade() * amount)
-                    / sheetFileInformation.getQuestionAmount());
+            double score = Double.parseDouble(decimalFormat.format(((Double.
+                    parseDouble(decimalFormat.format(sheetFileInformation.
+                    getGraderSession().getMaximumGrade()).replace(',', '.')))
+                    * amount) / questionAmount).replace(',', '.'));
 
-            if (amount >= sheetFileInformation.getMinimumQuestionAmountToPass()
+            if (amount >= minimumQuestionAmountToPass
                     && score >= sheetFileInformation.getMinimumScoreToPass()) {
                 amountStudentPassed++;
                 examResult.setPassed(true);
@@ -77,14 +81,13 @@ public class ExamSessionComparator {
             return (null);
         }
 
-        // TODO: No sé sí esto es un machetazo. ATT: Fry
         boolean[] invalidAnswer = new boolean[ExamProcess.BUBBLE_OPTIONS_AMOUNT];
         List<Boolean> scoreList = new ArrayList<>();
         for (int i = 0; i < correctAnswers.size(); i++) {
             if (Arrays.equals(correctAnswers.get(i).getChoises(), invalidAnswer)) {
                 break;
             }
-            
+
             scoreList.add(correctAnswers.get(i).equals(studentAnswers.get(i)));
         }
 

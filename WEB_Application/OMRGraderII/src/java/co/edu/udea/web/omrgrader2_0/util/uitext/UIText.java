@@ -16,7 +16,7 @@ public final class UIText {
 
     private static final Logger LOGGER = Logger.getLogger(UIText.class.getName());
     private static final String RESOURCE_PACKAGE_NAME =
-            "co.edu.udea.test.uimessages.config.UIMessages";
+            "co.edu.udea.test.uimessages.config.UIText";
     private static ResourceBundle currentResourcePackage =
             ResourceBundle.getBundle(RESOURCE_PACKAGE_NAME);
 

@@ -6,6 +6,7 @@ import co.edu.udea.web.omrgrader2_0.process.image.model.SheetFileInformation;
 import co.edu.udea.web.omrgrader2_0.util.text.TextUtil;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.List;
 import org.apache.poi.POIXMLProperties;
 import org.apache.poi.ss.usermodel.Cell;
@@ -54,7 +55,7 @@ public class FileSheetReport {
         this.createStudentInfoCells(workbook, sheet,
                 info.getStudentsExamsResultsList(),
                 this.EXAM_ANSWER_ROW_START + 1,
-                info.getGraderSession().getDecimalPrecision());
+                info.getPrecisionPattern());
 
         this.createExamInfoHeaders(info, sheet, workbook);
 
@@ -115,7 +116,7 @@ public class FileSheetReport {
         cell = row.createCell((short) 1);
         cell.setCellType(Cell.CELL_TYPE_STRING);
         cell.setCellStyle(this.createInfoExamCellStyle(workbook,
-                info.getGraderSession().getDecimalPrecision(), false));
+                info.getPrecisionPattern(), false));
         cell.setCellValue(info.getGraderSession().getGraderSessionPK().
                 getSessionName());
 
@@ -127,8 +128,10 @@ public class FileSheetReport {
         cell = row.createCell((short) 1);
         cell.setCellType(Cell.CELL_TYPE_NUMERIC);
         cell.setCellStyle(this.createInfoExamCellStyle(workbook,
-                info.getGraderSession().getDecimalPrecision(), true));
-        cell.setCellValue(info.getGraderSession().getMaximumGrade());
+                info.getPrecisionPattern(), true));
+        cell.setCellValue(Double.parseDouble(new DecimalFormat(info.
+                getPrecisionPattern()).format(info.getGraderSession().
+                getMaximumGrade()).replace(',', '.')));
 
         row = sheet.createRow((short) 2);
         cell = row.createCell((short) 0);
@@ -138,7 +141,7 @@ public class FileSheetReport {
         cell = row.createCell((short) 1);
         cell.setCellType(Cell.CELL_TYPE_NUMERIC);
         cell.setCellStyle(this.createInfoExamCellStyle(workbook,
-                info.getGraderSession().getDecimalPrecision(), false));
+                info.getPrecisionPattern(), false));
         cell.setCellValue(info.getStudentsAmount());
 
         row = sheet.createRow((short) 3);
@@ -149,7 +152,7 @@ public class FileSheetReport {
         cell = row.createCell((short) 1);
         cell.setCellType(Cell.CELL_TYPE_NUMERIC);
         cell.setCellStyle(this.createInfoExamCellStyle(workbook,
-                info.getGraderSession().getDecimalPrecision(), false));
+                info.getPrecisionPattern(), false));
         cell.setCellValue(info.getStudentAmountPassed());
 
         row = sheet.createRow((short) 4);
@@ -160,7 +163,7 @@ public class FileSheetReport {
         cell = row.createCell((short) 1);
         cell.setCellType(Cell.CELL_TYPE_NUMERIC);
         cell.setCellStyle(this.createInfoExamCellStyle(workbook,
-                info.getGraderSession().getDecimalPrecision(), false));
+                info.getPrecisionPattern(), false));
         cell.setCellValue(info.getQuestionAmount());
 
         row = sheet.createRow((short) 5);
@@ -171,7 +174,7 @@ public class FileSheetReport {
         cell = row.createCell((short) 1);
         cell.setCellType(Cell.CELL_TYPE_NUMERIC);
         cell.setCellStyle(this.createInfoExamCellStyle(workbook,
-                info.getGraderSession().getDecimalPrecision(), false));
+                info.getPrecisionPattern(), false));
         cell.setCellValue(info.getMinimumQuestionAmountToPass());
 
         row = sheet.createRow((short) 6);
@@ -182,7 +185,7 @@ public class FileSheetReport {
         cell = row.createCell((short) 1);
         cell.setCellType(Cell.CELL_TYPE_NUMERIC);
         cell.setCellStyle(this.createInfoExamCellStyle(workbook,
-                info.getGraderSession().getDecimalPrecision(), true));
+                info.getPrecisionPattern(), true));
         cell.setCellValue(info.getMinimumScoreToPass());
 
         row = sheet.createRow((short) 7);
@@ -191,10 +194,15 @@ public class FileSheetReport {
         cell.setCellStyle(this.createInfoExamHeaderCellStyle(workbook));
         cell.setCellValue("Porcentaje para Ganar");
         cell = row.createCell((short) 1);
-        cell.setCellType(Cell.CELL_TYPE_NUMERIC);
+        cell.setCellType(Cell.CELL_TYPE_STRING);
         cell.setCellStyle(this.createInfoExamCellStyle(workbook,
-                info.getGraderSession().getDecimalPrecision(), true));
-        cell.setCellValue(info.getGraderSession().getApprovalPercentage());
+                info.getPrecisionPattern(), false));
+        double d = Double.parseDouble(new DecimalFormat(info.
+                getPrecisionPattern()).format(Double.parseDouble(
+                new DecimalFormat(info.getPrecisionPattern()).format(
+                info.getGraderSession().getApprovalPercentage()).replace(",",
+                ".")) * 100).replace(",", "."));
+        cell.setCellValue(d + "%");
     }
 
     private void setPropertiesToWorkbook(XSSFWorkbook workbook, String examName) {
@@ -221,9 +229,8 @@ public class FileSheetReport {
 
     private void createStudentInfoCells(XSSFWorkbook workbook, Sheet sheet,
             List<ExamResult> examsResultsList, int rowNumberStart,
-            String precision) {
+            String precisionPattern) {
         DataFormat format = workbook.createDataFormat();
-        String prec = this.constructPrecision(precision);
 
         int rowNumber = rowNumberStart;
         for (ExamResult examResult : examsResultsList) {
@@ -232,19 +239,32 @@ public class FileSheetReport {
             cell.setCellType(Cell.CELL_TYPE_STRING);
             cell.setCellStyle(this.createInfoStudentCellStyle(workbook, 0, false,
                     false));
-            cell.setCellValue(examResult.getExam().getStudent().getFullNames());
+            if (examResult.getExam().getStudent().getFullNames() != null) {
+                cell.setCellValue(examResult.getExam().getStudent().getFullNames());
+            } else {
+                cell.setCellValue("");
+            }
+
 
             cell = row.createCell((short) 1);
             cell.setCellType(Cell.CELL_TYPE_STRING);
             cell.setCellStyle(this.createInfoStudentCellStyle(workbook, 0, true,
                     false));
-            cell.setCellValue(examResult.getExam().getStudent().getIdNumber());
+            if (examResult.getExam().getStudent().getIdNumber() != null) {
+                cell.setCellValue(examResult.getExam().getStudent().getIdNumber());
+            } else {
+                cell.setCellValue("");
+            }
 
             cell = row.createCell((short) 2);
             cell.setCellType(Cell.CELL_TYPE_STRING);
             cell.setCellStyle(this.createInfoStudentCellStyle(workbook, 0, true,
                     false));
-            cell.setCellValue(examResult.getExam().getStudent().geteMail());
+            if (examResult.getExam().getStudent().geteMail() != null) {
+                cell.setCellValue(examResult.getExam().getStudent().geteMail());
+            } else {
+                cell.setCellValue("");
+            }
 
             cell = row.createCell((short) 3);
             cell.setCellType(Cell.CELL_TYPE_NUMERIC);
@@ -261,7 +281,7 @@ public class FileSheetReport {
 
             CellStyle cellStyle = this.createInfoStudentCellStyle(workbook,
                     color, true, true);
-            cellStyle.setDataFormat(format.getFormat(prec));
+            cellStyle.setDataFormat(format.getFormat(precisionPattern));
             cell.setCellStyle(cellStyle);
             cell.setCellValue(examResult.getScore());
 
@@ -269,30 +289,15 @@ public class FileSheetReport {
         }
     }
 
-    // TODO: ¿La precisión se tiene que expresar por ejemplo: 0.0000?
-    private String constructPrecision(String precision) {
-        int decimalPrecision = Integer.parseInt(precision);
-        int i = 1;
-        String decimalPrecisionFormat = "0.0";
-
-        while (i < decimalPrecision) {
-            decimalPrecisionFormat = decimalPrecisionFormat + "0";
-            i++;
-        }
-
-        return (decimalPrecisionFormat);
-    }
-
     private CellStyle createInfoExamCellStyle(XSSFWorkbook workbook,
-            String precision, boolean prec) {
+            String precisionPattern, boolean precision) {
         CellStyle cellStyle = workbook.createCellStyle();
         Font font = workbook.createFont();
 
         DataFormat format = workbook.createDataFormat();
-        String precisionFormat = this.constructPrecision(precision);
 
-        if (prec) {
-            cellStyle.setDataFormat(format.getFormat(precisionFormat));
+        if (precision) {
+            cellStyle.setDataFormat(format.getFormat(precisionPattern));
         }
 
         cellStyle.setAlignment(CellStyle.ALIGN_CENTER);

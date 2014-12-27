@@ -52,7 +52,6 @@ public final class QuestionItem {
         return (hash);
     }
 
-    // TODO: ¿Qué pasaría sí el examen no tiene 60 preguntas sino por ejemplo 50?
     @Override()
     public boolean equals(Object obj) {
         if (obj == null) {
