@@ -1,5 +1,7 @@
 package co.edu.udea.android.omrgrader2_0.activity.session.preference;
 
+import java.util.List;
+
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
@@ -8,6 +10,7 @@ import android.os.Bundle;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import co.edu.udea.android.omrgrader2_0.R;
+import co.edu.udea.android.omrgrader2_0.util.EMailAccountManager;
 import co.edu.udea.android.omrgrader2_0.util.validator.RegexValidator;
 
 /**
@@ -135,9 +138,18 @@ public class MainSessionPreferenceFragment extends PreferenceFragment implements
 	private void onSetDefaultEMail() {
 		SharedPreferences.Editor sharedPreferencesEditor = this.sharedPreferences
 				.edit();
+		List<CharSequence> electronicsMailList = EMailAccountManager
+				.findAllEMailsAccount(super.getActivity()
+						.getApplicationContext());
+		CharSequence defaultElectronicMail = new String();
+
+		if (!electronicsMailList.isEmpty()) {
+			defaultElectronicMail = electronicsMailList.get(0);
+		}
 
 		sharedPreferencesEditor.putString(
-				super.getString(R.string.email_shared_preference_key), "");
+				super.getString(R.string.email_shared_preference_key),
+				defaultElectronicMail.toString());
 
 		sharedPreferencesEditor.commit();
 	}

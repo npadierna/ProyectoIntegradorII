@@ -37,38 +37,8 @@ public final class BaseStorageDirectory {
 		return (baseStorageDirectory);
 	}
 
-	private void creatBaseStorage() throws OMRGraderBusinessException {
-		File storageDirectoryFile = null;
-
-		if (Environment.MEDIA_MOUNTED.equals(Environment
-				.getExternalStorageState())) {
-			storageDirectoryFile = this.buildBaseStorageFile();
-
-			if (storageDirectoryFile == null) {
-				throw new OMRGraderBusinessException(
-						"The Base Storage Directory File was not created successfully.");
-			} else {
-				storageDirectoryFile.mkdirs();
-
-				this.baseStorageDirectoryFile = storageDirectoryFile;
-			}
-		}
-	}
-
-	private File buildBaseStorageFile() {
-		StringBuilder storageDirectoryPath = new StringBuilder(Environment
-				.getExternalStorageDirectory().getAbsolutePath());
-
-		storageDirectoryPath.append(File.separator)
-				.append(this.context.getResources().getString(
-						R.string.base_album_root));
-
-		return (new File(storageDirectoryPath.toString()));
-	}
-
 	public File[] createDirectoriesFilesForSession(
-			CharSequence sessionNameCharSequence)
-			throws OMRGraderBusinessException {
+			String sessionNameCharSequence) throws OMRGraderBusinessException {
 		StringBuilder pathStringBuilder = new StringBuilder();
 		File sessionDirectoryFile = null;
 		File studentsImagesDirectoryFile = null;
@@ -92,5 +62,71 @@ public final class BaseStorageDirectory {
 		}
 
 		return (new File[] { sessionDirectoryFile, studentsImagesDirectoryFile });
+	}
+
+	public boolean deleteFilesInSession(String sessionNameCharSequence) {
+		boolean allWasDeleted = true;
+		StringBuilder pathStringBuilder = new StringBuilder();
+		File sessionDirectoryFile = null;
+		File studentsImagesDirectoryFile = null;
+
+		pathStringBuilder
+				.append(this.baseStorageDirectoryFile.getAbsolutePath())
+				.append(File.separator).append(sessionNameCharSequence);
+		sessionDirectoryFile = new File(pathStringBuilder.toString());
+
+		pathStringBuilder.append(File.separator).append(
+				this.context.getResources().getString(
+						R.string.base_album_students));
+		studentsImagesDirectoryFile = new File(pathStringBuilder.toString());
+
+		if (studentsImagesDirectoryFile.exists()) {
+			File[] studentsExamsImagesFiles = studentsImagesDirectoryFile
+					.listFiles();
+
+			for (File studentExamImageFile : studentsExamsImagesFiles) {
+				if (!studentExamImageFile.delete()) {
+					allWasDeleted = false;
+				}
+			}
+		}
+
+		File[] examsImagesFiles = sessionDirectoryFile.listFiles();
+		for (File examImageFile : examsImagesFiles) {
+			if (!examImageFile.delete()) {
+				allWasDeleted = false;
+			}
+		}
+
+		return ((sessionDirectoryFile.delete()) && (allWasDeleted));
+	}
+
+	private File buildBaseStorageFile() {
+		StringBuilder storageDirectoryPath = new StringBuilder(Environment
+				.getExternalStorageDirectory().getAbsolutePath());
+
+		storageDirectoryPath.append(File.separator)
+				.append(this.context.getResources().getString(
+						R.string.base_album_root));
+
+		return (new File(storageDirectoryPath.toString()));
+	}
+
+	private void creatBaseStorage() throws OMRGraderBusinessException {
+		File storageDirectoryFile = null;
+
+		if (Environment.MEDIA_MOUNTED.equals(Environment
+				.getExternalStorageState())) {
+			storageDirectoryFile = this.buildBaseStorageFile();
+
+			if (storageDirectoryFile == null) {
+				throw new OMRGraderBusinessException(
+						"The Base Storage Directory File was not created successfully.");
+			} else {
+				storageDirectoryFile.mkdirs();
+
+				this.baseStorageDirectoryFile = storageDirectoryFile;
+			}
+		}
 	}
 }
