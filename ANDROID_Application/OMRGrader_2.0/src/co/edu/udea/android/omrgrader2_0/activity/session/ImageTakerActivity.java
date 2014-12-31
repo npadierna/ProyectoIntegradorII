@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.IOException;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -34,6 +36,7 @@ public class ImageTakerActivity extends Activity {
 
 	private File newExamPictureFile;
 
+	private AlertDialog.Builder errorAlertDialogBuilder;
 	private Button startTakingStudentExamsImagesButton;
 	private Button gradeExamsButton;
 
@@ -66,7 +69,34 @@ public class ImageTakerActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		super.setContentView(R.layout.activity_image_taker);
 
-		this.createComponents(super.getIntent().getExtras());
+		this.createViewComponents();
+	}
+
+	@Override()
+	protected void onStart() {
+		super.onStart();
+
+		Bundle bundle = super.getIntent().getExtras();
+
+		try {
+			this.omrGraderProcess = new OMRGraderProcess(
+					super.getApplicationContext(),
+					(bundle.containsKey(SESSION_NAME_KEY)) ? bundle
+							.getString(SESSION_NAME_KEY) : null);
+		} catch (OMRGraderBusinessException e) {
+			this.errorAlertDialogBuilder.setPositiveButton(
+					R.string.accept_button_label,
+					new DialogInterface.OnClickListener() {
+
+						@Override()
+						public void onClick(DialogInterface dialog, int which) {
+							ImageTakerActivity.this.finish();
+						}
+					});
+			this.errorAlertDialogBuilder.create().show();
+
+			Log.e(TAG, e.getMessage(), e);
+		}
 	}
 
 	public void onGradeExams(View view) {
@@ -83,53 +113,63 @@ public class ImageTakerActivity extends Activity {
 			boolean finishedSession = this.omrGraderProcess
 					.finishGraderSession();
 		} catch (OMRGraderBusinessException e) {
-			e.printStackTrace();
+			Log.e(TAG, e.getMessage(), e);
 		}
+
+		this.omrGraderProcess.deleteExamsImagesFiles();
 	}
 
 	public void onStartTakingStudentsExamsImages(View view) {
 		Log.v(TAG, "Start Taking Students Exams Images.");
 
-		// FIXME: Think more about how to handle this exception.
 		try {
 			this.newExamPictureFile = this.createIntentForTakingPicture(
 					super.getString(R.string.student_exam_picture_file_name),
 					this.omrGraderProcess.getSessionStudentDirectoryFile(),
 					REQUEST_FOR_TAKING_STUDENT_EXAM);
 		} catch (IOException e) {
-			e.printStackTrace();
+			this.errorAlertDialogBuilder
+					.setMessage(R.string.student_exam_image_no_taken_alert_dialog_message);
+			this.errorAlertDialogBuilder
+					.setTitle(R.string.student_exam_image_no_taken_alert_dialog_title);
+			this.errorAlertDialogBuilder.create().show();
+
+			Log.e(TAG, e.getMessage(), e);
 		}
 	}
 
 	public void onTakeReferenceExamImage(View view) {
 		Log.v(TAG, "Taking the Reference Exam Image.");
 
-		// FIXME: Think more about how to handle this exception.
 		try {
 			this.newExamPictureFile = this.createIntentForTakingPicture(
 					super.getString(R.string.reference_exam_picture_file_name),
 					this.omrGraderProcess.getSessionBaseDirectoryFile(),
 					REQUEST_FOR_TAKING_REFERENCE_EXAM);
 		} catch (IOException e) {
-			e.printStackTrace();
+			this.errorAlertDialogBuilder
+					.setMessage(R.string.reference_exam_image_no_taken_alert_dialog_message);
+			this.errorAlertDialogBuilder
+					.setTitle(R.string.reference_exam_image_no_taken_alert_dialog_title);
+			this.errorAlertDialogBuilder.create().show();
+
+			Log.e(TAG, e.getMessage(), e);
 		}
 	}
 
-	private void createComponents(Bundle bundle) {
+	private void createViewComponents() {
 		this.startTakingStudentExamsImagesButton = (Button) super
 				.findViewById(R.id.start_taking_student_exams_images_button);
 		this.gradeExamsButton = (Button) super
 				.findViewById(R.id.grade_exams_button);
 
-		// FIXME: Think more about how to handle this exception.
-
-		try {
-			this.omrGraderProcess = new OMRGraderProcess(
-					super.getApplicationContext(),
-					bundle.getString(SESSION_NAME_KEY));
-		} catch (OMRGraderBusinessException e) {
-			e.printStackTrace();
-		}
+		this.errorAlertDialogBuilder = new AlertDialog.Builder(this);
+		this.errorAlertDialogBuilder
+				.setMessage(R.string.grader_session_creation_failed_alert_dialog_message);
+		this.errorAlertDialogBuilder
+				.setTitle(R.string.grader_session_creation_failed_alert_dialog_title);
+		this.errorAlertDialogBuilder.setPositiveButton(
+				R.string.accept_button_label, null);
 	}
 
 	private File createIntentForTakingPicture(String pictureName,

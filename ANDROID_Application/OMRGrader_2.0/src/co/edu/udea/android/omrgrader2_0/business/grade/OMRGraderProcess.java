@@ -1,6 +1,7 @@
 package co.edu.udea.android.omrgrader2_0.business.grade;
 
 import java.io.File;
+import java.util.List;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -14,6 +15,7 @@ import co.edu.udea.android.omrgrader2_0.business.directory.BaseStorageDirectory;
 import co.edu.udea.android.omrgrader2_0.business.exception.OMRGraderBusinessException;
 import co.edu.udea.android.omrgrader2_0.business.grade.asynctask.ExamImageUploaderAsyncTask;
 import co.edu.udea.android.omrgrader2_0.business.grade.asynctask.GraderSessionAsyncTask;
+import co.edu.udea.android.omrgrader2_0.util.EMailAccountManager;
 import co.edu.udea.android.omrgrader2_0.webservice.model.GraderSession;
 
 /**
@@ -88,6 +90,13 @@ public final class OMRGraderProcess {
 		}
 
 		return ((returnedCodeResult == GraderSessionAsyncTask.GRADER_SESSION_OK) && (returnedGraderSession != null));
+	}
+
+	public boolean deleteExamsImagesFiles() {
+
+		return (this.baseStorageDirectory
+				.deleteFilesInSession(this.graderSession.getGraderSessionPK()
+						.getSessionName()));
 	}
 
 	public boolean finishGraderSession() throws OMRGraderBusinessException {
@@ -210,13 +219,21 @@ public final class OMRGraderProcess {
 								.getResources()
 								.getInteger(
 										R.integer.grade_precision_default_shared_preference))));
-		// FIXME: What's about the Email?
+
+		List<CharSequence> electronicsMailList = EMailAccountManager
+				.findAllEMailsAccount(context);
+		CharSequence defaultElectronicMail = new String();
+
+		if (!electronicsMailList.isEmpty()) {
+			defaultElectronicMail = electronicsMailList.get(0);
+		}
+
 		this.graderSession
 				.getGraderSessionPK()
 				.setElectronicMail(
 						this.sharedPreferences.getString(
 								context.getString(R.string.email_shared_preference_key),
-								null));
+								defaultElectronicMail.toString()));
 		this.graderSession
 				.setMaximumGrade(Float.valueOf(this.sharedPreferences.getString(
 						context.getString(R.string.grader_values_shared_preference_key),

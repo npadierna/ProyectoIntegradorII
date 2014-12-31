@@ -47,6 +47,12 @@
     <string name="start_taking_students_exams_images_button_label">Capturar Exámenes de Estudiantes</string>
     <string name="take_reference_exam_image_button_label">Capturar Examen de Referencia</string>
     <string name="grade_exams_button_label">Calificar Exámenes</string>
+    <string name="grader_session_creation_failed_alert_dialog_message">No se ha podido crear exitosamente la Sesión de Calificación. Por favor, trate intentando de nuevo.</string>
+    <string name="grader_session_creation_failed_alert_dialog_title">Creación de Sessión Fallado</string>
+    <string name="reference_exam_image_no_taken_alert_dialog_message">No se ha podido tomar el Examen de Referencia exitosamente, por favor intente de nuevo.</string>
+    <string name="reference_exam_image_no_taken_alert_dialog_title">Examen No Capturado</string>
+    <string name="student_exam_image_no_taken_alert_dialog_message">No se ha podido tomar el Examen del Estudiante exitosamente, por favor intente de nuevo.</string>
+    <string name="student_exam_image_no_taken_alert_dialog_title">Examen No Capturado</string>
 
     <!-- Initial Activity -->
     <string name="email_selector_text_view_message">Proporcione un Correo Electrónico al cual desea enviar los resultados de las sesiones de calificación:</string>
@@ -79,7 +85,7 @@
     <string name="main_session_preference_activity_name">Configuraciones</string>
 
     <!-- Main Session Preference Fragment -->
-    <string name="invalid_email_alert_dialog_message">El Correo Electrónico que ha sido ingresado no es válido. No se establecerá ningún valor para el Correo Electrónico.</string>
+    <string name="invalid_email_alert_dialog_message">El Correo Electrónico que ha sido ingresado no es válido. Se tratará de establer algún valor por defecto para el Correo Electrónico.</string>
     <string name="invalid_email_alert_dialog_title">E-Mail Inválido</string>
     <string name="invalid_grade_precision_dialog_message">El nivel de la Precisión establecida para los decimales de las notas no cumple con los criterios, se establecerá un valor por defecto.</string>
     <string name="invalid_grade_precision_dialog_title">Precisión Inválida</string>
