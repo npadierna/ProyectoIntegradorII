@@ -1,8 +1,11 @@
 package co.edu.udea.android.omrgrader2_0.activity.session;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.concurrent.ExecutionException;
 
 import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -13,11 +16,13 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import co.edu.udea.android.omrgrader2_0.R;
 import co.edu.udea.android.omrgrader2_0.activity.about.AboutUsActivity;
 import co.edu.udea.android.omrgrader2_0.activity.session.dialog.SessionNameDialogFragment;
 import co.edu.udea.android.omrgrader2_0.activity.session.preference.MainSessionPreferenceActivity;
-import co.edu.udea.android.omrgrader2_0.business.pin.PingAsyncTask;
+import co.edu.udea.android.omrgrader2_0.business.ping.PingAsyncTask;
+import co.edu.udea.android.omrgrader2_0.util.validator.InternetConnectionValidator;
 
 /**
  * 
@@ -32,7 +37,10 @@ public class MainSessionActivity extends FragmentActivity implements
 
 	private static final String SESSION_NAME_DIALOG_TAG = "Session Name Dialog Fragment";
 
+	private URL applicationServerURL;
+
 	private AlertDialog.Builder errorAlertDialogBuilder;
+	private Button newGraderSessionButton;
 	private DialogFragment sessionNameDialogFragment;
 
 	@Override()
@@ -93,22 +101,60 @@ public class MainSessionActivity extends FragmentActivity implements
 			return (true);
 		}
 
-		return (false);
+		return (super.onOptionsItemSelected(item));
+	}
+
+	@Override()
+	protected void onStart() {
+		super.onStart();
+
+		if (!InternetConnectionValidator.isNetworkConnecting(super
+				.getApplicationContext())) {
+			this.errorAlertDialogBuilder
+					.setMessage(R.string.no_internet_connection_alert_dialog_message);
+			this.errorAlertDialogBuilder
+					.setTitle(R.string.no_internet_connection_alert_dialog_title);
+			this.errorAlertDialogBuilder.setPositiveButton(
+					R.string.accept_button_label,
+					new DialogInterface.OnClickListener() {
+
+						@Override()
+						public void onClick(DialogInterface dialog, int which) {
+							MainSessionActivity.this.finish();
+						}
+					});
+			this.errorAlertDialogBuilder.create().show();
+		} else {
+			this.createApplicationServerURL();
+		}
 	}
 
 	public void onDoPing(View view) {
 		Log.v(TAG, "PIN to Server.");
 
-		AsyncTask<Object, Void, Integer> pinAsyncTask = new PingAsyncTask(
+		AsyncTask<Object, Void, Integer> pingAsyncTask = new PingAsyncTask(
 				super.getApplicationContext());
-		pinAsyncTask.execute(new Object());
+		pingAsyncTask.execute(new Object[] { this.applicationServerURL });
 
+		Integer pingResult = null;
 		try {
-			pinAsyncTask.get();
+			pingResult = pingAsyncTask.get();
 		} catch (InterruptedException e) {
-			e.printStackTrace();
+			Log.e(TAG, e.getMessage(), e);
 		} catch (ExecutionException e) {
-			e.printStackTrace();
+			Log.e(TAG, e.getMessage(), e);
+		}
+
+		if ((pingResult == null) || !(pingResult.equals(PingAsyncTask.OK))) {
+			this.newGraderSessionButton.setEnabled(false);
+
+			this.errorAlertDialogBuilder
+					.setMessage(R.string.no_application_server_available_alert_dialog_message);
+			this.errorAlertDialogBuilder
+					.setTitle(R.string.no_application_server_available_alert_dialog_title);
+			this.errorAlertDialogBuilder.create().show();
+		} else {
+			this.newGraderSessionButton.setEnabled(true);
 		}
 	}
 
@@ -119,7 +165,25 @@ public class MainSessionActivity extends FragmentActivity implements
 				SESSION_NAME_DIALOG_TAG);
 	}
 
+	private void createApplicationServerURL() {
+		try {
+			this.applicationServerURL = new URL(
+					super.getString(R.string.application_server_protocol),
+					super.getString(R.string.application_server_ip),
+					Integer.valueOf(super
+							.getString(R.string.application_server_port)),
+					super.getString(R.string.application_server_context));
+		} catch (NumberFormatException e) {
+			Log.e(TAG, e.getMessage(), e);
+		} catch (MalformedURLException e) {
+			Log.e(TAG, e.getMessage(), e);
+		}
+	}
+
 	private void createViewComponents() {
+		this.newGraderSessionButton = (Button) super
+				.findViewById(R.id.new_grader_session_button);
+
 		this.errorAlertDialogBuilder = new AlertDialog.Builder(this);
 		this.errorAlertDialogBuilder
 				.setMessage(R.string.invalid_session_name_alert_dialog_message);

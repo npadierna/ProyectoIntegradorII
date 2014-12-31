@@ -12,7 +12,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
@@ -36,7 +35,6 @@ public class InitialActivity extends Activity {
 	private String maximumGradeSelected;
 
 	private AlertDialog.Builder errorAlertDialogBuilder;
-	private CheckBox deleteImagesCheckBox;
 	private EditText eMailEditText;
 	private Spinner eMailListSpinner;
 	private Spinner maximumGradeSpinner;
@@ -79,9 +77,6 @@ public class InitialActivity extends Activity {
 
 		this.eMailEditText = (EditText) super
 				.findViewById(R.id.email_edit_text);
-
-		this.deleteImagesCheckBox = (CheckBox) super
-				.findViewById(R.id.delete_images_check_box);
 
 		this.eMailAccountsList = EMailAccountManager.findAllEMailsAccount(super
 				.getApplicationContext());
@@ -147,9 +142,6 @@ public class InitialActivity extends Activity {
 				.getDefaultSharedPreferences(super.getApplicationContext())
 				.edit();
 
-		sharedPreferencesEditor.putBoolean(
-				super.getString(R.string.delete_images_shared_preference_key),
-				this.deleteImagesCheckBox.isChecked());
 		sharedPreferencesEditor.putString(
 				super.getString(R.string.grader_values_shared_preference_key),
 				this.maximumGradeSelected);

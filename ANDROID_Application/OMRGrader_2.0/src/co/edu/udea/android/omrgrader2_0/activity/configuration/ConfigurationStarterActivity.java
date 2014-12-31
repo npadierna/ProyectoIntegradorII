@@ -12,7 +12,6 @@ import android.text.TextUtils;
 import android.util.Log;
 import co.edu.udea.android.omrgrader2_0.R;
 import co.edu.udea.android.omrgrader2_0.activity.session.MainSessionActivity;
-import co.edu.udea.android.omrgrader2_0.util.validator.InternetConnectionValidator;
 
 /**
  * 
@@ -45,17 +44,6 @@ public class ConfigurationStarterActivity extends Activity {
 					.setMessage(R.string.no_backcamera_alert_dialog_message);
 			this.errorAlertDialogBuilder
 					.setTitle(R.string.no_backcamera_alert_dialog_title);
-			this.errorAlertDialogBuilder.create().show();
-
-			return;
-		}
-
-		if (!InternetConnectionValidator.isNetworkConnecting(super
-				.getApplicationContext())) {
-			this.errorAlertDialogBuilder
-					.setMessage(R.string.no_internet_connection_alert_dialog_message);
-			this.errorAlertDialogBuilder
-					.setTitle(R.string.no_internet_connection_alert_dialog_title);
 			this.errorAlertDialogBuilder.create().show();
 
 			return;

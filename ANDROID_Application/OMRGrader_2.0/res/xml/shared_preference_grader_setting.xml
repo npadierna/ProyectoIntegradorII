@@ -52,15 +52,6 @@
             android:summary="@string/grade_precision_shared_preference_summary"
             android:title="@string/grade_precision_shared_preference_title" >
         </EditTextPreference>
-
-        <CheckBoxPreference
-            android:defaultValue="true"
-            android:key="@string/delete_images_shared_preference_key"
-            android:order="4"
-            android:persistent="true"
-            android:summary="@string/delete_images_shared_preference_summary"
-            android:title="@string/delete_images_shared_preference_title" >
-        </CheckBoxPreference>
     </PreferenceCategory>
 
 </PreferenceScreen>

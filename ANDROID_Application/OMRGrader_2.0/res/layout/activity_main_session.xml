@@ -75,10 +75,12 @@
         </Button>
 
         <Button
+            android:id="@+id/new_grader_session_button"
             style="?android:attr/buttonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:enabled="false"
             android:onClick="onStartGradeSession"
             android:text="@string/new_grader_session_button_label"
             android:textStyle="bold" >
