@@ -17,6 +17,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 import co.edu.udea.android.omrgrader2_0.R;
 import co.edu.udea.android.omrgrader2_0.activity.about.AboutUsActivity;
 import co.edu.udea.android.omrgrader2_0.activity.session.dialog.SessionNameDialogFragment;
@@ -155,6 +156,11 @@ public class MainSessionActivity extends FragmentActivity implements
 			this.errorAlertDialogBuilder.create().show();
 		} else {
 			this.newGraderSessionButton.setEnabled(true);
+
+			Toast.makeText(
+					super.getApplicationContext(),
+					super.getString(R.string.sucessfull_pint_to_server_toast_message),
+					Toast.LENGTH_LONG).show();
 		}
 	}
 

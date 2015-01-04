@@ -42,6 +42,13 @@ public final class OMRGraderProcess {
 		this.createComponents(context, graderSessionName);
 	}
 
+	public int countStudentExamsImages() {
+		File studentDirectoryFile = this.getSessionStudentDirectoryFile();
+
+		return ((studentDirectoryFile != null) ? studentDirectoryFile
+				.listFiles().length : 0);
+	}
+
 	public File getSessionBaseDirectoryFile() {
 
 		return ((this.sessionDirectoriesFiles != null) ? this.sessionDirectoriesFiles[0]

@@ -5,6 +5,7 @@ import java.io.IOException;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -36,9 +37,10 @@ public class ImageTakerActivity extends Activity {
 
 	private File newExamPictureFile;
 
-	private AlertDialog.Builder errorAlertDialogBuilder;
+	private AlertDialog.Builder alertDialogBuilder;
 	private Button startTakingStudentExamsImagesButton;
 	private Button gradeExamsButton;
+	private ProgressDialog uploaderProgressDialog;
 
 	@Override()
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -76,47 +78,94 @@ public class ImageTakerActivity extends Activity {
 	protected void onStart() {
 		super.onStart();
 
-		Bundle bundle = super.getIntent().getExtras();
+		if (this.omrGraderProcess == null) {
+			Bundle bundle = super.getIntent().getExtras();
 
-		try {
-			this.omrGraderProcess = new OMRGraderProcess(
-					super.getApplicationContext(),
-					(bundle.containsKey(SESSION_NAME_KEY)) ? bundle
-							.getString(SESSION_NAME_KEY) : null);
-		} catch (OMRGraderBusinessException e) {
-			this.errorAlertDialogBuilder.setPositiveButton(
-					R.string.accept_button_label,
-					new DialogInterface.OnClickListener() {
+			try {
+				this.omrGraderProcess = new OMRGraderProcess(
+						super.getApplicationContext(),
+						(bundle.containsKey(SESSION_NAME_KEY)) ? bundle
+								.getString(SESSION_NAME_KEY) : null);
+			} catch (OMRGraderBusinessException e) {
+				this.alertDialogBuilder.setPositiveButton(
+						R.string.accept_button_label,
+						new DialogInterface.OnClickListener() {
 
-						@Override()
-						public void onClick(DialogInterface dialog, int which) {
-							ImageTakerActivity.this.finish();
-						}
-					});
-			this.errorAlertDialogBuilder.create().show();
+							@Override()
+							public void onClick(DialogInterface dialog,
+									int which) {
+								ImageTakerActivity.this.finish();
+							}
+						});
+				this.alertDialogBuilder.create().show();
 
-			Log.e(TAG, e.getMessage(), e);
+				Log.e(TAG, e.getMessage(), e);
+			}
 		}
 	}
 
 	public void onGradeExams(View view) {
 		Log.v(TAG, "Starting The Grade for Exams.");
 
-		// FIXME: Think more about how to handle this exception.
+		boolean[] uploadedStudentsExams = null;
+		UploaderProgressDialogThread uploaderProgressDialogThread = new UploaderProgressDialogThread(
+				this.uploaderProgressDialog);
+
+		this.uploaderProgressDialog.show();
+		uploaderProgressDialogThread.setRunning(true);
+		uploaderProgressDialogThread.start();
+
+		this.alertDialogBuilder.setPositiveButton(R.string.accept_button_label,
+				new DialogInterface.OnClickListener() {
+
+					@Override()
+					public void onClick(DialogInterface dialog, int which) {
+						ImageTakerActivity.this.finish();
+					}
+				});
+
 		try {
-			boolean createdSession = this.omrGraderProcess
-					.createGraderSession();
-			boolean uploadedReferenceExam = this.omrGraderProcess
-					.uploadReferenceExamImage();
-			boolean[] uploadedStudentsExams = this.omrGraderProcess
+			if (!this.omrGraderProcess.createGraderSession()) {
+				this.alertDialogBuilder
+						.setMessage(R.string.grader_session_no_created_alert_dialog_message);
+				this.alertDialogBuilder
+						.setTitle(R.string.grader_session_no_created_alert_dialog_title);
+				this.alertDialogBuilder.create().show();
+			}
+
+			if (!this.omrGraderProcess.uploadReferenceExamImage()) {
+				this.alertDialogBuilder
+						.setMessage(R.string.reference_exam_image_no_uploaded_alert_dialog_message);
+				this.alertDialogBuilder
+						.setTitle(R.string.reference_exam_image_no_uploaded_alert_dialog_title);
+				this.alertDialogBuilder.create().show();
+			}
+
+			uploadedStudentsExams = this.omrGraderProcess
 					.uploadStudentExamImage();
-			boolean finishedSession = this.omrGraderProcess
-					.finishGraderSession();
+
+			if (!this.omrGraderProcess.finishGraderSession()) {
+				this.alertDialogBuilder
+						.setMessage(R.string.grader_session_no_finished_alert_dialog_message);
+				this.alertDialogBuilder
+						.setTitle(R.string.grader_session_no_finished_alert_dialog_title);
+				this.alertDialogBuilder.create().show();
+			}
 		} catch (OMRGraderBusinessException e) {
+			this.alertDialogBuilder
+					.setMessage(R.string.grader_session_uploading_error_alert_dialog_message);
+			this.alertDialogBuilder
+					.setTitle(R.string.grader_session_uploading_error_alert_dialog_title);
+			this.alertDialogBuilder.create().show();
+
 			Log.e(TAG, e.getMessage(), e);
 		}
 
 		this.omrGraderProcess.deleteExamsImagesFiles();
+
+		uploaderProgressDialogThread.setRunning(false);
+
+		this.resumeGraderSession(uploadedStudentsExams);
 	}
 
 	public void onStartTakingStudentsExamsImages(View view) {
@@ -128,11 +177,11 @@ public class ImageTakerActivity extends Activity {
 					this.omrGraderProcess.getSessionStudentDirectoryFile(),
 					REQUEST_FOR_TAKING_STUDENT_EXAM);
 		} catch (IOException e) {
-			this.errorAlertDialogBuilder
+			this.alertDialogBuilder
 					.setMessage(R.string.student_exam_image_no_taken_alert_dialog_message);
-			this.errorAlertDialogBuilder
+			this.alertDialogBuilder
 					.setTitle(R.string.student_exam_image_no_taken_alert_dialog_title);
-			this.errorAlertDialogBuilder.create().show();
+			this.alertDialogBuilder.create().show();
 
 			Log.e(TAG, e.getMessage(), e);
 		}
@@ -147,14 +196,23 @@ public class ImageTakerActivity extends Activity {
 					this.omrGraderProcess.getSessionBaseDirectoryFile(),
 					REQUEST_FOR_TAKING_REFERENCE_EXAM);
 		} catch (IOException e) {
-			this.errorAlertDialogBuilder
+			this.alertDialogBuilder
 					.setMessage(R.string.reference_exam_image_no_taken_alert_dialog_message);
-			this.errorAlertDialogBuilder
+			this.alertDialogBuilder
 					.setTitle(R.string.reference_exam_image_no_taken_alert_dialog_title);
-			this.errorAlertDialogBuilder.create().show();
+			this.alertDialogBuilder.create().show();
 
 			Log.e(TAG, e.getMessage(), e);
 		}
+	}
+
+	private void addFileToGalleryImages(File pictureFile) {
+		Uri uri = Uri.fromFile(pictureFile);
+
+		Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+		intent.setData(uri);
+
+		super.sendBroadcast(intent);
 	}
 
 	private void createViewComponents() {
@@ -163,13 +221,22 @@ public class ImageTakerActivity extends Activity {
 		this.gradeExamsButton = (Button) super
 				.findViewById(R.id.grade_exams_button);
 
-		this.errorAlertDialogBuilder = new AlertDialog.Builder(this);
-		this.errorAlertDialogBuilder
+		this.alertDialogBuilder = new AlertDialog.Builder(this);
+		this.alertDialogBuilder
 				.setMessage(R.string.grader_session_creation_failed_alert_dialog_message);
-		this.errorAlertDialogBuilder
+		this.alertDialogBuilder
 				.setTitle(R.string.grader_session_creation_failed_alert_dialog_title);
-		this.errorAlertDialogBuilder.setPositiveButton(
-				R.string.accept_button_label, null);
+		this.alertDialogBuilder.setPositiveButton(R.string.accept_button_label,
+				null);
+
+		this.uploaderProgressDialog = new ProgressDialog(this);
+		this.uploaderProgressDialog.setMessage(super
+				.getString(R.string.progress_uploader_message));
+		this.uploaderProgressDialog
+				.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+		this.uploaderProgressDialog.setTitle(super
+				.getString(R.string.progress_uploader_title));
+		this.uploaderProgressDialog.setCancelable(false);
 	}
 
 	private File createIntentForTakingPicture(String pictureName,
@@ -188,12 +255,24 @@ public class ImageTakerActivity extends Activity {
 		return (takenPictureFile);
 	}
 
-	private void addFileToGalleryImages(File pictureFile) {
-		Uri uri = Uri.fromFile(pictureFile);
+	private void resumeGraderSession(boolean[] uploadedStudentsExams) {
+		int counter = 0;
 
-		Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-		intent.setData(uri);
+		if (uploadedStudentsExams != null) {
+			for (boolean b : uploadedStudentsExams) {
+				if (b) {
+					counter++;
+				}
+			}
+		}
 
-		super.sendBroadcast(intent);
+		this.alertDialogBuilder
+				.setMessage(String.format(
+						"%s %d.",
+						super.getString(R.string.grader_session_results_alert_dialog_message),
+						counter));
+		this.alertDialogBuilder
+				.setTitle(R.string.grader_session_results_alert_dialog_title);
+		this.alertDialogBuilder.create().show();
 	}
 }

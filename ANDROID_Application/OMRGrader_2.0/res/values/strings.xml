@@ -12,7 +12,7 @@
 
     <!-- Application Server URL Properties -->
     <string name="application_server_context">omrgrader</string>
-    <string name="application_server_ip">192.168.0.195</string>
+    <string name="application_server_ip">192.168.0.191</string>
     <string name="application_server_port">8080</string>
     <string name="application_server_protocol">http</string>
     <string name="application_server_web_services_context">rest</string>
@@ -25,7 +25,7 @@
     <string name="no_backcamera_alert_dialog_message">Su dispositivo móvil no cuenta con una Cámara trasera.</string>
     <string name="no_backcamera_alert_dialog_title">Sin Cámara Trasera</string>
 
-    <!-- Dialog Session Name -->
+    <!-- Dialog Session Name Dialog -->
     <string name="session_name_text_view_title">Por favor, introduzca un nombre para la nueva Sesión de Calificación a ser creada:</string>
     <string name="session_name_title">Nombre de Sesión de Calificación</string>
 
@@ -53,6 +53,16 @@
     <string name="reference_exam_image_no_taken_alert_dialog_title">Examen No Capturado</string>
     <string name="student_exam_image_no_taken_alert_dialog_message">No se ha podido tomar el Examen del Estudiante exitosamente, por favor intente de nuevo.</string>
     <string name="student_exam_image_no_taken_alert_dialog_title">Examen No Capturado</string>
+    <string name="grader_session_no_created_alert_dialog_message">La Sesión de Calificación no ha podido ser creada exitosamente al Servidor de Aplicaciones. Por favor, vuelva a intentar creando de nuevo la Sesión de Calificación.</string>
+    <string name="grader_session_no_created_alert_dialog_title">Sesión de Calificación</string>
+    <string name="grader_session_no_finished_alert_dialog_message">La Sesión de Calificación no ha podido ser finalizada exitosamente al Servidor de Aplicaciones. Por favor, vuelva a intentar creando de nuevo la Sesión de Calificación.</string>
+    <string name="grader_session_no_finished_alert_dialog_title">Sesión de Calificación</string>
+    <string name="reference_exam_image_no_uploaded_alert_dialog_message">El Examen de Referencia no ha podido ser subido exitosamente al Servidor de Aplicaciones. Por favor, vuelva a intentar creando de nuevo la Sesión de Calificación.</string>
+    <string name="reference_exam_image_no_uploaded_alert_dialog_title">Examen de Referencia</string>
+    <string name="grader_session_uploading_error_alert_dialog_message">Ha sucedido un error inesperado cuando se estaba contactando el Servidor de Aplicaicones. Por favor, vuelva a intentar creando la Sesión de Calificación.</string>
+    <string name="grader_session_uploading_error_alert_dialog_title">Error Inesperado</string>
+    <string name="grader_session_results_alert_dialog_message">Durante esta Sesión de Calificación se logró subir la siguiente cantidad de Exámenes de Estudiantes exitosamente: </string>
+    <string name="grader_session_results_alert_dialog_title">Resultados De Sesión</string>
 
     <!-- Initial Activity -->
     <string name="email_selector_text_view_message">Proporcione un Correo Electrónico al cual desea enviar los resultados de las sesiones de calificación:</string>
@@ -80,6 +90,7 @@
     <string name="no_internet_connection_alert_dialog_title">Sin Conexión</string>
     <string name="no_application_server_available_alert_dialog_message">El Servidor de Aplicaciones no ha podido ser alcanzado; por favor intente de nuevo o dentro de unos momentos.</string>
     <string name="no_application_server_available_alert_dialog_title">Servidor No Disponible</string>
+    <string name="sucessfull_pint_to_server_toast_message">Servidor alcanzado exitosamente!!!</string>
 
     <!-- Main Session Preference Activity -->
     <string name="main_session_preference_activity_name">Configuraciones</string>
@@ -95,6 +106,10 @@
     <!-- Main Settings Menu -->
     <string name="menu_main_about_us_item">Acerca de</string>
     <string name="menu_main_settings_item">Configuraciones</string>
+
+    <!-- Progress Uploader Dialog -->
+    <string name="progress_uploader_message">Subiendo las imágenes de los Exámenes al Servidor de Aplicaciones.\nPor favor, espere.</string>
+    <string name="progress_uploader_title">Subiendo Imágenes</string>
 
     <!-- Shared Preferences Grader Settings -->
     <string name="email_shared_preference_dialog_message">Ingrese el Correo Electrónico (E-Mail) al cual desea recibir los resultados:</string>

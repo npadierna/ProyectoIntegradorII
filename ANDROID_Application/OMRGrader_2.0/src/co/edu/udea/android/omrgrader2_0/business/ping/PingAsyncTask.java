@@ -63,7 +63,7 @@ public class PingAsyncTask extends AsyncTask<Object, Void, Integer> {
 		URL url = (URL) parameters[0];
 
 		if ((TextUtils.isEmpty(url.getProtocol()))
-				|| (TextUtils.isEmpty(url.getHost())) || (url.getPort() != -1)
+				|| (TextUtils.isEmpty(url.getHost())) || (url.getPort() == -1)
 				|| (TextUtils.isEmpty(url.getFile()))) {
 
 			return (false);
