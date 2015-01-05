@@ -76,6 +76,7 @@ public class SheetFileInformation {
     }
 
     public String getPrecisionPattern() {
+
         return (this.precisionPattern);
     }
 
