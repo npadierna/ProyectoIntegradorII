@@ -12,7 +12,7 @@
 
     <!-- Application Server URL Properties -->
     <string name="application_server_context">omrgrader</string>
-    <string name="application_server_ip">192.168.0.191</string>
+    <string name="application_server_ip">192.168.0.197</string>
     <string name="application_server_port">8080</string>
     <string name="application_server_protocol">http</string>
     <string name="application_server_web_services_context">rest</string>

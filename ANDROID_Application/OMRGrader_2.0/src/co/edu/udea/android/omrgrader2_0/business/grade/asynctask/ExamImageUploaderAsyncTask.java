@@ -1,5 +1,7 @@
 package co.edu.udea.android.omrgrader2_0.business.grade.asynctask;
 
+import java.net.URL;
+
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.text.TextUtils;
@@ -29,23 +31,25 @@ public class ExamImageUploaderAsyncTask extends
 	protected Integer doInBackground(Object... parameters) {
 		if (this.checkParameters(parameters)) {
 			String asyncTaskKey = (String) parameters[0];
-			GraderSession graderSession = (GraderSession) parameters[1];
-			Bitmap examImageBitmap = (Bitmap) parameters[2];
+			URL webServiceURL = (URL) parameters[1];
+			GraderSession graderSession = (GraderSession) parameters[2];
+			Bitmap examImageBitmap = (Bitmap) parameters[3];
 			Integer imageFileId = null;
 
 			boolean uploadingResult = false;
 
 			try {
 				if (asyncTaskKey.equals(UPLOAD_STUDENT_EXAM_IMAGE)) {
-					imageFileId = (Integer) parameters[3];
+					imageFileId = (Integer) parameters[4];
 
 					uploadingResult = this.examImageWebService
-							.uploadStudentExamImageFile(examImageBitmap,
-									imageFileId.intValue(), graderSession);
+							.uploadStudentExamImageFile(webServiceURL,
+									examImageBitmap, imageFileId.intValue(),
+									graderSession);
 				} else {
 					uploadingResult = this.examImageWebService
-							.uploadReferenceExamImageFile(examImageBitmap,
-									graderSession);
+							.uploadReferenceExamImageFile(webServiceURL,
+									examImageBitmap, graderSession);
 				}
 			} catch (OMRGraderWebServiceException e) {
 
@@ -59,12 +63,17 @@ public class ExamImageUploaderAsyncTask extends
 	}
 
 	private boolean checkParameters(Object... parameters) {
-		if ((parameters == null) || (parameters.length < 3)) {
+		if ((parameters == null) || (parameters.length < 3)
+				|| !(parameters[0] instanceof String)
+				|| !(parameters[1] instanceof URL)
+				|| !(parameters[2] instanceof GraderSession)
+				|| !(parameters[3] instanceof Bitmap)) {
 
 			return (false);
 		}
 
 		String asyncTaskKey = null;
+		URL webServiceURL = null;
 		GraderSession graderSession = null;
 		Bitmap examImageBitmap = null;
 		Integer imageFileId = null;
@@ -84,15 +93,30 @@ public class ExamImageUploaderAsyncTask extends
 			}
 
 			if (asyncTaskKey.equals(UPLOAD_STUDENT_EXAM_IMAGE)) {
-				imageFileId = (Integer) parameters[3];
+				if (parameters[4] instanceof Integer) {
+					imageFileId = (Integer) parameters[4];
 
-				if (imageFileId == null) {
+					if ((imageFileId == null) || (imageFileId.intValue() <= 0)) {
+
+						return (false);
+					}
+				} else {
 
 					return (false);
 				}
 			}
 
-			graderSession = (GraderSession) parameters[1];
+			webServiceURL = (URL) parameters[1];
+			if ((webServiceURL == null)
+					|| (TextUtils.isEmpty(webServiceURL.getProtocol()))
+					|| (TextUtils.isEmpty(webServiceURL.getHost()))
+					|| (webServiceURL.getPort() == -1)
+					|| (TextUtils.isEmpty(webServiceURL.getFile()))) {
+
+				return (false);
+			}
+
+			graderSession = (GraderSession) parameters[2];
 			if ((graderSession == null)
 					|| (graderSession.getGraderSessionPK() == null)
 					|| (TextUtils.isEmpty(graderSession.getGraderSessionPK()
@@ -109,7 +133,7 @@ public class ExamImageUploaderAsyncTask extends
 			return (false);
 		}
 
-		examImageBitmap = (Bitmap) parameters[2];
+		examImageBitmap = (Bitmap) parameters[3];
 		if (examImageBitmap == null) {
 
 			return (false);

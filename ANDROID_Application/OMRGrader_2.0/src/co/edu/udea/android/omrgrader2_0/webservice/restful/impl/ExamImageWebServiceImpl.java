@@ -1,6 +1,7 @@
 package co.edu.udea.android.omrgrader2_0.webservice.restful.impl;
 
 import java.io.ByteArrayOutputStream;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -57,11 +58,11 @@ public class ExamImageWebServiceImpl extends AbstractContextWebService
 	}
 
 	@Override()
-	public boolean uploadReferenceExamImageFile(
+	public boolean uploadReferenceExamImageFile(URL webServiceURL,
 			Bitmap referenceExamImageBitmap, GraderSession graderSession)
 			throws OMRGraderWebServiceException {
-		if (!this.checkParameters(referenceExamImageBitmap, graderSession,
-				null, true)) {
+		if (!this.checkParameters(webServiceURL, referenceExamImageBitmap,
+				graderSession, null, true)) {
 
 			return (false);
 		}
@@ -71,15 +72,13 @@ public class ExamImageWebServiceImpl extends AbstractContextWebService
 				.put(WebServicePathContract.ExamImageWebServiceContract.DIRECTORY_STORAGE_ID_PARAMETER,
 						String.valueOf(this
 								.buildStorageDirectoryPathName(graderSession)));
-//		parametersMap
-//				.put(WebServicePathContract.ExamImageWebServiceContract.DIRECTORY_STORAGE_ID_PARAMETER,
-//						"temporal");
 
 		try {
 			HttpPost httpPost = this.createRequestForImageUploading(
 					referenceExamImageBitmap, true);
 			HttpEntity httpEntity = super
 					.executeHTTPMethod(
+							webServiceURL,
 							new String[] {
 									WebServicePathContract.ExamImageWebServiceContract.ROOT_PATH,
 									WebServicePathContract.ExamImageWebServiceContract.UPLOAD_REFERENCE_IMAGE_FILE_PATH },
@@ -100,11 +99,11 @@ public class ExamImageWebServiceImpl extends AbstractContextWebService
 	}
 
 	@Override()
-	public boolean uploadStudentExamImageFile(Bitmap studentExamImageBitmap,
-			Integer imageFileId, GraderSession graderSession)
-			throws OMRGraderWebServiceException {
-		if (!this.checkParameters(studentExamImageBitmap, graderSession,
-				imageFileId, false)) {
+	public boolean uploadStudentExamImageFile(URL webServiceURL,
+			Bitmap studentExamImageBitmap, Integer imageFileId,
+			GraderSession graderSession) throws OMRGraderWebServiceException {
+		if (!this.checkParameters(webServiceURL, studentExamImageBitmap,
+				graderSession, imageFileId, false)) {
 
 			return (false);
 		}
@@ -117,15 +116,13 @@ public class ExamImageWebServiceImpl extends AbstractContextWebService
 				.put(WebServicePathContract.ExamImageWebServiceContract.DIRECTORY_STORAGE_ID_PARAMETER,
 						String.valueOf(this
 								.buildStorageDirectoryPathName(graderSession)));
-//		parametersMap
-//				.put(WebServicePathContract.ExamImageWebServiceContract.DIRECTORY_STORAGE_ID_PARAMETER,
-//						"temporal");
 
 		try {
 			HttpPost httpPost = this.createRequestForImageUploading(
 					studentExamImageBitmap, false);
 			HttpEntity httpEntity = super
 					.executeHTTPMethod(
+							webServiceURL,
 							new String[] {
 									WebServicePathContract.ExamImageWebServiceContract.ROOT_PATH,
 									WebServicePathContract.ExamImageWebServiceContract.UPLOAD_STUDENT_IMAGE_FILE_PATH },
@@ -144,27 +141,31 @@ public class ExamImageWebServiceImpl extends AbstractContextWebService
 		return (true);
 	}
 
-	private boolean checkParameters(Bitmap examImageBitmap,
+	private boolean checkParameters(URL webServiceURL, Bitmap examImageBitmap,
 			GraderSession graderSession, Integer imageFileId,
 			boolean isReference) {
+		if ((webServiceURL == null)
+				|| (TextUtils.isEmpty(webServiceURL.getProtocol()))
+				|| (TextUtils.isEmpty(webServiceURL.getHost()))
+				|| (webServiceURL.getPort() == -1)
+				|| (TextUtils.isEmpty(webServiceURL.getFile()))) {
+
+			return (false);
+		}
+
 		if (examImageBitmap == null) {
 
 			return (false);
 		}
 
-		try {
-			if ((graderSession == null)
-					|| (graderSession.getGraderSessionPK() == null)
-					|| (TextUtils.isEmpty(graderSession.getGraderSessionPK()
-							.getElectronicMail().trim()))
-					|| (TextUtils.isEmpty(graderSession.getGraderSessionPK()
-							.getSessionName().trim()))
-					|| (!RegexValidator.isValidEMail(graderSession
-							.getGraderSessionPK().getElectronicMail()))) {
-
-				return (false);
-			}
-		} catch (Exception e) {
+		if ((graderSession == null)
+				|| (graderSession.getGraderSessionPK() == null)
+				|| (TextUtils.isEmpty(graderSession.getGraderSessionPK()
+						.getElectronicMail().trim()))
+				|| (TextUtils.isEmpty(graderSession.getGraderSessionPK()
+						.getSessionName().trim()))
+				|| (!RegexValidator.isValidEMail(graderSession
+						.getGraderSessionPK().getElectronicMail()))) {
 
 			return (false);
 		}

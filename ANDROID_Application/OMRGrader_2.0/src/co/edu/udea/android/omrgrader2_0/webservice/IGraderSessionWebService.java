@@ -1,5 +1,7 @@
 package co.edu.udea.android.omrgrader2_0.webservice;
 
+import java.net.URL;
+
 import co.edu.udea.android.omrgrader2_0.webservice.exception.OMRGraderWebServiceException;
 import co.edu.udea.android.omrgrader2_0.webservice.model.GraderSession;
 
@@ -11,9 +13,9 @@ import co.edu.udea.android.omrgrader2_0.webservice.model.GraderSession;
  */
 public interface IGraderSessionWebService {
 
-	public GraderSession createGraderSession(GraderSession graderSession)
-			throws OMRGraderWebServiceException;
+	public GraderSession createGraderSession(URL webServiceURL,
+			GraderSession graderSession) throws OMRGraderWebServiceException;
 
-	public GraderSession finishGraderSession(GraderSession graderSession)
-			throws OMRGraderWebServiceException;
+	public GraderSession finishGraderSession(URL webServiceURL,
+			GraderSession graderSession) throws OMRGraderWebServiceException;
 }

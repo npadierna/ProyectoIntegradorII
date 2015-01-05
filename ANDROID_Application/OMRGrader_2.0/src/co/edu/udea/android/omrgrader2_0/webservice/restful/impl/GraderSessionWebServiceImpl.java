@@ -1,5 +1,8 @@
 package co.edu.udea.android.omrgrader2_0.webservice.restful.impl;
 
+import java.net.URL;
+
+import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
@@ -38,9 +41,9 @@ public class GraderSessionWebServiceImpl extends AbstractContextWebService
 	}
 
 	@Override()
-	public GraderSession createGraderSession(GraderSession graderSession)
-			throws OMRGraderWebServiceException {
-		if (!this.checkParameters(graderSession, true)) {
+	public GraderSession createGraderSession(URL webServiceURL,
+			GraderSession graderSession) throws OMRGraderWebServiceException {
+		if (!this.checkParameters(webServiceURL, graderSession, true)) {
 
 			return (null);
 		}
@@ -54,12 +57,16 @@ public class GraderSessionWebServiceImpl extends AbstractContextWebService
 
 			HttpEntity httpEntity = super
 					.executeHTTPMethod(
+							webServiceURL,
 							new String[] {
 									WebServicePathContract.GraderSessionWebServiceContract.ROOT_PATH,
 									WebServicePathContract.GraderSessionWebServiceContract.CREATE_GRADER_SESSION_PATH },
 							null, httpPost);
 
 			if (httpEntity != null) {
+				Header header = httpEntity.getContentType();
+				Log.d(TAG, header.toString());
+
 				String entityResponse = EntityUtils.toString(httpEntity);
 
 				GraderSession responsedGraderSession = (GraderSession) (new GraderSession()
@@ -79,9 +86,9 @@ public class GraderSessionWebServiceImpl extends AbstractContextWebService
 	}
 
 	@Override()
-	public GraderSession finishGraderSession(GraderSession graderSession)
-			throws OMRGraderWebServiceException {
-		if (!this.checkParameters(graderSession, false)) {
+	public GraderSession finishGraderSession(URL webServiceURL,
+			GraderSession graderSession) throws OMRGraderWebServiceException {
+		if (!this.checkParameters(webServiceURL, graderSession, false)) {
 
 			return (null);
 		}
@@ -95,6 +102,7 @@ public class GraderSessionWebServiceImpl extends AbstractContextWebService
 
 			HttpEntity httpEntity = super
 					.executeHTTPMethod(
+							webServiceURL,
 							new String[] {
 									WebServicePathContract.GraderSessionWebServiceContract.ROOT_PATH,
 									WebServicePathContract.GraderSessionWebServiceContract.FINISH_GRADER_SESSION_PATH },
@@ -117,21 +125,25 @@ public class GraderSessionWebServiceImpl extends AbstractContextWebService
 		return (null);
 	}
 
-	private boolean checkParameters(GraderSession graderSession,
-			boolean isCreation) {
-		try {
-			if ((graderSession == null)
-					|| (graderSession.getGraderSessionPK() == null)
-					|| (TextUtils.isEmpty(graderSession.getGraderSessionPK()
-							.getElectronicMail().trim()))
-					|| (TextUtils.isEmpty(graderSession.getGraderSessionPK()
-							.getSessionName().trim()))
-					|| (!RegexValidator.isValidEMail(graderSession
-							.getGraderSessionPK().getElectronicMail()))) {
+	private boolean checkParameters(URL webServiceURL,
+			GraderSession graderSession, boolean isCreation) {
+		if ((webServiceURL == null)
+				|| (TextUtils.isEmpty(webServiceURL.getProtocol()))
+				|| (TextUtils.isEmpty(webServiceURL.getHost()))
+				|| (webServiceURL.getPort() == -1)
+				|| (TextUtils.isEmpty(webServiceURL.getFile()))) {
 
-				return (false);
-			}
-		} catch (Exception e) {
+			return (false);
+		}
+
+		if ((graderSession == null)
+				|| (graderSession.getGraderSessionPK() == null)
+				|| (TextUtils.isEmpty(graderSession.getGraderSessionPK()
+						.getElectronicMail().trim()))
+				|| (TextUtils.isEmpty(graderSession.getGraderSessionPK()
+						.getSessionName().trim()))
+				|| (!RegexValidator.isValidEMail(graderSession
+						.getGraderSessionPK().getElectronicMail()))) {
 
 			return (false);
 		}

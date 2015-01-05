@@ -2,6 +2,8 @@ package co.edu.udea.android.omrgrader2_0.activity.session;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -36,6 +38,7 @@ public class ImageTakerActivity extends Activity {
 	private OMRGraderProcess omrGraderProcess;
 
 	private File newExamPictureFile;
+	private URL webServiceURL;
 
 	private AlertDialog.Builder alertDialogBuilder;
 	private Button startTakingStudentExamsImagesButton;
@@ -72,6 +75,7 @@ public class ImageTakerActivity extends Activity {
 		super.setContentView(R.layout.activity_image_taker);
 
 		this.createViewComponents();
+		this.createWebServiceURL();
 	}
 
 	@Override()
@@ -83,7 +87,7 @@ public class ImageTakerActivity extends Activity {
 
 			try {
 				this.omrGraderProcess = new OMRGraderProcess(
-						super.getApplicationContext(),
+						super.getApplicationContext(), this.webServiceURL,
 						(bundle.containsKey(SESSION_NAME_KEY)) ? bundle
 								.getString(SESSION_NAME_KEY) : null);
 			} catch (OMRGraderBusinessException e) {
@@ -253,6 +257,24 @@ public class ImageTakerActivity extends Activity {
 		super.startActivityForResult(takePictureIntent, requestCode);
 
 		return (takenPictureFile);
+	}
+
+	private void createWebServiceURL() {
+		try {
+			this.webServiceURL = new URL(
+					super.getString(R.string.application_server_protocol),
+					super.getString(R.string.application_server_ip),
+					Integer.valueOf(super
+							.getString(R.string.application_server_port)),
+					super.getString(R.string.application_server_context)
+							.concat(File.separator)
+							.concat(super
+									.getString(R.string.application_server_web_services_context)));
+		} catch (NumberFormatException e) {
+			Log.e(TAG, e.getMessage(), e);
+		} catch (MalformedURLException e) {
+			Log.e(TAG, e.getMessage(), e);
+		}
 	}
 
 	private void resumeGraderSession(boolean[] uploadedStudentsExams) {

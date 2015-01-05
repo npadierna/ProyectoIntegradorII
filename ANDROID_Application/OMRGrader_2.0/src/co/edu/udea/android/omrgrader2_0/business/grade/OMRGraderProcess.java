@@ -1,6 +1,7 @@
 package co.edu.udea.android.omrgrader2_0.business.grade;
 
 import java.io.File;
+import java.net.URL;
 import java.util.List;
 
 import android.content.Context;
@@ -31,15 +32,17 @@ public final class OMRGraderProcess {
 
 	private File[] sessionDirectoriesFiles;
 	private File referenceExamImageFile;
+	private URL webServiceURL;
 
 	private AsyncTask<Object, Void, Integer> examImageUploaderAsyncTask;
 	private AsyncTask<Object, Void, Object[]> graderSessionAsyncTask;
 
 	private SharedPreferences sharedPreferences;
 
-	public OMRGraderProcess(Context context, String graderSessionName)
-			throws OMRGraderBusinessException {
+	public OMRGraderProcess(Context context, URL webServiceURL,
+			String graderSessionName) throws OMRGraderBusinessException {
 		this.createComponents(context, graderSessionName);
+		this.setWebServiceURL(webServiceURL);
 	}
 
 	public int countStudentExamsImages() {
@@ -70,6 +73,15 @@ public final class OMRGraderProcess {
 		this.referenceExamImageFile = referenceExamImageFile;
 	}
 
+	public URL getWebServiceURL() {
+
+		return (this.webServiceURL);
+	}
+
+	public void setWebServiceURL(URL webServiceURL) {
+		this.webServiceURL = webServiceURL;
+	}
+
 	public boolean createGraderSession() throws OMRGraderBusinessException {
 		Integer returnedCodeResult = null;
 		Object[] returnedValues = null;
@@ -79,7 +91,7 @@ public final class OMRGraderProcess {
 		this.graderSessionAsyncTask = new GraderSessionAsyncTask();
 		this.graderSessionAsyncTask.execute(new Object[] {
 				GraderSessionAsyncTask.CREATE_GRADER_SESSION,
-				this.graderSession });
+				this.webServiceURL, this.graderSession });
 
 		try {
 			returnedValues = this.graderSessionAsyncTask.get();
@@ -115,7 +127,7 @@ public final class OMRGraderProcess {
 		this.graderSessionAsyncTask = new GraderSessionAsyncTask();
 		this.graderSessionAsyncTask.execute(new Object[] {
 				GraderSessionAsyncTask.FINISH_GRADER_SESSION,
-				this.graderSession });
+				this.webServiceURL, this.graderSession });
 
 		try {
 			returnedValues = this.graderSessionAsyncTask.get();
@@ -140,7 +152,8 @@ public final class OMRGraderProcess {
 		this.examImageUploaderAsyncTask = new ExamImageUploaderAsyncTask();
 		this.examImageUploaderAsyncTask.execute(new Object[] {
 				ExamImageUploaderAsyncTask.UPLOAD_REFERENCE_EXAM_IMAGE,
-				this.graderSession, referenceExamImageBitMap });
+				this.webServiceURL, this.graderSession,
+				referenceExamImageBitMap });
 
 		try {
 			returnedValue = this.examImageUploaderAsyncTask.get();
@@ -173,8 +186,8 @@ public final class OMRGraderProcess {
 			this.examImageUploaderAsyncTask = new ExamImageUploaderAsyncTask();
 			this.examImageUploaderAsyncTask.execute(new Object[] {
 					ExamImageUploaderAsyncTask.UPLOAD_STUDENT_EXAM_IMAGE,
-					this.graderSession, studentExamImageBitMap,
-					Integer.valueOf(position + 1) });
+					this.webServiceURL, this.graderSession,
+					studentExamImageBitMap, Integer.valueOf(position + 1) });
 
 			try {
 				returnedValue = this.examImageUploaderAsyncTask.get();
