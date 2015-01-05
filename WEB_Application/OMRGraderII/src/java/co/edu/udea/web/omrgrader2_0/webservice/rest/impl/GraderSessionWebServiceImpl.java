@@ -62,11 +62,17 @@ public class GraderSessionWebServiceImpl implements IGraderSessionWebService {
                 buildStorageDirectoryPathName(graderSession);
 
         try {
-            graderSession.setAvailable(false);
-            this.graderSessionDAO.save(graderSession);
+            GraderSession gs = this.graderSessionDAO.find(graderSession.getGraderSessionPK());
+            if (gs == null) {
+                graderSession.setAvailable(false);
+                this.graderSessionDAO.save(graderSession);
 
-            this.imageFileManagement.createStorageDirectory(
-                    String.valueOf(storageDirectoryPathName));
+                this.imageFileManagement.createStorageDirectory(
+                        String.valueOf(storageDirectoryPathName));
+            } else {
+
+                return (Response.status(Response.Status.CONFLICT).build());
+            }
         } catch (OMRGraderProcessException | OMRGraderPersistenceException e) {
             Logger.getLogger(TAG).log(Level.SEVERE,
                     "Error while the Web Service was trying to create a new Grader Session.",
