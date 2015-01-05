@@ -88,7 +88,7 @@ public class GraderSessionThread extends Thread {
                         referenceExamImageFiles[0].getAbsolutePath());
                 exam = this.oMRGraderProcess.executeExamProcessing(
                         this.oMRGraderProcess.getOnlyLogosTemplateExam(), exam,
-                        true, null, null, null, null);
+                        0, null, null, null, null);
                 exam.setGrayScaledImageMat(null);
                 exam.setImageDescriptorsMat(null);
                 exam.setImageMatOfKeyPoints(null);
@@ -102,7 +102,9 @@ public class GraderSessionThread extends Thread {
                             studentExamImageFile.getAbsolutePath());
                     exam = this.oMRGraderProcess.executeExamProcessing(
                             this.oMRGraderProcess.getOnlyLogosTemplateExam(),
-                            exam, false, null, null, null, null);
+                            exam,
+                            referenceExamResult.getExam().getQuestionsItemsList().size(),
+                            null, null, null, null);
                     exam.setGrayScaledImageMat(null);
                     exam.setImageDescriptorsMat(null);
                     exam.setImageMatOfKeyPoints(null);

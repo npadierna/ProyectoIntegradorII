@@ -65,9 +65,10 @@ public final class ExamProcess {
     }
 
     public List<QuestionItem> findAnswers(Mat examImageMat,
-            List<Point> bubblesCentersPointsList) {
+            List<Point> bubblesCentersPointsList, int questionsItemsAmount) {
         List<QuestionItem> questionsItemsList = new ArrayList<>();
         StringBuilder stringBuilder = new StringBuilder();
+        boolean[] invalidAnswers = new boolean[BUBBLE_OPTIONS_AMOUNT];
 
         boolean[] answers;
         int[] pixelCounter;
@@ -87,10 +88,19 @@ public final class ExamProcess {
                 answers[j] = pixelCounter[j] >= SELECTED_BUBBLE_THRESH;
             }
 
-            questionsItemsList.add(new QuestionItem((short) (i + 1), answers));
+            if (Arrays.equals(invalidAnswers, answers)) {
+                if ((questionsItemsAmount <= 0)
+                        || (questionsItemsList.size() == questionsItemsAmount)) {
+                    break;
+                } else {
+                    questionsItemsList.add(new QuestionItem((short) (i + 1), answers));
+                }
+            } else {
+                questionsItemsList.add(new QuestionItem((short) (i + 1), answers));
 
-            // TODO: Eliminar esta instrucción.
-            System.out.println(stringBuilder);
+                // TODO: Eliminar esta instrucción.
+                System.out.println(stringBuilder);
+            }
         }
 
         return (questionsItemsList);

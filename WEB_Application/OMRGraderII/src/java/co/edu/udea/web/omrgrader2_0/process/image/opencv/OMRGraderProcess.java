@@ -57,7 +57,7 @@ public final class OMRGraderProcess {
         FEATURE_DETECTOR = FeatureDetector
                 .create(FeatureDetector.SURF);
     }
-    @Autowired
+    @Autowired()
     private QRManager qRManager;
     private ExamProcess examProcess;
     public Exam onlyLogosTemplateExam;
@@ -93,7 +93,7 @@ public final class OMRGraderProcess {
     }
 
     public Exam executeExamProcessing(Exam onlyLogosTemplate,
-            Exam exam, boolean referenceExam,
+            Exam exam, int questionsItemsAmount,
             String processedImageDestinationDirectoryPath,
             String blackWhiteImageDestinationDirectoryPath,
             String imageProcessedName, String imageBlackWhiteName) {
@@ -187,8 +187,16 @@ public final class OMRGraderProcess {
         ImageProcessUtil.drawTransferredQRSquere(img_matches, new Scalar(255,
                 0, 0), qr_corners_solu, corners_template);
 
+        List<Point> bubblesCentersPoints;
+        if (questionsItemsAmount > 0) {
+            bubblesCentersPoints = ExamProcess.BUBBLES_CENTERS_POINTS.subList(0,
+                    questionsItemsAmount * ExamProcess.BUBBLE_OPTIONS_AMOUNT);
+        } else {
+            bubblesCentersPoints = ExamProcess.BUBBLES_CENTERS_POINTS;
+        }
+
         Mat center_locations_mat = Converters
-                .vector_Point2d_to_Mat(ExamProcess.BUBBLES_CENTERS_POINTS);
+                .vector_Point2d_to_Mat(bubblesCentersPoints);
         Mat center_locations_transfered = new Mat();
         Core.perspectiveTransform(center_locations_mat,
                 center_locations_transfered, H);
@@ -218,9 +226,9 @@ public final class OMRGraderProcess {
         }
 
         exam.setQuestionsItemsList(this.examProcess.findAnswers(
-                blackAndWhiteImage, center_locations_t));
+                blackAndWhiteImage, center_locations_t, questionsItemsAmount));
 
-        if (!referenceExam) {
+        if (questionsItemsAmount > 0) {
             exam.setStudent(this.executeQRCordeProcessing(exam,
                     qr_corners_solu));
         }
@@ -229,7 +237,7 @@ public final class OMRGraderProcess {
     }
 
     public Exam executeExamProcessing(String refer_path,
-            String solu_path, boolean referenceExam,
+            String solu_path, int questionsItemsAmount,
             String processedImageDestinationDirectoryPath,
             String blackWhiteImageDestinationDirectoryPath,
             String imageProcessedName, String imageBlackWhiteName) {
@@ -335,8 +343,16 @@ public final class OMRGraderProcess {
         ImageProcessUtil.drawTransferredQRSquere(img_matches, new Scalar(255,
                 0, 0), qr_corners_solu, corners_template);
 
+                List<Point> bubblesCentersPoints;
+        if (questionsItemsAmount > 0) {
+            bubblesCentersPoints = ExamProcess.BUBBLES_CENTERS_POINTS.subList(0,
+                    questionsItemsAmount * ExamProcess.BUBBLE_OPTIONS_AMOUNT);
+        } else {
+            bubblesCentersPoints = ExamProcess.BUBBLES_CENTERS_POINTS;
+        }
+
         Mat center_locations_mat = Converters
-                .vector_Point2d_to_Mat(ExamProcess.BUBBLES_CENTERS_POINTS);
+                .vector_Point2d_to_Mat(bubblesCentersPoints);
         Mat center_locations_transfered = new Mat();
         Core.perspectiveTransform(center_locations_mat,
                 center_locations_transfered, H);
@@ -367,9 +383,9 @@ public final class OMRGraderProcess {
         Exam exam = new Exam(solu_path, image_solu, keyPoints_solu,
                 descriptors_solu);
         exam.setQuestionsItemsList(this.examProcess.findAnswers(
-                blackAndWhiteImage, center_locations_t));
+                blackAndWhiteImage, center_locations_t, questionsItemsAmount));
 
-        if (!referenceExam) {
+        if (questionsItemsAmount > 0) {
             exam.setStudent(this.executeQRCordeProcessing(exam,
                     qr_corners_solu));
         }

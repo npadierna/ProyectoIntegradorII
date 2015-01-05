@@ -53,11 +53,13 @@ public class MainTests {
         timeStart = System.currentTimeMillis();
         System.load("/home/pivb/Software/Libraries/OpenCV2.4.8/opencv_java248.so");
 
-        testDataSheetGeneratorAndEmaiSender();
+//        testDataSheetGeneratorAndEmaiSender();
+        testOMR();
+        
 
         timeEnd = System.currentTimeMillis();
         fullTime = timeEnd - timeStart;
-        System.out.println("Time Processing: " + fullTime + "milliseconds.");
+        System.out.println("Time Processing: " + fullTime + " milliseconds.");
     }
 
     /* 
@@ -105,20 +107,20 @@ public class MainTests {
         oMRGraderProcess
                 .executeExamProcessing(MainTests.class.getResource(File.separator.concat(
                 ONLY_LOGOS_TEMPLATE_IMAGE_NAME)).getPath(),
-                examAbsolutePath, false,
-                "/home/pivb/Imágenes/UdeA/",
-                "/home/pivb/Imágenes/UdeA/",
-                "examForProcessing-Processed.png",
-                "examForProcessing-BlackAndWhite.png");
-
-        Exam referenceExam = oMRGraderProcess.getOnlyLogosTemplateExam();
-        Exam studentExam = oMRGraderProcess.extractFeatures(
-                examAbsolutePath);
-        oMRGraderProcess.executeExamProcessing(referenceExam, studentExam, false,
+                examAbsolutePath, 30,
                 "/home/pivb/Imágenes/UdeA/",
                 "/home/pivb/Imágenes/UdeA/",
                 "examForProcessing-Processed_(1).png",
                 "examForProcessing-BlackAndWhite_(1).png");
+
+        Exam referenceExam = oMRGraderProcess.getOnlyLogosTemplateExam();
+        Exam studentExam = oMRGraderProcess.extractFeatures(
+                examAbsolutePath);
+        oMRGraderProcess.executeExamProcessing(referenceExam, studentExam, 55,
+                "/home/pivb/Imágenes/UdeA/",
+                "/home/pivb/Imágenes/UdeA/",
+                "examForProcessing-Processed_(2).png",
+                "examForProcessing-BlackAndWhite_(2).png");
     }
 
     public static void testReadEmailProperties() throws OMRGraderEmailException {
