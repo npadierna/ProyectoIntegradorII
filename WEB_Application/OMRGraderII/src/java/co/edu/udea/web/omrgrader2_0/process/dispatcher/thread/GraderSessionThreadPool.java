@@ -3,6 +3,8 @@ package co.edu.udea.web.omrgrader2_0.process.dispatcher.thread;
 import co.edu.udea.web.omrgrader2_0.persistence.dao.IGraderSessionDAO;
 import co.edu.udea.web.omrgrader2_0.persistence.entities.GraderSession;
 import co.edu.udea.web.omrgrader2_0.process.directory.ImageFileManager;
+import co.edu.udea.web.omrgrader2_0.process.email.EmailSender;
+import co.edu.udea.web.omrgrader2_0.process.grade.ExamSessionComparator;
 import co.edu.udea.web.omrgrader2_0.process.image.opencv.OMRGraderProcess;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +25,10 @@ public final class GraderSessionThreadPool implements IThreadNotifier {
 
     public static final int THREAD_POOL_SIZE = 10;
     private static List<GraderSessionThread> threadPoolList;
+    @Autowired()
+    private EmailSender emailSender;
+    @Autowired()
+    private ExamSessionComparator examSessionComparator;
     @Autowired()
     private IGraderSessionDAO graderSessionDAO;
     @Autowired()
@@ -49,7 +55,8 @@ public final class GraderSessionThreadPool implements IThreadNotifier {
         if (index != -1) {
             graderSessionThread = new GraderSessionThread((long) index,
                     graderSession, this.oMRGraderProcess, this.graderSessionDAO,
-                    this.imageFileManagement, this);
+                    this.imageFileManagement, this.emailSender,
+                    this.examSessionComparator, this);
 
             threadPoolList.set(index, graderSessionThread);
         }

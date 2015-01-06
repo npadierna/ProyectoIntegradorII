@@ -1,5 +1,6 @@
-// TODO: Refactorizar moviendo para el paquete donde quede SheetFilInfo.
-package co.edu.udea.web.omrgrader2_0.process.image.model;
+package co.edu.udea.web.omrgrader2_0.process.email.report.model;
+
+import co.edu.udea.web.omrgrader2_0.process.image.model.Exam;
 
 /**
  *

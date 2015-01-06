@@ -1,15 +1,13 @@
 package co.edu.udea.web.omrgrader2_0.process.grade;
 
-import co.edu.udea.web.omrgrader2_0.process.email.report.FileSheetReport;
-import co.edu.udea.web.omrgrader2_0.process.image.model.ExamResult;
+import co.edu.udea.web.omrgrader2_0.process.email.report.model.ExamResult;
 import co.edu.udea.web.omrgrader2_0.process.image.model.QuestionItem;
-import co.edu.udea.web.omrgrader2_0.process.image.model.SheetFileInformation;
+import co.edu.udea.web.omrgrader2_0.process.email.report.model.FileSheetInformation;
 import co.edu.udea.web.omrgrader2_0.process.image.opencv.ExamProcess;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import org.apache.poi.hssf.record.FileSharingRecord;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.WebApplicationContext;
@@ -28,22 +26,23 @@ public class ExamSessionComparator {
         super();
     }
 
-    public void score(SheetFileInformation sheetFileInformation) {
+    public void score(FileSheetInformation fileSheetInformation) {
         DecimalFormat decimalFormat = new DecimalFormat(
-                sheetFileInformation.getPrecisionPattern());
+                fileSheetInformation.getPrecisionPattern());
 
         int minimumQuestionAmountToPass = (int) ((Double.parseDouble(
-                decimalFormat.format(sheetFileInformation.
-                getGraderSession().getApprovalPercentage()).replace(',', '.')))
-                * sheetFileInformation.getReferenceExam().getExam().
+                decimalFormat.format(fileSheetInformation.
+                getGraderSession().getApprovalPercentage() / 100.0F).
+                replace(',', '.')))
+                * fileSheetInformation.getReferenceExam().getExam().
                 getQuestionsItemsList().size());
-        int questionAmount = sheetFileInformation.
+        int questionAmount = fileSheetInformation.
                 getReferenceExam().getExam().getQuestionsItemsList().size();
 
         int amountStudentPassed = 0;
-        for (ExamResult examResult : sheetFileInformation.
+        for (ExamResult examResult : fileSheetInformation.
                 getStudentsExamsResultsList()) {
-            List<Boolean> scoreList = this.compareAnswers(sheetFileInformation.
+            List<Boolean> scoreList = this.compareAnswers(fileSheetInformation.
                     getReferenceExam().getExam().getQuestionsItemsList(),
                     examResult.getExam().getQuestionsItemsList());
 
@@ -55,12 +54,12 @@ public class ExamSessionComparator {
             }
 
             double score = Double.parseDouble(decimalFormat.format(((Double.
-                    parseDouble(decimalFormat.format(sheetFileInformation.
+                    parseDouble(decimalFormat.format(fileSheetInformation.
                     getGraderSession().getMaximumGrade()).replace(',', '.')))
                     * amount) / questionAmount).replace(',', '.'));
 
             if (amount >= minimumQuestionAmountToPass
-                    && score >= sheetFileInformation.getMinimumScoreToPass()) {
+                    && score >= fileSheetInformation.getMinimumScoreToPass()) {
                 amountStudentPassed++;
                 examResult.setPassed(true);
             }
@@ -69,7 +68,7 @@ public class ExamSessionComparator {
             examResult.setScore(score);
         }
 
-        sheetFileInformation.setStudentAmountPassed(amountStudentPassed);
+        fileSheetInformation.setStudentAmountPassed(amountStudentPassed);
     }
 
     private List<Boolean> compareAnswers(List<QuestionItem> correctAnswers,
@@ -81,13 +80,8 @@ public class ExamSessionComparator {
             return (null);
         }
 
-        boolean[] invalidAnswer = new boolean[ExamProcess.BUBBLE_OPTIONS_AMOUNT];
         List<Boolean> scoreList = new ArrayList<>();
         for (int i = 0; i < correctAnswers.size(); i++) {
-            if (Arrays.equals(correctAnswers.get(i).getChoises(), invalidAnswer)) {
-                break;
-            }
-
             scoreList.add(correctAnswers.get(i).equals(studentAnswers.get(i)));
         }
 

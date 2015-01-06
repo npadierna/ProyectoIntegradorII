@@ -1,8 +1,8 @@
 package co.edu.udea.web.omrgrader2_0.process.email.report;
 
+import co.edu.udea.web.omrgrader2_0.process.email.report.model.FileSheetInformation;
 import co.edu.udea.web.omrgrader2_0.process.exception.OMRGraderProcessException;
-import co.edu.udea.web.omrgrader2_0.process.image.model.ExamResult;
-import co.edu.udea.web.omrgrader2_0.process.image.model.SheetFileInformation;
+import co.edu.udea.web.omrgrader2_0.process.email.report.model.ExamResult;
 import co.edu.udea.web.omrgrader2_0.util.text.TextUtil;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -42,7 +42,7 @@ public class FileSheetReport {
         super();
     }
 
-    public String createDataSheet(String path, SheetFileInformation info)
+    public String createDataSheet(String path, FileSheetInformation info)
             throws OMRGraderProcessException {
         XSSFWorkbook workbook = new XSSFWorkbook();
         this.setPropertiesToWorkbook(workbook, info.getGraderSession().
@@ -106,7 +106,7 @@ public class FileSheetReport {
         sheet.setColumnWidth(4, this.COLUMN_WIDTH_20);
     }
 
-    private void createExamInfoHeaders(SheetFileInformation info, Sheet sheet,
+    private void createExamInfoHeaders(FileSheetInformation info, Sheet sheet,
             XSSFWorkbook workbook) {
         Row row = sheet.createRow((short) 0);
         Cell cell = row.createCell((short) 0);
@@ -201,7 +201,7 @@ public class FileSheetReport {
                 getPrecisionPattern()).format(Double.parseDouble(
                 new DecimalFormat(info.getPrecisionPattern()).format(
                 info.getGraderSession().getApprovalPercentage()).replace(",",
-                ".")) * 100).replace(",", "."));
+                "."))).replace(",", "."));
         cell.setCellValue(d + "%");
     }
 

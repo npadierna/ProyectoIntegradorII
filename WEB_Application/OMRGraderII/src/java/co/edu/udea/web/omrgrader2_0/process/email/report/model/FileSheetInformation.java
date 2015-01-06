@@ -1,8 +1,6 @@
-// TODO: Refactorizar moviendo para algún lado.
-package co.edu.udea.web.omrgrader2_0.process.image.model;
+package co.edu.udea.web.omrgrader2_0.process.email.report.model;
 
 import co.edu.udea.web.omrgrader2_0.persistence.entities.GraderSession;
-import co.edu.udea.web.omrgrader2_0.process.email.report.FileSheetReport;
 import co.edu.udea.web.omrgrader2_0.util.text.TextUtil;
 import java.text.DecimalFormat;
 import java.util.List;
@@ -13,7 +11,7 @@ import java.util.List;
  * @author Miguel &Aacute;ngel Ossa Ruiz
  * @author Neiber Padierna P&eacute;rez
  */
-public class SheetFileInformation {
+public class FileSheetInformation {
 
     private GraderSession graderSession;
     private List<ExamResult> studentsExamsResultsList;
@@ -21,7 +19,7 @@ public class SheetFileInformation {
     private int studentAmountPassed;
     private String precisionPattern;
 
-    public SheetFileInformation(GraderSession graderSession,
+    public FileSheetInformation(GraderSession graderSession,
             ExamResult refereExamResult,
             List<ExamResult> studentsExamsResultsList) {
         this.graderSession = graderSession;
@@ -91,7 +89,7 @@ public class SheetFileInformation {
             String num = df.format((Double.parseDouble(df.format(
                     this.getGraderSession().getMaximumGrade()).
                     replace(',', '.'))) * (Double.parseDouble(df.format(
-                    this.getGraderSession().getApprovalPercentage()).
+                    this.getGraderSession().getApprovalPercentage() / 100.0).
                     replace(',', '.')))).replace(',', '.');
 
             return (Double.parseDouble(num));
@@ -118,7 +116,7 @@ public class SheetFileInformation {
             DecimalFormat df = new DecimalFormat(this.getPrecisionPattern());
 
             return (int) ((Double.parseDouble(df.format(this.getGraderSession().
-                    getApprovalPercentage()).replace(',', '.')))
+                    getApprovalPercentage() / 100.0).replace(',', '.')))
                     * this.getReferenceExam().getExam().getQuestionsItemsList().
                     size());
         }

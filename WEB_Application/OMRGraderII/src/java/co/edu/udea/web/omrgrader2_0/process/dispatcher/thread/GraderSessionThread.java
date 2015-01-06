@@ -4,10 +4,14 @@ import co.edu.udea.web.omrgrader2_0.persistence.dao.IGraderSessionDAO;
 import co.edu.udea.web.omrgrader2_0.persistence.entities.GraderSession;
 import co.edu.udea.web.omrgrader2_0.persistence.exception.OMRGraderPersistenceException;
 import co.edu.udea.web.omrgrader2_0.process.directory.ImageFileManager;
+import co.edu.udea.web.omrgrader2_0.process.email.EmailSender;
+import co.edu.udea.web.omrgrader2_0.process.email.exception.OMRGraderEmailException;
+import co.edu.udea.web.omrgrader2_0.process.email.report.FileSheetReport;
 import co.edu.udea.web.omrgrader2_0.process.exception.OMRGraderProcessException;
+import co.edu.udea.web.omrgrader2_0.process.grade.ExamSessionComparator;
 import co.edu.udea.web.omrgrader2_0.process.image.model.Exam;
-import co.edu.udea.web.omrgrader2_0.process.image.model.ExamResult;
-import co.edu.udea.web.omrgrader2_0.process.image.model.SheetFileInformation;
+import co.edu.udea.web.omrgrader2_0.process.email.report.model.ExamResult;
+import co.edu.udea.web.omrgrader2_0.process.email.report.model.FileSheetInformation;
 import co.edu.udea.web.omrgrader2_0.process.image.opencv.OMRGraderProcess;
 import java.io.File;
 import java.util.ArrayList;
@@ -24,6 +28,8 @@ import java.util.logging.Logger;
 public class GraderSessionThread extends Thread {
 
     private static final String TAG = GraderSessionThread.class.getSimpleName();
+    private EmailSender emailSender;
+    private ExamSessionComparator examSessionComparator;
     private IGraderSessionDAO graderSessionDAO;
     private IThreadNotifier threadNotifier;
     private ImageFileManager imageFileManagement;
@@ -35,12 +41,16 @@ public class GraderSessionThread extends Thread {
             OMRGraderProcess oMRGraderProcess,
             IGraderSessionDAO graderSessionDAO,
             ImageFileManager imageFileManagement,
+            EmailSender emailSender,
+            ExamSessionComparator examSessionComparator,
             IThreadNotifier threadNotifier) {
         this.key = key;
         this.graderSession = graderSession;
         this.oMRGraderProcess = oMRGraderProcess;
         this.graderSessionDAO = graderSessionDAO;
         this.imageFileManagement = imageFileManagement;
+        this.emailSender = emailSender;
+        this.examSessionComparator = examSessionComparator;
         this.threadNotifier = threadNotifier;
     }
 
@@ -69,6 +79,7 @@ public class GraderSessionThread extends Thread {
 
         long storageDirectoryPathName = this.imageFileManagement.
                 buildStorageDirectoryPathName(this.getGraderSession());
+        FileSheetReport fileSheetReport = new FileSheetReport();
 
         try {
             File[] referenceExamImageFiles = new File(this.imageFileManagement.
@@ -96,7 +107,6 @@ public class GraderSessionThread extends Thread {
                 referenceExamResult = new ExamResult(exam);
                 studentsExamsResultsList = new ArrayList<>(studentExamsImagesFiles.length);
 
-                ExamResult examResult;
                 for (File studentExamImageFile : studentExamsImagesFiles) {
                     exam = this.oMRGraderProcess.extractFeatures(
                             studentExamImageFile.getAbsolutePath());
@@ -109,29 +119,67 @@ public class GraderSessionThread extends Thread {
                     exam.setImageDescriptorsMat(null);
                     exam.setImageMatOfKeyPoints(null);
 
-                    examResult = new ExamResult(exam);
-
-                    studentsExamsResultsList.add(examResult);
+                    studentsExamsResultsList.add(new ExamResult(exam));
                 }
 
-                SheetFileInformation sheetFileInformation = new SheetFileInformation(
+                FileSheetInformation fileSheetInformation = new FileSheetInformation(
                         this.graderSession, referenceExamResult,
                         studentsExamsResultsList);
-                // TODO: Proceder a crear el archivo con la información y a
-                // enviar el correo electrónico.
+                String fileXSLXPath;
+
+                this.examSessionComparator.score(fileSheetInformation);
+
+                try {
+                    fileXSLXPath = fileSheetReport.createDataSheet(
+                            this.imageFileManagement.
+                            buildUploadedFileDirectoryPath(String.valueOf(
+                            storageDirectoryPathName), false), fileSheetInformation);
+                } catch (OMRGraderProcessException e) {
+                    try {
+                        this.emailSender.sendEmail(this.graderSession.getGraderSessionPK().getElectronicMail(),
+                                "Error", "Ha surgido un error mientras se estaba generando el Reporte de Calificaciones.");
+                    } catch (OMRGraderEmailException ex) {
+                        Logger.getLogger(TAG).log(Level.SEVERE,
+                                "Error while the applications was sending the Error Reporting Email.",
+                                e);
+                    }
+                    this.resumeGranderSession(storageDirectoryPathName);
+                    this.executeNotification();
+
+                    return;
+                }
+
+                try {
+                    this.emailSender.sendEMail(this.graderSession.
+                            getGraderSessionPK().getElectronicMail(),
+                            fileXSLXPath,
+                            fileSheetInformation.getGraderSession().
+                            getGraderSessionPK().getSessionName());
+                } catch (OMRGraderEmailException e) {
+                    Logger.getLogger(TAG).log(Level.SEVERE,
+                            "Error while the applications was sending the Reporting Email.",
+                            e);
+                }
+
+                this.resumeGranderSession(storageDirectoryPathName);
+                this.executeNotification();
             }
-
-            boolean eliminationResult = this.imageFileManagement
-                    .deleteStorageDirectory(String.valueOf(
-                    storageDirectoryPathName));
-            this.graderSessionDAO.delete(this.getGraderSession()
-                    .getGraderSessionPK());
-
-            this.executeNotification();
         } catch (OMRGraderProcessException | OMRGraderPersistenceException e) {
             Logger.getLogger(TAG).log(Level.SEVERE,
                     "Error while the Grader Session Thread was trying to manage a Grader Session.",
                     e);
+        }
+    }
+
+    private void resumeGranderSession(long storageDirectoryPathName)
+            throws OMRGraderPersistenceException {
+        try {
+            this.imageFileManagement.deleteStorageDirectory(String.valueOf(
+                    storageDirectoryPathName));
+        } catch (OMRGraderProcessException ex) {
+        } finally {
+            this.graderSessionDAO.delete(this.getGraderSession()
+                    .getGraderSessionPK());
         }
     }
 
