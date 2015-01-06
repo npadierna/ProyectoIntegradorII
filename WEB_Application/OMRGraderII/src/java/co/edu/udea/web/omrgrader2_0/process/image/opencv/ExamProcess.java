@@ -26,10 +26,11 @@ public final class ExamProcess {
             166, 195, 224, 253, 376, 405, 434, 463, 492, 614, 643, 672, 701,
             730);
     public static final int BUBBLE_OPTIONS_AMOUNT = 5;
-    public static final int BUBBLE_OPTION_RADIUS_LENGTH = 10;
+    public static final int BUBBLE_OPTION_RADIUS_LENGTH = 7;
     public static final int QUESTION_ITEMS_COLUMNS_AMOUNT = 3;
     public static final int TOTAL_QUESTION_ITEMS = 60;
-    public static final int SELECTED_BUBBLE_THRESH = 290;
+    public static final int SELECTED_BUBBLE_THRESH = (int) Math.floor(Math.PI
+            * Math.pow(BUBBLE_OPTION_RADIUS_LENGTH, 2.0) * 0.60);
     public static final List<Point> BUBBLES_CENTERS_POINTS;
     public static final List<Point> QR_CORNERS_POINTS;
 

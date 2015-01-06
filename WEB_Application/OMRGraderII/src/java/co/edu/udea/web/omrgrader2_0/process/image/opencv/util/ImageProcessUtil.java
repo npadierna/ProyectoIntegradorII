@@ -18,6 +18,8 @@ import org.opencv.imgproc.Imgproc;
  */
 public final class ImageProcessUtil {
 
+    public static final int THRESHOLD = 95;
+
     private ImageProcessUtil() {
         super();
     }
@@ -31,8 +33,8 @@ public final class ImageProcessUtil {
                     new Size(3, 3), 0, 0);
         }
 
-        double thresh = Imgproc.threshold(imageInGrayMat, imageInGrayMat, 0,
-                255, Imgproc.THRESH_BINARY | Imgproc.THRESH_OTSU);
+        double thresh = Imgproc.threshold(imageInGrayMat, imageInGrayMat,
+                255 - THRESHOLD, 255, Imgproc.THRESH_BINARY);
         Imgproc.threshold(imageInGrayMat, imageInGrayMat, thresh, 255,
                 Imgproc.THRESH_BINARY_INV);
 
@@ -87,7 +89,7 @@ public final class ImageProcessUtil {
                 transferredCornersPoints.get(0).y), lineColor, 4);
     }
 
-    public static void drawTransferredTemplateSquare(Mat image, 
+    public static void drawTransferredTemplateSquare(Mat image,
             Scalar lineColor, List<Point> solutionCornersPoints,
             List<Point> templateCornersPoints) {
         Core.line(image, new Point(solutionCornersPoints.get(0).x

@@ -206,7 +206,7 @@ public final class OMRGraderProcess {
 
         ImageProcessUtil.drawTransferredBubbles(img_matches,
                 center_locations_t, corners_template, new Scalar(0, 0, 255), 2,
-                11);
+                ExamProcess.BUBBLE_OPTION_RADIUS_LENGTH);
 
         if (this.checkDirectoryPathName(processedImageDestinationDirectoryPath)
                 && (this.checkImageName(imageProcessedName))) {
@@ -343,7 +343,7 @@ public final class OMRGraderProcess {
         ImageProcessUtil.drawTransferredQRSquere(img_matches, new Scalar(255,
                 0, 0), qr_corners_solu, corners_template);
 
-                List<Point> bubblesCentersPoints;
+        List<Point> bubblesCentersPoints;
         if (questionsItemsAmount > 0) {
             bubblesCentersPoints = ExamProcess.BUBBLES_CENTERS_POINTS.subList(0,
                     questionsItemsAmount * ExamProcess.BUBBLE_OPTIONS_AMOUNT);
@@ -362,7 +362,7 @@ public final class OMRGraderProcess {
 
         ImageProcessUtil.drawTransferredBubbles(img_matches,
                 center_locations_t, corners_template, new Scalar(0, 0, 255), 2,
-                11);
+                ExamProcess.BUBBLE_OPTION_RADIUS_LENGTH);
         if (this.checkDirectoryPathName(processedImageDestinationDirectoryPath)
                 && (this.checkImageName(imageProcessedName))) {
             ImageProcessUtil.writeImageFile(
