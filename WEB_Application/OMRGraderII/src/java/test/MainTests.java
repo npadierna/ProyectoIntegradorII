@@ -7,10 +7,10 @@ import co.edu.udea.web.omrgrader2_0.process.email.exception.OMRGraderEmailExcept
 import co.edu.udea.web.omrgrader2_0.process.email.report.FileSheetReport;
 import co.edu.udea.web.omrgrader2_0.process.exception.OMRGraderProcessException;
 import co.edu.udea.web.omrgrader2_0.process.grade.ExamSessionComparator;
-import co.edu.udea.web.omrgrader2_0.process.image.model.ExamResult;
+import co.edu.udea.web.omrgrader2_0.process.email.report.model.ExamResult;
 import co.edu.udea.web.omrgrader2_0.process.image.model.Exam;
 import co.edu.udea.web.omrgrader2_0.process.image.model.QuestionItem;
-import co.edu.udea.web.omrgrader2_0.process.image.model.SheetFileInformation;
+import co.edu.udea.web.omrgrader2_0.process.email.report.model.FileSheetInformation;
 import co.edu.udea.web.omrgrader2_0.process.image.model.Student;
 import co.edu.udea.web.omrgrader2_0.process.image.opencv.OMRGraderProcess;
 import static co.edu.udea.web.omrgrader2_0.process.image.opencv.OMRGraderProcess.ONLY_LOGOS_TEMPLATE_IMAGE_NAME;
@@ -56,7 +56,6 @@ public class MainTests {
 //        testDataSheetGeneratorAndEmaiSender();
         testOMR();
         
-
         timeEnd = System.currentTimeMillis();
         fullTime = timeEnd - timeStart;
         System.out.println("Time Processing: " + fullTime + " milliseconds.");
@@ -102,21 +101,21 @@ public class MainTests {
         OMRGraderProcess oMRGraderProcess = new OMRGraderProcess();
         oMRGraderProcess.initialize();
 
-        String examAbsolutePath = "/home/pivb/Imágenes/UdeA/Foto_(1).jpg";
+        String examAbsolutePath = "/home/pivb/Imágenes/UdeA/Foto_Nueva_(10).jpg";
 
-        oMRGraderProcess
-                .executeExamProcessing(MainTests.class.getResource(File.separator.concat(
-                ONLY_LOGOS_TEMPLATE_IMAGE_NAME)).getPath(),
-                examAbsolutePath, 30,
-                "/home/pivb/Imágenes/UdeA/",
-                "/home/pivb/Imágenes/UdeA/",
-                "examForProcessing-Processed_(1).png",
-                "examForProcessing-BlackAndWhite_(1).png");
+//        oMRGraderProcess
+//                .executeExamProcessing(MainTests.class.getResource(File.separator.concat(
+//                ONLY_LOGOS_TEMPLATE_IMAGE_NAME)).getPath(),
+//                examAbsolutePath, 0,
+//                "/home/pivb/Imágenes/UdeA/",
+//                "/home/pivb/Imágenes/UdeA/",
+//                "examForProcessing-Processed_(1).png",
+//                "examForProcessing-BlackAndWhite_(1).png");
 
         Exam referenceExam = oMRGraderProcess.getOnlyLogosTemplateExam();
         Exam studentExam = oMRGraderProcess.extractFeatures(
                 examAbsolutePath);
-        oMRGraderProcess.executeExamProcessing(referenceExam, studentExam, 55,
+        oMRGraderProcess.executeExamProcessing(referenceExam, studentExam, 60,
                 "/home/pivb/Imágenes/UdeA/",
                 "/home/pivb/Imágenes/UdeA/",
                 "examForProcessing-Processed_(2).png",
@@ -256,13 +255,13 @@ public class MainTests {
         exam.setQuestionsItemsList(answers);
         answerStudents.add(new ExamResult(exam));
 
-        float percentage = 60f / 100f;
+        float percentage = 60f;
         GraderSession gs = new GraderSession(
-                new GraderSessionPK("anderssongarciasotelo@gmail.com", "Examen I Prueba"));
+                new GraderSessionPK("npadierna@gmail.com", "Examen I Prueba"));
         gs.setApprovalPercentage(percentage);
         gs.setDecimalPrecision("2");
         gs.setMaximumGrade(5f);
-        SheetFileInformation sfi = new SheetFileInformation(gs, referenceExam, answerStudents);
+        FileSheetInformation sfi = new FileSheetInformation(gs, referenceExam, answerStudents);
         ExamSessionComparator esc = new ExamSessionComparator();
         esc.score(sfi);
 
