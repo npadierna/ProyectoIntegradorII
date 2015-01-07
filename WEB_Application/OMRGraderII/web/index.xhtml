@@ -1,45 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:p="http://primefaces.org/ui">
-    <h:head>
-        <title>#{text.application_title}</title>
-    </h:head>
-    <f:view locale="#{facesContext.externalContext.requestLocale}" />
-    <h:body>
-        <center>
-            <p:panel id="appInfo" header="#{text.application_name}" style="width: 90%">
-                <p:graphicImage width="200" height="262" 
-                                url="./resources/images/udea.jpg" >
-                </p:graphicImage>
-                <br/>
-                <h:panelGrid columns="1" cellpadding="10">
-                    <h:panelGrid columns="2" cellpadding="30" style="width: 100%">
-                        <p:fieldset legend="#{text.develop_by}" style="margin-bottom:20px">
-                            <h:panelGrid columns="1" cellpadding="5">
-                                <ul style="list-style-type:square">
-                                    <li>#{text.full_name_andersson}</li>
-                                    <li>#{text.full_name_miguel}</li>
-                                    <li>#{text.full_name_neiber}</li>
-                                    <li>#{text.full_name_juanfranco}</li>
-                                </ul>
-                            </h:panelGrid>
-                        </p:fieldset>
-                        <p:fieldset legend="#{text.project_goal_title}" style="margin-bottom:20px">
-                            <h:panelGrid columns="1" cellpadding="5">
-                                <h:outputText value="#{text.project_goal_text}" />
-                            </h:panelGrid>
-                        </p:fieldset>
-                    </h:panelGrid>
-                    <p:fieldset legend="#{text.step_by_step_title}" style="margin-bottom:20px">
-                        <h:panelGrid columns="1" cellpadding="5">
-                            <h:outputText value="#{text.step_by_step_text}" />
-                        </h:panelGrid>
-                    </p:fieldset>
-                </h:panelGrid>
-            </p:panel>
-        </center>
-    </h:body>
-</html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                template="./templates/mainTemplate.xhtml">
+    <ui:define name="content">
+        <f:view>
+            <div id="index">
+                <h2>Oelo</h2>
+                <p>Luismi</p>
+            </div>
+        </f:view>
+    </ui:define>
+</ui:composition>
