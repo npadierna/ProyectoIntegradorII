@@ -8,45 +8,13 @@
                 xmlns:p="http://primefaces.org/ui">
     <ui:insert name="header">
         <h1>#{text.application_name}</h1>
-        <center>
-            <p:panel id="appInfo" header="#{text.application_name}" style="width: 90%">
-                <p:graphicImage width="200" height="262" 
-                                url="./resources/images/udea.jpg" >
-                </p:graphicImage>
-                <br/>
-                <h:panelGrid columns="1" cellpadding="10">
-                    <h:panelGrid columns="2" cellpadding="30" style="width: 100%">
-                        <p:fieldset legend="#{text.develop_by}" style="margin-bottom:20px">
-                            <h:panelGrid columns="1" cellpadding="5">
-                                <ul style="list-style-type:square">
-                                    <li>#{text.full_name_andersson}</li>
-                                    <li>#{text.full_name_miguel}</li>
-                                    <li>#{text.full_name_neiber}</li>
-                                    <li>#{text.full_name_juanfranco}</li>
-                                </ul>
-                            </h:panelGrid>
-                        </p:fieldset>
-                        <p:fieldset legend="#{text.project_goal_title}" style="margin-bottom:20px">
-                            <h:panelGrid columns="1" cellpadding="5">
-                                <h:outputText value="#{text.project_goal_text}" />
-                            </h:panelGrid>
-                        </p:fieldset>
-                    </h:panelGrid>
-                    <p:fieldset legend="#{text.step_by_step_title}" style="margin-bottom:20px">
-                        <h:panelGrid columns="1" cellpadding="5">
-                            <h:outputText value="#{text.step_by_step_text}" />
-                        </h:panelGrid>
-                    </p:fieldset>
-                </h:panelGrid>
-            </p:panel>
-        </center>
-        <!--
-                <p:menubar>
-                    <p:menuitem value="Acerca de nosotros"></p:menuitem>
-                    <p:menuitem value="Acerca de la aplicacion"></p:menuitem>
-                    <p:menuitem value="Acerca del proyecto"></p:menuitem>
-                    <p:menuitem value="Manual de usuario"></p:menuitem>
-                </p:menubar>-->
-
+        <h:form id="menuBarForm">
+            <p:menubar>
+                <p:menuitem value="Acerca de nosotros"></p:menuitem>
+                <p:menuitem value="Acerca de la aplicacion"></p:menuitem>
+                <p:menuitem value="Acerca del proyecto"></p:menuitem>
+                <p:menuitem value="Manual de usuario"></p:menuitem>
+            </p:menubar
+        </h:form>
     </ui:insert>
 </ui:composition>
