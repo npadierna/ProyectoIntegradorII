@@ -2,12 +2,17 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:f="http://java.sun.com/jsf/core"
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:p="http://primefaces.org/ui"
-      xmlns:ui="http://java.sun.com/jsf/facelets">   
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">   
 
-    <h:body>
+    <f:view contentType="text/html">
+        <h:head>
+            <title>Main Template</title>
+            <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        </h:head>
+        <h:body>
             <div id="header">
                 <ui:include src="./header.xhtml" />
             </div>
@@ -22,6 +27,6 @@
             <div id="footer">
                 <ui:include src="./footer.xhtml" />
             </div>
-    </h:body>
-
+        </h:body>
+    </f:view>
 </html>
