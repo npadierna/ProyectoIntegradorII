@@ -4,6 +4,7 @@ import co.edu.udea.web.omrgrader2_0.process.exception.OMRGraderProcessException;
 import co.edu.udea.web.omrgrader2_0.process.image.opencv.util.ImageProcessUtil;
 import co.edu.udea.web.omrgrader2_0.process.image.model.Exam;
 import co.edu.udea.web.omrgrader2_0.process.image.model.Student;
+import co.edu.udea.web.omrgrader2_0.process.image.opencv.util.OpenCVLibraryLoader;
 import co.edu.udea.web.omrgrader2_0.process.qr.QRManager;
 import java.io.File;
 import java.util.ArrayList;
@@ -40,7 +41,7 @@ import org.springframework.web.context.WebApplicationContext;
  * @author Neiber Padierna P&eacute;rez
  */
 @Component()
-@DependsOn(value = {"openCVLibraryLoader"})
+@DependsOn(value = {OpenCVLibraryLoader.OPENCV_LIBRARY_LOADER_BEAN})
 @Scope(value = WebApplicationContext.SCOPE_APPLICATION)
 public final class OMRGraderProcess {
 
