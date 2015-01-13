@@ -58,10 +58,12 @@ public final class GraderSessionDispatcherThread extends Thread {
                         this.execute(graderSessionThread);
 
                         continue;
+                    } else {
+                        Thread.sleep(TIME_FOR_SLEEPING);
                     }
                 }
 
-                Thread.sleep(TIME_FOR_SLEEPING);
+                Thread.sleep(TIME_FOR_SLEEPING / 2);
             } catch (OMRGraderPersistenceException | InterruptedException e) {
                 Logger.getLogger(TAG).log(Level.SEVERE,
                         "Error while the OMRGrader Dispatcher was trying to manage a Grader Session.",
