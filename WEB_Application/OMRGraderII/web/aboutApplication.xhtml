@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:c="http://java.sun.com/jsp/jstl/core"
+                template="./templates/mainTemplate.xhtml">
+    <ui:define name="content">
+        <center>
+            <div style="width: 80%">
+                <f:view>
+                    <h2 style="font-family: Verdana;">#{text.aboutApplication_headerTitle}</h2>
+                    <div align="justify">
+                        <p style="font-family: Verdana;">
+                            <h:outputText style="font-size: 17px" escape="false"
+                                          value="#{text.aboutApplication_outputText_introduction_value}" />
+                        </p>
+                    </div>
+                    <br />
+                    <div align="justify">
+                        <p:tabView scrollable="true">
+                            <p:tab title="#{text.globals_webApplicationText}">
+                                <h:outputText style="font-family: Verdana;"
+                                              value="#{text.aboutApplication_outputText_introductionWebApplication_value}" />
+                                <br /><br />
+                                <p:panelGrid>                            
+                                    <f:facet name="header">
+                                        <b><center>#{text.aboutApplication_facetHeaderTechnologiesText}</center></b>
+                                    </f:facet>
+                                    <p:accordionPanel multiple="false" style="width: 100%;">
+                                        <p:tab title="#{text.aboutApplication_tab_javaJDKNameWAT_title}">
+                                            <h:outputText
+                                                value="#{text.aboutApplication_outputText_javaJDKDescriptionWAT_value}" />
+                                        </p:tab>
+                                        <p:tab title="#{text.aboutApplication_tab_netbeansIDENameWAT_title}">
+                                            <h:outputText 
+                                                value="#{text.aboutApplication_outputText_netbeansIDEDescriptionWAT_value}" />
+                                        </p:tab>
+                                        <p:tab title="#{text.aboutApplication_tab_javaMailNameWAT_title}">
+                                            <h:outputText 
+                                                value="#{text.aboutApplication_outputText_javaMailDescriptionWAT_value}" />
+                                        </p:tab>
+                                        <p:tab title="#{text.aboutApplication_tab_log4jNameWAT_title}">
+                                            <h:outputText 
+                                                value="#{text.aboutApplication_outputText_log4jDescriptionWAT_value}" />
+                                        </p:tab>
+                                        <p:tab title="#{text.aboutApplication_tab_primefacesThemesNameWAT_title}">
+                                            <h:outputText 
+                                                value="#{text.aboutApplication_outputText_primefacesThemesDescriptionWAT_value}" />
+                                        </p:tab>
+                                        <p:tab title="#{text.aboutApplication_tab_glassfishServerNameWAT_title}">
+                                            <h:outputText 
+                                                value="#{text.aboutApplication_outputText_glassfishServerDescriptionWAT_value}" />
+                                        </p:tab>
+                                        <p:tab title="#{text.aboutApplication_tab_mysqlServerNameWAT_title}">
+                                            <h:outputText 
+                                                value="#{text.aboutApplication_outputText_mysqlServerDescriptionWAT_value}" />
+                                        </p:tab>
+                                        <p:tab title="#{text.aboutApplication_tab_mysqlWorkbenchNameWAT_title}">
+                                            <h:outputText 
+                                                value="#{text.aboutApplication_outputText_mysqlWorkbenchDescriptionWAT_value}" />
+                                        </p:tab>
+                                        <p:tab title="#{text.aboutApplication_tab_linuxUbuntuNameWAT_title}">
+                                            <h:outputText 
+                                                value="#{text.aboutApplication_outputText_linuxUbuntuDescriptionWAT_value}" />
+                                        </p:tab>
+                                    </p:accordionPanel>
+                                </p:panelGrid>
+                                <br /><br />
+                                <p:panelGrid>
+                                    <f:facet name="header">
+                                        <b><center>#{text.aboutApplication_facetHeaderFrameworksText}</center></b>
+                                    </f:facet>
+                                    <p:accordionPanel multiple="false" style="width: 100%;">
+                                        <p:tab title="#{text.aboutApplication_tab_springMVCNameWAF_title}">
+                                            <h:outputText
+                                                value="#{text.aboutApplication_outputText_springMVCDescriptionWAF_value}" />
+                                        </p:tab>
+                                        <p:tab title="#{text.aboutApplication_tab_hibernateOMRNameWAF_title}">
+                                            <h:outputText
+                                                value="#{text.aboutApplication_outputText_hibernateOMRDescriptionWAF_value}" />
+                                        </p:tab>
+                                        <p:tab title="#{text.aboutApplication_tab_jsfNameWAF_title}">
+                                            <h:outputText
+                                                value="#{text.aboutApplication_outputText_jsfDescriptionWAF_value}" />
+                                        </p:tab>
+                                        <p:tab title="#{text.aboutApplication_tab_jerseyWSNameWAF_title}">
+                                            <h:outputText
+                                                value="#{text.aboutApplication_outputText_jerseyWSDescriptionWAF_value}" />
+                                        </p:tab>
+                                        <p:tab title="#{text.aboutApplication_tab_openCVNameWAF_title}">
+                                            <h:outputText
+                                                value="#{text.aboutApplication_outputText_openCVDescriptionWAF_value}" />
+                                        </p:tab>
+                                    </p:accordionPanel>
+                                </p:panelGrid>
+                            </p:tab>
+
+                            <br /><br />
+
+                            <p:tab title="#{text.globals_androidApplicationText}">
+                                <h:outputText style="font-family: Verdana;"
+                                              value="#{text.aboutApplication_outputText_introductionAndroidApplication_value}" />
+                                <br /><br />
+                                <p:panelGrid>                            
+                                    <f:facet name="header">
+                                        <b><center>#{text.aboutApplication_facetHeaderTechnologiesText}</center></b>
+                                    </f:facet>
+                                    <p:accordionPanel multiple="false" style="width: 100%;">
+                                        <p:tab title="#{text.aboutApplication_tab_eclipseADTNameAAT_title}">
+                                            <h:outputText
+                                                value="#{text.aboutApplication_outputText_eclipseADTDescriptionAAT_value}" />
+                                        </p:tab>
+                                        <p:tab title="#{text.aboutApplication_tab_javaJDKNameAAT_title}">
+                                            <h:outputText
+                                                value="#{text.aboutApplication_outputText_javaJDKDescriptionAAT_value}" />
+                                        </p:tab>
+                                        <p:tab title="#{text.aboutApplication_tab_androidNameAAT_title}">
+                                            <h:outputText
+                                                value="#{text.aboutApplication_outputText_androidDescriptionAAT_value}" />
+                                        </p:tab>
+                                        <p:tab title="#{text.aboutApplication_tab_apacheHttpComponentsClientNameAAT_title}">
+                                            <h:outputText
+                                                value="#{text.aboutApplication_outputText_apacheHttpComponentsClientDescriptionAAT_value}" />
+                                        </p:tab>
+                                    </p:accordionPanel>
+                                </p:panelGrid>
+                            </p:tab>        
+                        </p:tabView>
+                    </div>
+                </f:view>
+            </div>
+        </center>
+    </ui:define>
+</ui:composition>

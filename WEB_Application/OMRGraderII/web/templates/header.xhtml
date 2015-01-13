@@ -7,14 +7,41 @@
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui">
     <ui:insert name="header">
-        <h1>#{text.application_name}</h1>
-        <h:form id="menuBarForm">
-            <p:menubar>
-                <p:menuitem value="Acerca de nosotros"></p:menuitem>
-                <p:menuitem value="Acerca de la aplicacion"></p:menuitem>
-                <p:menuitem value="Acerca del proyecto"></p:menuitem>
-                <p:menuitem value="Manual de usuario"></p:menuitem>
-            </p:menubar
-        </h:form>
+        <center>
+            <div align="center" style="width: 80%">
+                <h:form id="menuBarForm">
+                    <h1 style="font-family: Verdana;">#{text.header_headerTitle}</h1>
+                    <p:menubar style="alignment-adjust: central; alignment-baseline: central">
+                        <p:menuitem id="homeMenuItem" icon="ui-icon-tag"
+                                    value="#{text.header_menuItem_home_value}"                                     
+                                    action="#{menuManagedBean.navigateToHome}" />
+                        <p:submenu id="aboutSubMenu" icon="ui-icon-note"
+                                   label="#{text.header_subMenu_about_label}" >
+                            <p:menuitem id="aboutUsMenuItem" 
+                                        value="#{text.header_menuItem_aboutUs_value}" 
+                                        action="#{menuManagedBean.navigateToAboutUs}" />
+                            <p:menuitem id="aboutApplicationMenuItem" 
+                                        value="#{text.header_menuItem_aboutApplication_value}"
+                                        action="#{menuManagedBean.navigateToAboutApplication}"/>
+                            <p:menuitem id="aboutProjectMenuItem" 
+                                        value="#{text.header_menuItem_aboutProject_value}"
+                                        action="#{menuManagedBean.navigateToAboutProject}" />
+                        </p:submenu>
+                        <p:menuitem id="userDocumentationMenuItem"
+                                    value="#{text.header_menuItem_userDocumentation_value}" 
+                                    icon="ui-icon-document-b" 
+                                    action="#{menuManagedBean.navigateToUserDocumentation}" />
+                        <p:menuitem id="examTemplateMenuItem" 
+                                    value="#{text.header_menuItem_examTemplate_value}" 
+                                    icon="ui-icon-arrowreturnthick-1-s"
+                                    action="#{menuManagedBean.navigateToExamTemplate}" />
+                        <p:menuitem id="acknowledgmentsmenuItem" 
+                                    value="#{text.header_menuItem_acknowledgments_value}" 
+                                    icon="ui-icon-comment"
+                                    action="#{menuManagedBean.navigateToAcknowledgments}" />
+                    </p:menubar>
+                </h:form>
+            </div>
+        </center>
     </ui:insert>
 </ui:composition>

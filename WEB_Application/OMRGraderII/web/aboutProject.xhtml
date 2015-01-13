@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:c="http://java.sun.com/jsp/jstl/core"
+                template="./templates/mainTemplate.xhtml">
+    <ui:define name="content">
+        <center>
+            <div style="width: 80%" align="justify">
+                <p:tabView scrollable="true">
+                    <p:tab title="#{text.aboutProject_tab_objectives_title}">
+                        <h:outputText
+                            value="#{text.aboutProject_outputText_objectivesIntroduction_value}" />
+                        <br />
+                        <center><h2>#{text.aboutProject_overallObjectiveText}</h2></center>
+                        <h:outputText 
+                            value="#{text.aboutProject_outputText_overallObjectiveDescription_value}" />
+                        <br /><br /><br />
+                        <center><h2>#{text.aboutProject_specificObjectivesText}</h2></center>
+                        <ol type="1">
+                            <li><h:outputText escape="false" value="#{text.aboutProject_outputText_specificObjective1_value}" /></li>
+                            <li><h:outputText escape="false" value="#{text.aboutProject_outputText_specificObjective2_value}" /></li>
+                            <li><h:outputText escape="false" value="#{text.aboutProject_outputText_specificObjective3_value}" /></li>
+                            <li><h:outputText escape="false" value="#{text.aboutProject_outputText_specificObjective4_value}" /></li>
+                            <li><h:outputText escape="false" value="#{text.aboutProject_outputText_specificObjective5_value}" /></li>
+                            <li><h:outputText escape="false" value="#{text.aboutProject_outputText_specificObjective6_value}" /></li>
+                            <li><h:outputText escape="false" value="#{text.aboutProject_outputText_specificObjective7_value}" /></li>
+                        </ol>
+                    </p:tab>
+                    <p:tab title="#{text.aboutProject_tab_applicationDescription_title}">
+                        <h:outputText
+                            value="#{text.aboutProject_outputText_introductionApplicationDescription_value}" />
+                        <br />
+                        <center><h2>#{text.globals_webApplicationText}</h2></center>
+                        <h:outputText escape="false" value="#{text.aboutProject_outputText_webApplicationDescription_value}" />
+                        <br /><br /><br />
+                        <center><h2>#{text.globals_androidApplicationText}</h2></center>
+                        <h:outputText escape="false" value="#{text.aboutProject_outputText_androidApplicationDescription_value}" />
+                    </p:tab>
+                </p:tabView>
+            </div>
+        </center>
+    </ui:define>
+</ui:composition>

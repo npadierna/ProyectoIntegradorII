@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:c="http://java.sun.com/jsp/jstl/core"
+                template="./templates/mainTemplate.xhtml">
+    <ui:define name="content">
+        <center>
+            <h2 style="font-family: Verdana;">#{text.examTemplate_headerTitle}</h2>
+            <div style="width: 80%" align="justify">
+                <p style="font-family: Verdana;">
+                    <h:outputText value="#{text.examTemplate_outputText_introduction_value}" />
+                </p>
+                <br /><br />
+                <h:form>
+                    <table border="0px" align="center">
+                        <tr>
+                            <td>
+                                <p:commandButton ajax="false" icon="ui-icon-arrowthickstop-1-s"
+                                                 value="#{text.examTemplate_commandButton_downloadDOCXFileTemplate_value}" >
+                                    <p:fileDownload value="#{documentationManagedBean.answerSheetTemplateDOCXFile}" />
+                                </p:commandButton>
+                            </td>
+                            <td>
+                                <p:spacer width="60" />
+                            </td>
+                            <td>
+                                <p:commandButton ajax="false" icon="ui-icon-arrowthickstop-1-s"
+                                                 value="#{text.examTemplate_commandButton_downloadPDFFileTemplate_value}" >
+                                    <p:fileDownload value="#{documentationManagedBean.answerSheetTemplatePDFFile}" />
+                                </p:commandButton>
+                            </td>
+                        </tr>
+                    </table>
+                </h:form>
+            </div>
+        </center>
+    </ui:define>
+</ui:composition>
