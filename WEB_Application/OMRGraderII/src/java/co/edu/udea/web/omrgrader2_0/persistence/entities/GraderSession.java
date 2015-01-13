@@ -43,7 +43,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement()
 public class GraderSession implements IEntity, Serializable {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1125210938814939716L;
     @EmbeddedId()
     protected GraderSessionPK graderSessionPK;
     @Basic(optional = false)

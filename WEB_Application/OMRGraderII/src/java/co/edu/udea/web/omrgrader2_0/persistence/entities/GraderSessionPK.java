@@ -16,7 +16,7 @@ import javax.validation.constraints.Size;
 @Embeddable()
 public class GraderSessionPK implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = -1445326959777045657L;
     @Basic(optional = false)
     @NotNull()
     @Size(min = 1, max = 55)
