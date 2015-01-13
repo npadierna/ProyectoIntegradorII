@@ -12,6 +12,7 @@ import co.edu.udea.web.omrgrader2_0.process.grade.ExamSessionComparator;
 import co.edu.udea.web.omrgrader2_0.process.image.model.Exam;
 import co.edu.udea.web.omrgrader2_0.process.email.report.model.ExamResult;
 import co.edu.udea.web.omrgrader2_0.process.email.report.model.FileSheetInformation;
+import co.edu.udea.web.omrgrader2_0.process.image.exception.OMRGraderImageException;
 import co.edu.udea.web.omrgrader2_0.process.image.opencv.OMRGraderProcess;
 import java.io.File;
 import java.util.ArrayList;
@@ -113,8 +114,8 @@ public class GraderSessionThread extends Thread {
                     exam = this.oMRGraderProcess.executeExamProcessing(
                             this.oMRGraderProcess.getOnlyLogosTemplateExam(),
                             exam,
-                            referenceExamResult.getExam().getQuestionsItemsList().size(),
-                            null, null, null, null);
+                            referenceExamResult.getExam().getQuestionsItemsList()
+                            .size(), null, null, null, null);
                     exam.setGrayScaledImageMat(null);
                     exam.setImageDescriptorsMat(null);
                     exam.setImageMatOfKeyPoints(null);
@@ -135,14 +136,8 @@ public class GraderSessionThread extends Thread {
                             buildUploadedFileDirectoryPath(String.valueOf(
                             storageDirectoryPathName), false), fileSheetInformation);
                 } catch (OMRGraderProcessException e) {
-                    try {
-                        this.emailSender.sendEmail(this.graderSession.getGraderSessionPK().getElectronicMail(),
-                                "Error", "Ha surgido un error mientras se estaba generando el Reporte de Calificaciones.");
-                    } catch (OMRGraderEmailException ex) {
-                        Logger.getLogger(TAG).log(Level.SEVERE,
-                                "Error while the applications was sending the Error Reporting Email.",
-                                e);
-                    }
+                    this.sendErrorEmail("Error Generando Reporte",
+                            "Ha surgido un error mientras se estaba generando el Reporte de Calificaciones.");
                     this.resumeGranderSession(storageDirectoryPathName);
                     this.executeNotification();
 
@@ -160,15 +155,28 @@ public class GraderSessionThread extends Thread {
                             "Error while the applications was sending the Reporting Email.",
                             e);
                 }
-
-                this.resumeGranderSession(storageDirectoryPathName);
-                this.executeNotification();
             }
-        } catch (OMRGraderProcessException | OMRGraderPersistenceException e) {
+        } catch (OMRGraderImageException | OMRGraderProcessException | OMRGraderPersistenceException e) {
             Logger.getLogger(TAG).log(Level.SEVERE,
                     "Error while the Grader Session Thread was trying to manage a Grader Session.",
                     e);
+
+            this.sendErrorEmail("Erro Procesando Imágenes",
+                    "Ha surgido un error mientras se estaban analizando y procesando las imágenes de los Exámenes.");
+        } finally {
+            try {
+                this.resumeGranderSession(storageDirectoryPathName);
+                this.executeNotification();
+            } catch (OMRGraderPersistenceException e) {
+                Logger.getLogger(TAG).log(Level.SEVERE,
+                        "Error while the Grader Session Thread was trying to manage a Grader Session.",
+                        e);
+            }
         }
+    }
+
+    private void executeNotification() {
+        this.threadNotifier.notifyEvent(new Object[]{this});
     }
 
     private void resumeGranderSession(long storageDirectoryPathName)
@@ -183,7 +191,14 @@ public class GraderSessionThread extends Thread {
         }
     }
 
-    private void executeNotification() {
-        this.threadNotifier.notifyEvent(new Object[]{this});
+    private void sendErrorEmail(String subject, String message) {
+        try {
+            this.emailSender.sendEmail(this.graderSession.getGraderSessionPK()
+                    .getElectronicMail(), subject, message);
+        } catch (OMRGraderEmailException e) {
+            Logger.getLogger(TAG).log(Level.SEVERE,
+                    "Error while the applications was sending the Error Reporting Email.",
+                    e);
+        }
     }
 }

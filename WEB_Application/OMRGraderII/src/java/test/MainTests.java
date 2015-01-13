@@ -11,6 +11,7 @@ import co.edu.udea.web.omrgrader2_0.process.email.report.model.ExamResult;
 import co.edu.udea.web.omrgrader2_0.process.image.model.Exam;
 import co.edu.udea.web.omrgrader2_0.process.image.model.QuestionItem;
 import co.edu.udea.web.omrgrader2_0.process.email.report.model.FileSheetInformation;
+import co.edu.udea.web.omrgrader2_0.process.image.exception.OMRGraderImageException;
 import co.edu.udea.web.omrgrader2_0.process.image.model.Student;
 import co.edu.udea.web.omrgrader2_0.process.image.opencv.OMRGraderProcess;
 import static co.edu.udea.web.omrgrader2_0.process.image.opencv.OMRGraderProcess.ONLY_LOGOS_TEMPLATE_IMAGE_NAME;
@@ -44,8 +45,7 @@ import org.opencv.highgui.Highgui;
  */
 public class MainTests {
 
-    public static void main(String[] args) throws OMRGraderProcessException,
-            OMRGraderEmailException {
+    public static void main(String[] args) throws OMRGraderImageException, OMRGraderEmailException {
 
         long timeStart;
         long timeEnd;
@@ -53,8 +53,8 @@ public class MainTests {
         timeStart = System.currentTimeMillis();
         System.load("/home/pivb/Software/Libraries/OpenCV2.4.8/opencv_java248.so");
 
-//        testDataSheetGeneratorAndEmaiSender();
-        testOMR();
+        testDataSheetGeneratorAndEmaiSender();
+//        testOMR();
         
         timeEnd = System.currentTimeMillis();
         fullTime = timeEnd - timeStart;
@@ -97,7 +97,7 @@ public class MainTests {
         }
     }
 
-    public static void testOMR() {
+    public static void testOMR() throws OMRGraderImageException {
         OMRGraderProcess oMRGraderProcess = new OMRGraderProcess();
         oMRGraderProcess.initialize();
 
