@@ -46,7 +46,7 @@ import org.springframework.web.context.WebApplicationContext;
 @Scope(value = WebApplicationContext.SCOPE_APPLICATION)
 public final class OMRGraderProcess {
 
-    public static final String ONLY_LOGOS_TEMPLATE_IMAGE_NAME = "Only_Logos_Templage.png";
+    public static final String ONLY_LOGOS_TEMPLATE_IMAGE_NAME = "Only_Logos_Template.png";
     private static final DescriptorExtractor DESCRIPTOR_EXTRACTOR;
     private static final DescriptorMatcher DESCRIPTOR_MATCHER;
     private static final FeatureDetector FEATURE_DETECTOR;
