@@ -90,11 +90,19 @@ public final class ExamProcess {
             }
 
             if (Arrays.equals(invalidAnswers, answers)) {
-                if ((questionsItemsAmount <= 0)
-                        || (questionsItemsList.size() == questionsItemsAmount)) {
+                boolean[] answersCopy = this.validatePixelCounter(pixelCounter,
+                        0.70F);
+
+                if (((questionsItemsAmount <= 0)
+                        || (questionsItemsList.size() == questionsItemsAmount))
+                        && (Arrays.equals(invalidAnswers, answersCopy))) {
                     break;
                 } else {
-                    questionsItemsList.add(new QuestionItem((short) (i + 1), answers));
+                    questionsItemsList.add(new QuestionItem((short) (i + 1),
+                            answersCopy));
+
+                    // TODO: Eliminar esta instrucción.
+                    System.out.println(stringBuilder);
                 }
             } else {
                 questionsItemsList.add(new QuestionItem((short) (i + 1), answers));
@@ -105,6 +113,20 @@ public final class ExamProcess {
         }
 
         return (questionsItemsList);
+    }
+
+    private boolean[] validatePixelCounter(int[] pixelCounter, float percentage) {
+        boolean[] answers = new boolean[BUBBLE_OPTIONS_AMOUNT];
+        float selectedBubbleThresh = Float.valueOf(SELECTED_BUBBLE_THRESH);
+
+        for (int index = 0; index < pixelCounter.length; index++) {
+            if ((Float.valueOf(pixelCounter[index]) / selectedBubbleThresh)
+                    >= percentage) {
+                answers[index] = true;
+            }
+        }
+
+        return (answers);
     }
 
     private int countWhitePixelsInBubble(Mat examImageMat,
