@@ -161,7 +161,7 @@ public class GraderSessionThread extends Thread {
                     "Error while the Grader Session Thread was trying to manage a Grader Session.",
                     e);
 
-            this.sendErrorEmail("Erro Procesando Imágenes",
+            this.sendErrorEmail("Error Procesando Imágenes",
                     "Ha surgido un error mientras se estaban analizando y procesando las imágenes de los Exámenes.");
         } finally {
             try {
